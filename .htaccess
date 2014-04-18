@@ -1,0 +1,8 @@
+# http://stackoverflow.com/questions/8291712/using-clean-urls-in-restful-api
+
+<IfModule mod_rewrite.c>
+	RewriteEngine On
+	RewriteBase /event/
+	RewriteCond %{REQUEST_FILENAME} !-f
+	RewriteRule . conference.php [L]
+</IfModule>
