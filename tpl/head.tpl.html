@@ -1,0 +1,18 @@
+<?php
+	require_once(implode(DIRECTORY_SEPARATOR, array(__dir__, '..', 'php', 'index.php')));
+?>
+<!doctype html>
+<html lang="en">
+<head>
+	<meta charset="UTF-8">
+	<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no">
+	<title><?php echo isset($title) ? $title : 'Upstream Events'; ?></title>
+	<link href="//netdna.bootstrapcdn.com/bootstrap/3.1.1/css/bootstrap.min.css" rel="stylesheet">
+	<link href="//netdna.bootstrapcdn.com/font-awesome/4.0.3/css/font-awesome.css" rel="stylesheet">
+	<link href="css.css" rel="stylesheet">
+</head>
+<body data-spy="scroll" data-target=".navbar">
+	<?php include('tpl/nav.tpl.html'); ?>
+
+	
+

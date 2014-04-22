@@ -6,7 +6,6 @@ class myMail extends PHPMailer {
 	function __construct() {
 		parent::__construct();
 		$this->setFrom(config::myMail_from_email, config::myMail_from_name);
-		$this->isHTML(true);
 	}
 
 	public function notify($subject, $html) {
@@ -16,8 +15,7 @@ class myMail extends PHPMailer {
 
 		$this->addAddress(config::myMail_notify_email, config::myMail_notify_name);
 		$this->Subject = $subject;
-		$this->Body    = $html;
-		$this->AltBody = strip_tags($html);
+		$this->msgHTML($html);
 		return $this->send();
 	}
 
@@ -28,8 +26,7 @@ class myMail extends PHPMailer {
 
 		$this->addAddress($to, $name);
 		$this->Subject = $subject;
-		$this->Body    = $html;
-		$this->AltBody = strip_tags($html);
+		$this->msgHTML($html);
 		return $this->send();
 	}
 }
