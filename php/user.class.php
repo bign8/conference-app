@@ -19,11 +19,6 @@ define("HASH_PBKDF2_INDEX", 3);
 * User class: controlls everything that happens with a user
 */
 class User {
-	const E_RESET_BAD_EMAIL = 'bad-email';
-	const E_RESET_BAD_HASH  = 'bad-hash';
-	const E_RESET_MISSMATCH = 'missmatch';
-	const E_RESET_SHORT     = 'short';
-
 	private $db;
 	public function __construct() {
 		if ( session_id() === '' ) session_start();
@@ -33,9 +28,9 @@ class User {
 	public function login( $email, $pass ) {
 		$sth = $this->db->prepare("SELECT * FROM user WHERE email=?;");
 		$test = (
-			!$sth->execute( $email ) &&
+			$sth->execute( $email ) &&
 			($user = $sth->fetch()) !== false && 
-			validate_password( $pass, $user['pass'])
+			$this->validate_password( $pass, $user['pass'] )
 		);
 		if ($test) {
 			unset($user['pass']);
@@ -47,6 +42,13 @@ class User {
 	public function logout() {
 		unset( $_SESSION['user'] );
 	}
+	public function register( $name, $email, $pass, $conf ) {
+		if (strlen($pass) < 3) throw new GUIException('Password is short', 'Please choose a password at least 3 characters long.');
+		if ($pass != $conf) throw new GUIException('Password missmatch', 'Try typing them again');
+
+		$this->db->prepare("INSERT INTO user (name,email,pass) VALUES (?,?,?);")->execute( $name, $email, $this->create_hash( $pass ) );
+		return $this->login($email, $pass);
+	}
 	public function save_profile( $data ) {
 		// TODO
 	}
@@ -55,7 +57,7 @@ class User {
 		if (
 			!$sth->execute( $email ) ||
 			false === ($user = $sth->fetch())
-		) throw Exception(self::E_RESET_BAD_EMAIL);
+		) throw new GUIException('Invalid Email', 'This email has not been registered');
 
 		// DB
 		$hash = sha1( $user['email'] . config::encryptSTR . uniqid() );
@@ -63,23 +65,24 @@ class User {
 
 		// Email
 		$mail = new myMail();
-		$html = str_replace('{{HASH}}', $hash, file_get_contents('../tpl/reset-pass.email.html'));
+		$mail->STMPDebug = 2;
+		$html = str_replace('{{HASH}}', $hash, file_get_contents(__DIR__ . '/../tpl/reset-pass.email.html'));
 		return $mail->sendMsg('Upstream Academy Conference: Password Reset', $html, $user['email'], $user['name']);
 	}
 	public function reset_valid( $hash ) {
 		$STH = $this->db->prepare("SELECT * FROM user WHERE resetHash=? AND resetExpire > CURRENT_TIMESTAMP LIMIT 0,1;");
-		if (!$STH->execute( $hash )) throw new Exception(self::E_DB_ERROR);
+		if (!$STH->execute( $hash )) throw new Exception();
 		return count($STH->fetchAll()) == 1;
 	}
 	public function reset_pass( $pass, $confirm, $hash ) {
-		if (strlen($pass) < 2) throw new Exception(self::E_RESET_SHORT);
-		if ($pass != $confirm) throw new Exception(self::E_RESET_MISSMATCH);
-		if (!$this->valid_reset($hash)) throw new Exception(self::E_RESET_BAD_HASH);
-		return $this->db->prepare("UPDATE user SET pass=?,resetHash=NULL,resetExpires=NULL WHERE resetHash=?;")->execute( create_hash($pass), $hash );
+		if (strlen($pass) < 3) throw new GUIException('Password is short', 'Please choose a password at least 3 characters long.');
+		if ($pass != $confirm) throw new GUIException('Password missmatch', 'Try typing them again');
+		if (!$this->reset_valid($hash)) throw new Exception();
+		return $this->db->prepare("UPDATE user SET pass=?,resetHash=NULL,resetExpire=NULL WHERE resetHash=?;")->execute( $this->create_hash($pass), $hash ); // TODO: auto login
 	}
 
 	// https://crackstation.net/hashing-security.htm#phpsourcecode
-	private function create_hash($password) {
+	public function create_hash($password) {
 		$salt = base64_encode(mcrypt_create_iv(PBKDF2_SALT_BYTE_SIZE, MCRYPT_DEV_URANDOM));
 		return PBKDF2_HASH_ALGORITHM . ":" . PBKDF2_ITERATIONS . ":" .  $salt . ":" . base64_encode($this->pbkdf2(
 			PBKDF2_HASH_ALGORITHM,
@@ -129,3 +132,4 @@ class User {
 }
 
 $user = new User();
+if (isset($_REQUEST['gen'])) echo $user->create_hash($_REQUEST['gen']);

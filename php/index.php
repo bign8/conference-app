@@ -32,15 +32,51 @@ $panel_include = function($path, $id = '', $event = null) use ($app, &$dumb_coun
 
 if (isset($_REQUEST['action'])) switch ($_REQUEST['action']) {
 	case 'logout':
-		// TODO
+		(new User())->logout();
+		die(header('Location: index.php')); // lose query string
 		break;
 	case 'login':
-		// TODO
+		if ((new User())->login($_POST['email'], $_POST['pass'])) die(header('Location: index.php#')); // TODO: direct to conference
+		$app->set_error('login', 'Invalid Credentials', 'Change a few things up and try authenticating again');
+		break;
+	case 'reset':
+		try {
+			if ((new User())->reset_send($_POST['email'])) {
+				$app->set_error('login', 'Reset Sent', 'Check your inbox for password reset instructions', 'success');
+			} else {
+				$app->set_error('login', 'Reset Error', 'We encountered an error processing your reset request');
+			}
+		} catch (GUIException $e) {
+			$app->set_gui_error('login', $e);
+		}
+		break;
+	case 'reset_pw':
+		$user = new User();
+		try {
+			if ( $user->reset_pass($_POST['pass'], $_POST['conf'], $_POST['hash']) ) {
+				die(header('Location: index.php#login')); // lose query string
+			} else {
+				$app->set_error('reset', 'Reset Error', 'We have encountered an unrecoverable error');
+			}
+		} catch (GUIException $e) {
+			$app->set_gui_error('reset', $e);
+		}
 		break;
 	case 'register':
-		// TODO
+		$user = new User();
+		try {
+			$res = $user->register( $_POST['name'], $_POST['email'], $_POST['pass'], $_POST['conf'] );
+			if ($res) die(header('Location: index.php#'));
+		} catch (PDOException $e) {
+			$user->reset_send( $_POST['email'] );
+			$app->set_error('register', 'Duplicate Email', 'Password reset instructions have been sent to the provided email');
+		} catch (GUIException $e) {
+			$app->set_gui_error('register', $e);
+		}
 		break;
 	case 'profile':
 		// TODO
 		break;
 }
+
+// $app->set_gui_error('login', new GUIException());

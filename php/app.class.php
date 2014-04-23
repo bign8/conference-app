@@ -1,10 +1,36 @@
 <?php
 
+class GUIException extends Exception {
+	function __construct($title = 'Error', $msg = 'Unknown error occured', $type = 'danger') {
+		parent::__construct("<div class=\"alert alert-{$type}\"><strong>{$title}</strong> {$msg}</div>");
+	}
+}
+
 class App {
 	private $db;
+	public $status = array();
 
 	function __construct() {
 		$this->db = new myPDO();
+	}
+
+	// Pretty Error Handling
+	public function get_error($location) {
+		$out = '';
+		if (array_key_exists($location, $this->status)) 
+			foreach ($this->status[$location] as $value) 
+				$out .= $value->getMessage();
+		return $out;
+	}
+	public function set_gui_error($location, GUIException $value) {
+		if (array_key_exists($location, $this->status)) {
+			array_push($this->status[$location], $value);
+		} else {
+			$this->status[$location] = array($value);
+		}
+	}
+	public function set_error($location, $title = 'Error', $msg = 'Unknown error occured', $type = 'danger') {
+		$this->set_gui_error($location, new GUIException($title, $msg, $type));
 	}
 
 	public function get_conf($slug) {
