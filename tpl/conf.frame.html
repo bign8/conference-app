@@ -1,0 +1,35 @@
+<?php
+	$confs = $app->get_my_confs($_SESSION['user']['userID']);
+?>
+
+<div class="page-header">
+	<h1>Conferences</h1>
+</div>
+<p class="lead">
+	Lorem ipsum dolor sit amet, consectetur adipiscing elit. Ut ac eleifend nisl. Mauris vitae tincidunt turpis, quis facilisis orci. Maecenas elementum sapien vitae libero semper commodo. Quisque tincidunt, dui vitae laoreet sollicitudin, sem tellus interdum odio, eu ornare tellus tellus ac tortor. Nulla laoreet urna ligula, ut ultrices dui ultricies et. Proin in viverra tellus. Duis vel sem quis neque molestie vehicula id eu mauris. Mauris eleifend ut est at luctus. Sed nec ligula a lectus ultricies bibendum viverra vitae ante. Suspendisse fringilla turpis nisi. Lorem ipsum dolor sit amet, consectetur adipiscing elit. Donec fermentum nisl urna, non dictum dolor facilisis eu.
+</p>
+<p>
+	In feugiat tincidunt tortor. Quisque cursus purus a justo egestas, id consectetur tellus vulputate. Quisque sed blandit nulla. Nunc fringilla quis lacus eget hendrerit. Etiam tincidunt metus at nisl scelerisque dapibus. Interdum et malesuada fames ac ante ipsum primis in faucibus. Vivamus vestibulum mauris lacus, nec accumsan lectus adipiscing nec. Vestibulum convallis suscipit lectus vitae eleifend. Proin luctus pulvinar mi et elementum. Pellentesque luctus, metus quis elementum dictum, leo lorem posuere odio, vel accumsan tellus odio at risus. Proin tempus imperdiet quam nec vestibulum.
+</p>
+<div class="row">
+	<div class="col-md-8-col-md-offset-2">
+		<?php if (count($confs) > 0): ?>
+			<?php foreach ($confs as $conf): ?>
+				<div class="well" style="position:relative;">
+					<img src="img/logo/<?php echo $conf['logo']; ?>" alt="<?php echo $conf['title']; ?>" class="pull-right">
+					<h2>
+						<?php echo $conf['title']; ?>
+						<small><?php echo $conf['theme']; ?></small>
+					</h2>
+					<?php echo $conf['desc']; ?>
+					<a href="<?php echo $conf['slug']; ?>" class="btn btn-default btn-sm" style="position:absolute; bottom:10px; right:10px;">
+						Go to <?php echo $conf['title']; ?>
+					</a>
+					<!-- <pre><?php print_r($conf); ?></pre> -->
+				</div>
+			<?php endforeach; ?>
+		<?php else: ?>
+			<h2>NO CONFERENCES YET</h2>
+		<?php endif; ?>
+	</div>
+</div>

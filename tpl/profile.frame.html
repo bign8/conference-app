@@ -1,0 +1,97 @@
+<?php
+	if (isset($_SESSION['user'])) $user = $_SESSION['user'];
+	else die(header('Location: .'));
+?>
+
+<div class="page-header">
+	<h1>
+		Profile
+		<small><?=$user['name']; ?></small>
+	</h1>
+</div>
+<!-- <p class="lead">
+	Lorem ipsum dolor sit amet, consectetur adipiscing elit. Ut ac eleifend nisl. Mauris vitae tincidunt turpis, quis facilisis orci. Maecenas elementum sapien vitae libero semper commodo. Quisque tincidunt, dui vitae laoreet sollicitudin, sem tellus interdum odio, eu ornare tellus tellus ac tortor. Nulla laoreet urna ligula, ut ultrices dui ultricies et. Proin in viverra tellus. Duis vel sem quis neque molestie vehicula id eu mauris. Mauris eleifend ut est at luctus. Sed nec ligula a lectus ultricies bibendum viverra vitae ante. Suspendisse fringilla turpis nisi. Lorem ipsum dolor sit amet, consectetur adipiscing elit. Donec fermentum nisl urna, non dictum dolor facilisis eu.
+</p>
+<p>
+	In feugiat tincidunt tortor. Quisque cursus purus a justo egestas, id consectetur tellus vulputate. Quisque sed blandit nulla. Nunc fringilla quis lacus eget hendrerit. Etiam tincidunt metus at nisl scelerisque dapibus. Interdum et malesuada fames ac ante ipsum primis in faucibus. Vivamus vestibulum mauris lacus, nec accumsan lectus adipiscing nec. Vestibulum convallis suscipit lectus vitae eleifend. Proin luctus pulvinar mi et elementum. Pellentesque luctus, metus quis elementum dictum, leo lorem posuere odio, vel accumsan tellus odio at risus. Proin tempus imperdiet quam nec vestibulum.
+</p> -->
+<div class="well">
+	<form role="form" action="profile.php" method="post" class="form-horizontal clearfix" enctype="multipart/form-data" name="profile">
+		<div class="row">
+			<div class="col-sm-2">
+				<div class="img-loader">
+					<img id="actual_user_image" class="img-responsive img-rounded" style="margin-bottom: 10px" src="img/usr/<?=$user['photo']; ?>">
+				</div>
+				<input id="user_image" type="file" class="hide" accept="image/*" name="image" />
+				<input type="button" class="form-control btn btn-default" onclick="user_image.click()" value="Choose File" />
+			</div>
+
+			<div class="col-sm-4">
+				<?=$app->get_error('profile'); ?>
+				<div class="form-group">
+					<label for="user_name" class="col-sm-3 control-label">Name</label>
+					<div class="col-sm-9">
+						<input type="text" class="form-control" id="user_name" placeholder="Name" name="name" value="<?=$user['name']; ?>">
+					</div>
+				</div>
+				<div class="form-group">
+					<label for="user_title" class="col-sm-3 control-label">Title</label>
+					<div class="col-sm-9">
+						<input type="text" class="form-control" id="user_title" placeholder="Title" name="title" value="<?=$user['title']; ?>">
+					</div>
+				</div>
+				<div class="form-group">
+					<label for="user_firm" class="col-sm-3 control-label">Firm</label>
+					<div class="col-sm-9">
+						<input type="text" class="form-control" id="user_firm" placeholder="Firm" name="firm" value="<?=$user['firm']; ?>">
+					</div>
+				</div>
+				<div class="form-group">
+					<label for="user_phone" class="col-sm-3 control-label">Phone</label>
+					<div class="col-sm-9">
+						<input type="text" class="form-control" id="user_phone" placeholder="Phone" name="phone" value="<?=$user['phone']; ?>">
+					</div>
+				</div>
+				<div class="form-group">
+					<label for="user_email" class="col-sm-3 control-label">Email</label>
+					<div class="col-sm-9">
+						<input type="text" class="form-control" id="user_email" placeholder="Email" name="email" value="<?=$user['email']; ?>">
+					</div>
+				</div>
+
+				<div class="well">
+					<div class="col-sm-9 col-sm-offset-3">
+						<h4>Change Password</h4>
+					</div>
+					<div class="form-group">
+						<label for="user_old_pass" class="col-sm-3 control-label">Old&nbsp;Pass</label>
+						<div class="col-sm-9">
+							<input type="password" class="form-control" id="user_old_pass" placeholder="Old Pass" name="old_pass">
+						</div>
+					</div>
+					<div class="form-group">
+						<label for="user_pass" class="col-sm-3 control-label">Password</label>
+						<div class="col-sm-9">
+							<input type="password" class="form-control" id="user_pass" placeholder="Password" name="pass">
+						</div>
+					</div>
+					<div class="form-group">
+						<label for="user_confirm" class="col-sm-3 control-label">Confirm</label>
+						<div class="col-sm-9">
+							<input type="password" class="form-control" id="user_confirm" placeholder="Confirm" name="confirm">
+						</div>
+					</div>
+				</div>
+			</div>
+			<div class="col-sm-6">
+				<label for="user_bio">Biography</label>
+				<textarea id="user_bio" class="form-control text-auto-scale" placeholder="Bio..." rows="10" name="bio"><?=$user['bio']; ?></textarea>
+
+			</div>
+		</div>
+		<input type="hidden" name="userID" value="<?=$user['userID']; ?>">
+		<input type="hidden" id="orig_image" name="orig_image" value="<?=$user['photo']; ?>">
+		<button type="submit" class="btn btn-primary pull-right" name="action" value="profile">Save Changes</button>
+		<button type="reset" class="btn btn-default" id="profile_reset" name="profile_reset">Reset</button>
+	</form>
+</div>

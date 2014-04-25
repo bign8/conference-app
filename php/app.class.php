@@ -33,6 +33,12 @@ class App {
 		$this->set_gui_error($location, new GUIException($title, $msg, $type));
 	}
 
+	public function get_my_confs($userID) {
+		$sth = $this->db->prepare("SELECT * FROM attendee a LEFT JOIN conference c ON a.conferenceID=c.conferenceID WHERE userID=? ORDER BY start_stamp, title;");
+		$sth->execute( $userID );
+		return $sth->fetchAll();
+	}
+
 	public function get_conf($slug) {
 
 		// General Conference

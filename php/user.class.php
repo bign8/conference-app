@@ -33,7 +33,6 @@ class User {
 			$this->validate_password( $pass, $user['pass'] )
 		);
 		if ($test) {
-			unset($user['pass']);
 			$_SESSION['user'] = $user;
 			$this->db->prepare("UPDATE user SET seen=CURRENT_TIMESTAMP, resetHash=NULL, resetExpire=NULL WHERE userID=?;")->execute( $user['userID'] );
 		}
@@ -50,7 +49,72 @@ class User {
 		return $this->login($email, $pass);
 	}
 	public function save_profile( $data ) {
-		// TODO
+		$mail = new myMail();
+		if ($_SESSION['user']['userID'] != $data['userID']) throw new GUIException('Saving issue', 'We were unable to save your profile changes');
+
+		// Old user data
+		$user = $this->db->prepare("SELECT * FROM user WHERE userID=? LIMIT 1;");
+		if (!$user->execute( $data['userID'] )) throw new GUIException('Database error', 'We cannot save your profile data currently');
+		$old_user = $user->fetch();
+
+		// validate + change passwords
+		if ( isset($data['pass']) && $data['pass'] != '' ) {
+			if ( !$this->validate_password($data['old_pass'], $old_user['pass']) ) throw new GUIException('Old Password Invalid', 'You must enter password');
+			if ($data['pass'] == $data['confirm']) throw new GUIException('Password missmatch', 'We were unable to change your password');
+			if (strlen($data['pass']) < 3) throw new GUIException('Password is short', 'Please choose a password at least 3 characters long.');
+			$sth = $this->db->prepare("UPDATE user SET pass=? WHERE userID=?;");
+			if (!$sth->execute($data['pass'], $data['userID'])) throw new GUIException('Database error', 'We cannot save you profile data currently');
+		}
+
+		// Upload photo
+		if (isset($_FILES['image']) && !$_FILES['image']['error']) {
+			if (false === $ext = array_search(trim($_FILES['image']['type']), array(
+				'gif0' => "image/gif",
+				'jpg1' => "image/jpg",
+				'jpg2' => "image/jpeg",
+				'jpg3' => "image/pjpeg",
+				'png4' => "image/x-png",
+				'png5' => "image/png"
+			))) throw new GUIException('Invalid Image Type', '<br/>Currently we only accept PNGs, JPGs, and GIFs.');
+			$ext = substr($ext, 0, -1);
+
+			$basename = implode(DIRECTORY_SEPARATOR, array(__DIR__, '..', 'img', 'usr')) . DIRECTORY_SEPARATOR;
+			$filename = $data['userID'] . '_' . str_replace(' ', '_', $data['name']) . '.' . $ext;
+			print_r($basename . $filename);
+			if (file_exists($basename . $filename)) unlink($basename . $filename);
+			if (file_exists($basename . $old_user['photo'])) unlink($basename . $old_user['photo']);
+			if (!move_uploaded_file( $_FILES['image']['tmp_name'], $basename . $filename )) throw new GUIException('Server Error', 'Unable to upload image');
+			$mail->addAttachment( $basename . $filename, $filename );
+			$sth = $this->db->prepare("UPDATE user SET photo=? WHERE userID=?;");
+			if (!$sth->execute($filename, $data['userID'])) throw new GUIException('Database error', 'We cannot save you profile data currently');
+		}
+
+		// Update Settings
+		$sth = $this->db->prepare("UPDATE user SET name=?, title=?, firm=?, phone=?, email=?, bio=? WHERE userID=?;");
+		if (!$sth->execute($data['name'], $data['title'], $data['firm'], $data['phone'], $data['email'], $data['bio'], $data['userID']))
+			throw new GUIException('Something went wrong', 'and we were unable to save your changes');
+
+		// Re-assign sesion data
+		$user->execute( $data['userID'] );
+		$_SESSION['user'] = $user->fetch();
+
+		// Generate Email
+		$fields = array(
+			'Name' => 'name',
+			'Title' => 'title',
+			'Firm' => 'firm',
+			'Phone' => 'phone',
+			'Email' => 'email',
+			'Bio' => 'bio',
+		);
+		function table_row_compare($title, $old, $new) {
+			$str = "<tr";
+			if ($old != $new) $str .= ' style="background-color:red"';
+			return $str . "><td>$title</td><td>$old</td><td>$new</td></tr>";
+		}
+		$html = "<p>The following changes have been made to a user</p><table><tr><th>Attribute</th><th>Old Version</th><th>New version</th></tr>";
+		foreach ($fields as $key => $value) $html .= table_row_compare( $key, $old_user[$value], $_SESSION['user'][$value] );
+		return $mail->notify('Upsteram Academy Event Profile Update', $html . '</table>');
 	}
 	public function reset_send( $email ) {
 		$sth = $this->db->prepare("SELECT userID, name, email FROM user WHERE email=? LIMIT 1;");

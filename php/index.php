@@ -75,7 +75,12 @@ if (isset($_REQUEST['action'])) switch ($_REQUEST['action']) {
 		}
 		break;
 	case 'profile':
-		// TODO
+		try {
+			$res = $user->save_profile( $_POST );
+			if ($res) throw new GUIException('Changes Saved', 'True story', 'success');
+		} catch(GUIException $e) {
+			$app->set_gui_error('profile', $e);
+		}
 		break;
 }
 
