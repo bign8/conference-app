@@ -1,6 +1,51 @@
 <div class="page-header">
-	<h1>Location</h1>
+	<h1>Location <small><?php echo $event['location']['name']; ?></small></h1>
 </div>
 <?php echo $event['html_location']; ?>
+<?php echo $event['location']['desc']; ?>
+
+<?php 
+$hmap = isset($event['location']['hotel_map']) ? "<a href=\"{$event['location']['hotel_map']}\">(PDF)</a>" : '<em>unavailable</em>';
+$lmap = isset($event['location']['local_map']) ? "<a href=\"{$event['location']['local_map']}\">(PDF)</a>" : '<em>unavailable</em>';
+
+$html = <<<HTML
+<div style="width: 400px; height: 145px; overflow: hidden">
+	<h3 style="margin-top: 0; text-align: center">{$event['location']['name']}</h3>
+	<div class="row">
+		<div class="col-md-6">
+			<div class="well">
+				<h4 style="margin-top:0">Address:</h4>
+				<address style="margin-bottom:0">
+					{$event['location']['address']}<br>
+					{$event['location']['city']}&nbsp;
+					{$event['location']['state']}
+				</address>
+			</div>	
+		</div>
+		<div class="col-md-6">
+			<div class="well">
+				<h4 style="margin-top:0">Maps:</h4>
+				Hotel Map: {$hmap}<br/>
+				Local Map: {$lmap}<br/>
+			</div>
+		</div>
+	</div>
+</div>
+HTML;
+$html = str_replace('"', '\"', $html);
+$html = str_replace("\n", '', $html);
+$html = str_replace("\r", '', $html);
+?>
+
+<div id="map-canvas" class="full-map"></div>
+
+<script type="text/javascript">
+	var my_map = new ELA_MAP(
+		document.getElementById('map-canvas'), 
+		<?php echo $event['location']['map_options']; ?>,
+		"<?php echo $event['location']['name']; ?>",
+		"<?php echo $html; ?>"
+	);
+</script>
 
 <!-- <pre><?php print_r($event); ?></pre> -->

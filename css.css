@@ -73,3 +73,9 @@ textarea.text-auto-scale { resize: none; }
 	margin: -7px -64px;
 	display: none;
 }
+
+.full-map {
+	height: 100%;
+	width: 100%;
+	min-height: 600px;
+}

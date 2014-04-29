@@ -21,6 +21,7 @@
 					<li><a href="#attendees">Attendees</a></li>
 					<li><a href="#sponsors">Sponsors</a></li>
 				<?php endif; ?>
+				<?php if (isset($_SESSION['user']) && !isset($event)): ?><li><a href="#conf">My Conferences</a></li><?php endif; ?>
 			</ul>
 			<ul class="nav navbar-nav navbar-right">
 				<?php if ($auth): ?>
