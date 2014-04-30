@@ -74,8 +74,30 @@ textarea.text-auto-scale { resize: none; }
 	display: none;
 }
 
+/* map */
 .full-map {
 	height: 100%;
 	width: 100%;
 	min-height: 600px;
 }
+
+/* speakers */
+.thumbnail {
+	background-color: white;
+	transition: 1s;
+	-o-transition: 1s;
+	-ms-transition: 1s;
+	-moz-transition: 1s;
+	-webkit-transition: 1s;
+	position: relative;
+}
+.thumbnail.active { 
+	background-color: #FCF8E3;
+}
+.thumbnail .direct-link {
+	display: none;
+	position: absolute;
+	bottom: 5px;
+	right: 10px;
+}
+.thumbnail:hover .direct-link { display: block; }

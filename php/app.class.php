@@ -63,7 +63,7 @@ class App {
 		$conf['agenda'] = $sth->fetchAll();
 
 		// Speakers
-		$sth = $this->db->prepare("SELECT DISTINCT u.* FROM session s LEFT JOIN speaker p ON p.sessionID=s.sessionID LEFT JOIN user u ON p.userID=u.userID WHERE conferenceID=? ORDER BY u.name;");
+		$sth = $this->db->prepare("SELECT DISTINCT u.* FROM session s JOIN speaker p ON p.sessionID = s.sessionID LEFT JOIN user u ON p.userID = u.userID WHERE conferenceID=? AND p.featured='true' ORDER BY u.name;");
 		$sth->execute( $conf['conferenceID'] );
 		$conf['speakers'] = $sth->fetchAll();
 

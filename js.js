@@ -67,32 +67,43 @@ ELA_MAP.prototype = {
  * ------------------------------------------------------------------- */
 
 // jQuery soft scroll
-jQuery.fn.scroll_top = function (cb) {
+jQuery.fn.scroll_top = function (offset, cb) {
 	if ( this.offset() ) jQuery('html, body').animate({
-		scrollTop: parseInt( this.offset().top, 10 )
+		scrollTop: Math.max(parseInt( this.offset().top, 10 )-offset, 0)
 	}, 500, cb);
 };
-jQuery('a').on('click', function (e){
-	if ( e.target.hash ) {
-		jQuery( e.target.hash ).scroll_top(function() {
-			if (e.target.hash == '#login') $('#inputUser').focus();
-			document.location.hash = e.target.hash;
-		});
-		e.preventDefault();
-	}
-});
+jQuery(document).ready(function() {
 
-// Profile image
-jQuery('#user_image').change(function() {
-	if (this.files && this.files[0]) {
-		var reader = new FileReader();
-		reader.onload = function (e) {
-			jQuery('#actual_user_image').attr('src', e.target.result);
-		};
-		reader.readAsDataURL(this.files[0]);
-	}
-});
-jQuery('#profile_reset').click(function () {
-	document.profile.reset();
-	$('#actual_user_image').attr('src', 'img/usr/' + $('#orig_image').val());
+	// soft scroll links
+	jQuery('a').on('click', function (e){
+		e.target = $(e.target).closest('a')[0];
+		if ( e.target.hash ) {
+			var is_user = e.target.hash.match(/speaker-/);
+			if (is_user) {
+				jQuery(e.target.hash).addClass('active');
+				setTimeout(function() { jQuery(e.target.hash).removeClass('active'); }, 5000);
+			}
+
+			jQuery( e.target.hash ).scroll_top(is_user ? 60 : 0, function() {
+				if (e.target.hash == '#login') jQuery('#inputUser').focus();
+				document.location.hash = e.target.hash;
+			});
+			e.preventDefault();
+		}
+	});
+
+	// Profile image
+	jQuery('#user_image').change(function() {
+		if (this.files && this.files[0]) {
+			var reader = new FileReader();
+			reader.onload = function (e) {
+				jQuery('#actual_user_image').attr('src', e.target.result);
+			};
+			reader.readAsDataURL(this.files[0]);
+		}
+	});
+	jQuery('#profile_reset').click(function () {
+		document.profile.reset();
+		$('#actual_user_image').attr('src', 'img/usr/' + $('#orig_image').val());
+	});
 });

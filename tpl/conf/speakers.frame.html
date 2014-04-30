@@ -3,4 +3,27 @@
 </div>
 <?php echo $event['html_speakers']; ?>
 
-<!-- <pre><?php print_r($event); ?></pre> -->
+<div class="row">
+	<?php 
+		$count = count($event['speakers']);
+		for ($i=0; $i < $count; $i++): 
+			if ($i % 3 == 0 && $i != 0) {
+				$left = $count - $i;
+				echo $left < 3 ? '</div><div class="row"><div class="col-md-' . (3 - $left) * 2 . '"></div>' : '</div><div class="row">' ;
+			}
+			$speaker = $event['speakers'][$i];
+		?>
+		<div class="col-sm-6 col-md-4">
+			<div class="thumbnail" style="text-align: center;" id="speaker-<?=$speaker['userID']; ?>">
+				<img src="./img/usr/<?=$speaker['photo']; ?>" alt="..." style="max-height:300px">
+				<div class="caption">
+					<h3><?=$speaker['name']; ?></h3>
+					<p><?=$speaker['title']; ?><br/><?=$speaker['firm']; ?></p>
+				</div>
+				<a class="direct-link" href="#speaker-<?=$speaker['userID']; ?>"><i class="fa fa-link"></i></a>
+			</div>
+		</div>
+	<?php endfor; ?>
+</div>
+
+<!-- <pre><?php print_r($event['speakers']); ?></pre> -->
