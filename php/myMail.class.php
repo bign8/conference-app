@@ -6,6 +6,7 @@ class myMail extends PHPMailer {
 	function __construct() {
 		parent::__construct();
 		$this->setFrom(config::myMail_from_email, config::myMail_from_name);
+		$this->CharSet = 'UTF-8';
 
 		$this->isSMTP();                        // Set mailer to use SMTP
 		$this->Host       = 'smtp.gmail.com';   // Specify main and backup server

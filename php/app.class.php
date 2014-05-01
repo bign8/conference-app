@@ -48,7 +48,7 @@ class App {
 		if (!$conf) return false;
 
 		// Attendee
-		$sth = $this->db->prepare("SELECT * FROM attendee a LEFT JOIN user u ON a.userID = u.userID WHERE a.conferenceID=?;");
+		$sth = $this->db->prepare("SELECT * FROM attendee a LEFT JOIN user u ON a.userID = u.userID WHERE a.conferenceID=? ORDER BY name;");
 		$sth->execute( $conf['conferenceID'] );
 		$conf['attendees'] = $sth->fetchAll();
 
@@ -56,6 +56,11 @@ class App {
 		$sth = $this->db->prepare("SELECT * FROM location WHERE locationID=? LIMIT 1;");
 		$sth->execute( $conf['locationID'] );
 		$conf['location'] = $sth->fetch();
+
+		// Speakers
+		$sth = $this->db->prepare("SELECT DISTINCT u.* FROM session s JOIN speaker p ON p.sessionID = s.sessionID LEFT JOIN user u ON p.userID = u.userID WHERE conferenceID=? AND p.featured='true' ORDER BY u.name;");
+		$sth->execute( $conf['conferenceID'] );
+		$conf['speakers'] = $sth->fetchAll();
 
 		// Agenda
 		$sth1 = $this->db->prepare("SELECT * FROM session s WHERE conferenceID=? ORDER BY \"date\", start, s.title;");
@@ -68,15 +73,16 @@ class App {
 			array_push($conf['agenda'], $row);
 		}
 
-		// Speakers
-		$sth = $this->db->prepare("SELECT DISTINCT u.* FROM session s JOIN speaker p ON p.sessionID = s.sessionID LEFT JOIN user u ON p.userID = u.userID WHERE conferenceID=? AND p.featured='true' ORDER BY u.name;");
-		$sth->execute( $conf['conferenceID'] );
-		$conf['speakers'] = $sth->fetchAll();
-
 		// Sponsors
-		$sth = $this->db->prepare("SELECT * FROM sponsor s LEFT JOIN company c ON s.companyID=c.companyID LEFT JOIN rep r ON s.sponsorID=r.sponsorID LEFT JOIN user u ON r.userID=u.userID WHERE s.conferenceID=? ORDER BY s.priority, r.priority;");
-		$sth->execute( $conf['conferenceID'] );
-		$conf['sponsors'] = $sth->fetchAll();
+		$sth1 = $this->db->prepare("SELECT * FROM sponsor s LEFT JOIN company c ON s.companyID=c.companyID WHERE s.conferenceID=? ORDER BY priority, name;");
+		$sth2 = $this->db->prepare("SELECT * FROM rep r LEFT JOIN user u ON r.userID=u.userID WHERE r.sponsorID=? ORDER BY priority, name;");
+		$sth1->execute( $conf['conferenceID'] );
+		$conf['sponsors'] = array();
+		while (false !== ($row = $sth1->fetch())) {
+			$sth2->execute( $row['sponsorID'] );
+			$row['reps'] = $sth2->fetchAll();
+			array_push($conf['sponsors'], $row);
+		}
 
 		return $conf;
 	}

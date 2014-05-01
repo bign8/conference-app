@@ -3,4 +3,29 @@
 </div>
 <?php echo $event['html_sponsors']; ?>
 
-<!-- <pre><?php print_r($event); ?></pre> -->
+<div class="row">
+	<?php 
+		$count = count($event['sponsors']);
+		for ($i=0; $i < $count; $i++): 
+			if ($i % 3 == 0 && $i != 0) {
+				$left = $count - $i;
+				echo $left < 3 ? '</div><div class="row"><div class="col-md-' . (3 - $left) * 2 . '"></div>' : '</div><div class="row">' ;
+			}
+			$sponsor = $event['sponsors'][$i];
+		?>
+		<div class="col-sm-6 col-md-4">
+			<div class="thumbnail" style="text-align: center;" id="sponsor-<?=$sponsor['sponsorID']; ?>">
+				<?php if (!is_null($sponsor['logo'])): ?>
+					<img src="./data/sponsor/<?=$sponsor['sponsorID']; ?>/<?=$sponsor['logo']; ?>" alt="..." style="max-height:300px">
+				<?php endif; ?>
+				<div class="caption">
+					<h3><?=$sponsor['name']; ?></h3>
+					<p><?=$sponsor['bio']; ?></p>
+				</div>
+				<a class="direct-link" href="#sponsor-<?=$sponsor['sponsorID']; ?>"><i class="fa fa-link"></i></a>
+			</div>
+		</div>
+	<?php endfor; ?>
+</div>
+
+<!-- <pre><?php print_r($event['sponsors']); ?></pre> -->
