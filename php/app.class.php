@@ -58,9 +58,15 @@ class App {
 		$conf['location'] = $sth->fetch();
 
 		// Agenda
-		$sth = $this->db->prepare("SELECT * FROM session s LEFT JOIN speaker p ON p.sessionID=s.sessionID LEFT JOIN user u ON p.userID=u.userID WHERE conferenceID=? ORDER BY \"date\", start, s.title;");
-		$sth->execute( $conf['conferenceID'] );
-		$conf['agenda'] = $sth->fetchAll();
+		$sth1 = $this->db->prepare("SELECT * FROM session s WHERE conferenceID=? ORDER BY \"date\", start, s.title;");
+		$sth2 = $this->db->prepare("SELECT u.* FROM speaker s LEFT JOIN user u ON s.userID=u.userID WHERE sessionID=? ORDER BY name;");
+		$sth1->execute( $conf['conferenceID'] );
+		$conf['agenda'] = array();
+		while (false !== ($row = $sth1->fetch())) {
+			$sth2->execute( $row['sessionID'] );
+			$row['speakers'] = $sth2->fetchAll();
+			array_push($conf['agenda'], $row);
+		}
 
 		// Speakers
 		$sth = $this->db->prepare("SELECT DISTINCT u.* FROM session s JOIN speaker p ON p.sessionID = s.sessionID LEFT JOIN user u ON p.userID = u.userID WHERE conferenceID=? AND p.featured='true' ORDER BY u.name;");
