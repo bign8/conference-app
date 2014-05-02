@@ -116,9 +116,27 @@ jQuery(document).ready(function() {
 
 angular.module('event', [
 	'event-attendee',
+	'event-speaker',
 	'helpers',
 	'ui.bootstrap',
 ]);
+
+angular.module('event-speaker', []).controller('event-speaker', ['$scope', '$modal', function ($scope, $modal) {
+	$scope.open = function (user) {
+		user = JSON.parse(user.split('~~~').join('"'));
+		var instance = $modal.open({
+			templateUrl: 'tpl/dialog.tpl.html',
+			resolve: {
+				user: function() { return user; }
+			},
+			controller: ['$scope', 'user', '$modalInstance', function ($scope, user, $modalInstance) {
+				$scope.user = user;
+				$scope.ok = function () { $modalInstance.close($scope.person); };
+				$scope.cancel = function () { $modalInstance.dismiss('cancel'); };
+			}]
+		});
+	};
+}]);
 
 angular.module('event-attendee', []).controller('event-attendee', ['$scope', '$sce', function ($scope, $sce) {
 	

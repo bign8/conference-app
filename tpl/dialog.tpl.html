@@ -1,0 +1,21 @@
+<div class="modal-header">
+	<h2>{{user.name}} <small>{{user.title}}</small></h2>
+</div>
+<div class="modal-body">
+	<div class="row">
+		<div class="col-xs-4 image">
+			<img 
+				ng-src="./data/usr/{{user.photo}}"
+				class="img-rounded img-responsive center-block"
+				ng-attr-title="{{user.name}}" />
+		</div>
+		<div class="col-xs-8">
+			<p data-ng-bind="user.bio"></p>
+		</div>
+	</div>
+	<!-- <textarea ng-model="user.note" class="form-control text-auto-scale" placeholder="Notes..." ></textarea> -->
+</div>
+<div class="modal-footer">
+	<button class="btn btn-primary btn-sm" ng-click="ok()"><!-- <i class="glyphicon glyphicon-floppy-disk"></i> &nbsp; -->Close</button>
+	<!-- <button class="btn btn-warning pull-left btn-sm" ng-click="cancel()">Cancel</button> -->
+</div>
