@@ -78,7 +78,7 @@ jQuery(document).ready(function() {
 	jQuery('a').on('click', function (e){
 		e.target = $(e.target).closest('a')[0];
 		if ( e.target.hash ) {
-			var is_user = e.target.hash.match(/speaker-/);
+			var is_user = e.target.hash.match(/speaker-/) || e.target.hash.match(/sponsor-/);
 			if (is_user) {
 				jQuery(e.target.hash).addClass('active');
 				setTimeout(function() { jQuery(e.target.hash).removeClass('active'); }, 5000);
