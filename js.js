@@ -107,3 +107,66 @@ jQuery(document).ready(function() {
 		$('#actual_user_image').attr('src', 'data/usr/' + $('#orig_image').val());
 	});
 });
+
+
+/* ------------------------------------------------------------------- *|
+ * angular page accents
+ * docs:  https://docs.angularjs.org/api/
+ * ------------------------------------------------------------------- */
+
+angular.module('event', [
+	'event-attendee',
+	'helpers',
+	'ui.bootstrap',
+]);
+
+angular.module('event-attendee', []).controller('event-attendee', ['$scope', '$sce', function ($scope, $sce) {
+	
+	// Parse data (http://regexpal.com/)
+	var data, obj, regex = />([^<]*).*[\s]+[^>]+>([^<]*)<.*[\s]+[^>]+>([\s]+[^<]*)<.*[\s]+.*tel:([^"]*).*[\s]+.*mailto:([^"]*)/;
+	$scope.data = [];
+	$('#attendee tr.data').each(function (i, e){
+		data = e.innerHTML.match(regex);
+		obj = {
+			name : data[1].trim(),
+			title: data[2].trim(),
+			firm : data[3].trim(),
+			phone: data[4].trim(),
+			email: data[5].trim(),
+		};
+		obj.safe = {
+			name : $sce.trustAsHtml(obj.name ),
+			title: $sce.trustAsHtml(obj.title),
+			firm : $sce.trustAsHtml(obj.firm ),
+		};
+		$scope.data.push(obj);
+	});
+
+	// Searching
+	$scope.total_rows = function () {
+		$scope.filtered_data = $scope.filtered_data ? $scope.filtered_data : [];
+		var tail = ($scope.filtered_data.length == $scope.data.length) ? '' : (' of ' + $scope.data.length);
+		return 'Total: ' + $scope.filtered_data.length + tail;
+	};
+
+	// Pagination
+	$scope.limits = [15,25,50,100];
+	$scope.limit = $scope.limits[0];
+	$scope.page = 1;
+
+	// Order By
+	$scope.fields = [
+		{field: ['name'], disp: 'Name'},
+		{field: ['title','name'], disp: 'Title'},
+		{field: ['firm','name'], disp: 'Firm'},
+	];
+	$scope.field = $scope.fields[0].field;
+	$scope.sort_order = false;
+}]);
+
+angular.module('helpers', []).filter('pagination', function () {
+	return function (inputArray, selectedPage, pageSize) {
+		var start = (selectedPage-1) * pageSize;
+		return inputArray.slice(start, start + pageSize);
+	};
+});
