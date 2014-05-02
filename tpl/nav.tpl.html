@@ -13,15 +13,19 @@
 				<li class="active">
 					<a href="#home"><?php echo isset($event['title']) ? $event['title'] : 'Home'; ?></a>
 				</li>
-				<li><a href="#about">About</a></li>
-				<?php if (isset($event)): ?>
-					<li><a href="#location">Location</a></li>
-					<li><a href="#speakers">Speakers</a></li>
-					<li><a href="#agenda">Agenda</a></li>
-					<li><a href="#attendees">Attendees</a></li>
-					<li><a href="#sponsors">Sponsors</a></li>
+				<?php if (strpos($_SERVER['PHP_SELF'],'profile.php')===false): ?>
+					<li><a href="#about">About</a></li>
+					<?php if (isset($event)): ?>
+						<li><a href="#location">Location</a></li>
+						<li><a href="#speakers">Speakers</a></li>
+						<li><a href="#agenda">Agenda</a></li>
+						<li><a href="#attendees">Attendees</a></li>
+						<li><a href="#sponsors">Sponsors</a></li>
+					<?php endif; ?>
+					<?php if (isset($_SESSION['user']) && !isset($event)): ?>
+						<li><a href="#conf">My Conferences</a></li>
+					<?php endif; ?>
 				<?php endif; ?>
-				<?php if (isset($_SESSION['user']) && !isset($event)): ?><li><a href="#conf">My Conferences</a></li><?php endif; ?>
 			</ul>
 			<ul class="nav navbar-nav navbar-right">
 				<?php if ($auth): ?>

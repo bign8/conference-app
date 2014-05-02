@@ -1,5 +1,4 @@
 <?php
-
 	$title = 'Profile';
 	include('tpl/head.tpl.html');
 ?>

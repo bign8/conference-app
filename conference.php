@@ -1,6 +1,6 @@
 <?php
 	require_once('php' . DIRECTORY_SEPARATOR . 'index.php');
-	set_exception_handler(function () { header('Location: ./#login'); });
+	set_exception_handler(function () { header('Location: /event/#login'); }); // TODO: fix on release!
 
 	if (!isset($_SESSION['user']) || !$app->is_my_conf($_REQUEST['slug'], $_SESSION['user']['userID'])) throw new Exception('un-authed');
 
