@@ -1,7 +1,11 @@
 <div class="jumbotron">
 	<img class="pull-right img-responsive col-sm-2 hidden-xs img-rounded" src="./data/ua-logo.png" alt="Upstream Academy">
 	<h1>Upstream Academy Events</h1>
-	<p>Please <a href="#login">login or create an account</a>.</p>
+	<?php if (isset($_SESSION['user'])): ?>
+		<p>Welcome! Check out your <a href="#conf">Conferences</a>.</p>
+	<?php else: ?>
+		<p>Please <a href="#login">login or create an account</a>.</p>
+	<?php endif; ?>
 	<p><a class="btn btn-primary btn-lg" role="button">Learn more</a></p>
 </div>
 <p class="lead">
