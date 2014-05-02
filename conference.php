@@ -1,6 +1,9 @@
 <?php
 	require_once('php' . DIRECTORY_SEPARATOR . 'index.php');
-	set_exception_handler(function () { header('Location: .'); });
+	set_exception_handler(function () { header('Location: ./#login'); });
+
+	if (!isset($_SESSION['user']) || !$app->is_my_conf($_REQUEST['slug'], $_SESSION['user']['userID'])) throw new Exception('un-authed');
+
 	if (false === ($event = $app->get_conf($_REQUEST['slug']))) throw new Exception('Un-found event');
 	$title = $event['title'];
 	include('tpl/head.tpl.html');

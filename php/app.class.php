@@ -39,6 +39,13 @@ class App {
 		return $sth->fetchAll();
 	}
 
+	public function is_my_conf($slug, $userID) {
+		return true;
+		$sth = $this->db->prepare("SELECT * FROM attendee a LEFT JOIN conference c ON a.conferenceID=a.conferenceID WHERE userID=? AND slug=?;");
+		$sth->execute($userID, $slug);
+		return count($sth->fetchAll()) > 0;
+	}
+
 	public function get_conf($slug) {
 
 		// General Conference
