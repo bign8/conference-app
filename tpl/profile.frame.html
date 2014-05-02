@@ -1,6 +1,8 @@
 <?php
 	if (isset($_SESSION['user'])) $user = $_SESSION['user'];
 	else die(header('Location: .'));
+
+	$user['photo'] = is_null($user['photo']) ? 'default.jpg' : $user['photo']; // Default image
 ?>
 
 <div class="page-header">
