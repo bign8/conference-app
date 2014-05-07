@@ -4,5 +4,6 @@
 	RewriteEngine On
 	RewriteBase /event/
 	RewriteCond %{REQUEST_FILENAME} !-f
+	RewriteCond %{REQUEST_FILENAME} !-d
 	RewriteRule (.*) conference.php?slug=$1 [L]
 </IfModule>
