@@ -19,10 +19,16 @@
 					<img src="./data/sponsor/<?=$sponsor['logo']; ?>" alt="..." style="max-height:300px">
 				<?php endif; ?>
 				<div class="caption">
-					<h3><?=$sponsor['name']; ?></h3>
+					<h3>
+						<?php if (is_null($sponsor['site'])): ?>
+							<?=$sponsor['name']; ?>
+						<?php else: ?>
+							<a href="<?=$sponsor['site']; ?>" style="color:#333;" target="_blank"><?=$sponsor['name']; ?></a>
+						<?php endif; ?>
+					</h3>
 					<p><?=$sponsor['bio']; ?></p>
 				</div>
-				<a class="direct-link" href="#sponsor-<?=$sponsor['sponsorID']; ?>"><i class="fa fa-link"></i></a>
+				<!-- <a class="direct-link" href="#sponsor-<?=$sponsor['sponsorID']; ?>"><i class="fa fa-link"></i></a> -->
 			</div>
 		</div>
 	<?php endfor; ?>
