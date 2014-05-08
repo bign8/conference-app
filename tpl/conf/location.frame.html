@@ -40,12 +40,14 @@ $html = str_replace("\r", '', $html);
 <div id="map-canvas" class="full-map"></div>
 
 <script type="text/javascript">
+	//*
 	var my_map = new ELA_MAP(
 		document.getElementById('map-canvas'), 
 		<?php echo $event['location']['map_options']; ?>,
 		"<?php echo $event['location']['name']; ?>",
 		"<?php echo $html; ?>"
 	);
+	//*/
 </script>
 
 <!-- <pre><?php print_r($event); ?></pre> -->

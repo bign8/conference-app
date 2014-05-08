@@ -17,7 +17,7 @@ foreach ($days as $date => $day):
 		<h3><?=date("l, F j, Y", strtotime($date)); ?></h3>
 	</div>
 
-	<table class="table">
+	<table class="table" data-ng-controller="event-agenda">
 		<thead>
 			<tr>
 				<th class="col-md-2">Time</th>
@@ -39,7 +39,7 @@ foreach ($days as $date => $day):
 						<?php 
 							if (count($item['speakers']) == 0) echo '-';
 							foreach ($item['speakers'] as $speaker) {
-								echo '<a href="#speaker-' . $speaker['userID'] . '" title="' . $speaker['title'] . ' - ' . $speaker['firm'] . '">' . $speaker['name'] . '</a><br/>';
+								echo '<a href="#" title="' . $speaker['title'] . ' - ' . $speaker['firm'] . '" data-ng-click="show_user(' . $speaker['userID'] . ')" >' . $speaker['name'] . '</a><br/>';
 							}
 						?>
 					</td>

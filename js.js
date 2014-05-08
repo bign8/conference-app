@@ -67,9 +67,9 @@ ELA_MAP.prototype = {
  * ------------------------------------------------------------------- */
 
 // jQuery soft scroll
-jQuery.fn.scroll_top = function (offset, cb) {
+jQuery.fn.scroll_top = function (cb) {
 	if ( this.offset() ) jQuery('html, body').animate({
-		scrollTop: Math.max(parseInt( this.offset().top, 10 )-offset, 0)
+		scrollTop: Math.max(parseInt( this.offset().top, 10 ), 0)
 	}, 500, cb);
 };
 jQuery(document).ready(function() {
@@ -77,14 +77,9 @@ jQuery(document).ready(function() {
 	// soft scroll links
 	jQuery('a').on('click', function (e){
 		e.target = $(e.target).closest('a')[0];
+		console.log(e.target.hash);
 		if ( e.target.hash ) {
-			var is_user = e.target.hash.match(/speaker-/) || e.target.hash.match(/sponsor-/);
-			if (is_user) {
-				jQuery(e.target.hash).addClass('active');
-				setTimeout(function() { jQuery(e.target.hash).removeClass('active'); }, 5000);
-			}
-
-			jQuery( e.target.hash ).scroll_top(is_user ? 60 : 0, function() {
+			jQuery( e.target.hash ).scroll_top(function() {
 				if (e.target.hash == '#login') jQuery('#inputUser').focus();
 				document.location.hash = e.target.hash;
 			});
@@ -115,27 +110,32 @@ jQuery(document).ready(function() {
  * ------------------------------------------------------------------- */
 
 angular.module('event', [
+	'event-agenda',
 	'event-attendee',
 	'event-speaker',
 	'helpers',
 	'ui.bootstrap',
 ]);
 
-angular.module('event-speaker', []).controller('event-speaker', ['$scope', '$modal', function ($scope, $modal) {
-	$scope.open = function (user) {
-		user = JSON.parse(user.split('~~~').join('"'));
+angular.module('event-speaker', []).controller('event-speaker', ['$scope', '$modal', 'API', function ($scope, $modal, API) {
+	var User = new API('user');
+	$scope.show_user = function (userID) {
 		var instance = $modal.open({
-			templateUrl: 'tpl/dialog.tpl.html',
-			resolve: {
-				user: function() { return user; }
-			},
+			templateUrl: 'tpl/user.dialog.tpl.html',
+			resolve: { user: User.get.bind(User, userID) },
 			controller: ['$scope', 'user', '$modalInstance', function ($scope, user, $modalInstance) {
 				$scope.user = user;
 				$scope.ok = function () { $modalInstance.close($scope.person); };
 				$scope.cancel = function () { $modalInstance.dismiss('cancel'); };
 			}]
 		});
+		// TODO: Notes on speaker
 	};
+}]);
+
+angular.module('event-agenda', []).controller('event-agenda', ['$scope', '$controller', function ($scope, $controller) {
+	angular.extend(this, $controller('event-speaker', {$scope: $scope}));
+	// TODO: Notes on agenda item
 }]);
 
 angular.module('event-attendee', []).controller('event-attendee', ['$scope', '$sce', function ($scope, $sce) {
@@ -187,4 +187,43 @@ angular.module('helpers', []).filter('pagination', function () {
 		var start = (selectedPage-1) * pageSize;
 		return inputArray.slice(start, start + pageSize);
 	};
-});
+}).factory('API', ['$http', function ($http) { // TODO: improve with browser data cashe
+	var base = './db/';
+	var cleanup = function (result) { /*clear_new.call(this);*/ return result.data; };
+	var rem_obj = function (item) { this.list.splice(this.list.indexOf(item), 1); };
+	// var clear_new = function() {
+	// 	var len = (this.list || []).length;
+	// 	for (var i = 0; i < len; i++) this.list[i].is_new = false;
+	// };
+	var add_obj = function (item, data) {
+		// item.is_new = true;
+		item[ this.id ] = data.success.data;
+		this.list.unshift(item);
+	};
+	var service = function(table, identifier, cb) {
+		this.list = [];
+		this.table = table;
+		this.id = identifier || (table + 'ID'); // standard convention (tablename + ID, ie: faq = faqID)
+		this.all().then(angular.extend.bind(undefined, this.list)).then(cb);
+	};
+	service.prototype = {
+		all: function () {
+			return $http.get(base + this.table).then( cleanup.bind(this) );
+		},
+		get: function (itemID) {
+			return $http.get(base + this.table + '/' + itemID).then( cleanup.bind(this) );
+		},
+		set: function (item) {
+			return $http.put(base + this.table + '/' + item[ this.id ], item).then( cleanup.bind(this) );
+		},
+		rem: function (item) {
+			return $http.delete(base + this.table + '/' + item[ this.id ]).then( cleanup.bind(this) ).then(rem_obj.bind(this, item));
+		},
+		add: function (item) {
+			return $http.post(base + this.table, item).then( cleanup.bind(this) ).then(add_obj.bind(this, item));
+		}
+	};
+	return service;
+}]).config(['$locationProvider', function ($locationProvider) {
+	$locationProvider.html5Mode(true); // fix link hashes
+}]);
