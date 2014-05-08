@@ -1,6 +1,9 @@
 <?php
 
-// TODO security
+// Security
+if (session_id() == '') session_start();
+if (!isset($_SESSION['user'])) exit(ArrestDB::Reply( ArrestDB::$FORBIDDEN ));
+
 $dsn = 'sqlite:' . implode(DIRECTORY_SEPARATOR, array(__DIR__, '..', 'php', 'db.db'));
 
 /**
