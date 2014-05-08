@@ -10,6 +10,15 @@ $forbidden = array(
 // TODO security
 $dsn = 'sqlite:' . implode(DIRECTORY_SEPARATOR, array(__DIR__, '..', 'php', 'db.db'));
 
+// N8-ADD: only allow these actions and provide these fields on these tables
+$whitelist = array(
+	'user' => array(
+		'actions' => array('GET'),
+		'fields' => array('userID', 'name', 'title', 'firm', 'phone', 'photo', 'bio', 'email', 'seen')
+	),
+);
+// N8-END
+
 /**
 * The MIT License
 * http://creativecommons.org/licenses/MIT/
@@ -38,8 +47,9 @@ if (array_key_exists('_method', $_GET) === true) {
 }
 
 ArrestDB::Serve('GET', '/(#any)/(#any)/(#any)', function ($table, $id, $data) {
+	global $whitelist; // N8-ADD
 	$query = array(
-		sprintf('SELECT * FROM "%s"', $table),
+		sprintf('SELECT %s FROM "%s"', implode(', ', $whitelist[$table]['fields']), $table), // N8-MOD
 		sprintf('WHERE "%s" %s ?', $id, (ctype_digit($data) === true) ? '=' : 'LIKE'),
 	);
 
@@ -78,8 +88,9 @@ ArrestDB::Serve('GET', '/(#any)/(#any)/(#any)', function ($table, $id, $data) {
 });
 
 ArrestDB::Serve('GET', '/(#any)/(#num)?', function ($table, $id = null) {
+	global $whitelist; // N8-ADD
 	$query = array(
-		sprintf('SELECT * FROM "%s"', $table),
+		sprintf('SELECT %s FROM "%s"', implode(', ', $whitelist[$table]['fields']), $table), // N8-MOD
 	);
 
 	if (isset($id) === true) {
@@ -434,6 +445,13 @@ class ArrestDB {
 				if (substr($root, -1) != '/') $root .= '/';
 			}
 			if (preg_match('~^' . str_replace(array('#any', '#num'), array('[^/]++', '[0-9]++'), $route) . '~i', $root, $parts) > 0) {
+
+				// N8-ADD: Can we perform action on table?
+				global $whitelist, $forbidden;
+				$actions = @$whitelist[$parts[1]]['actions'];
+				if (!is_array($actions) || !in_array($on, $actions)) exit(ArrestDB::Reply($forbidden));
+				// N8-END
+
 				return (empty($callback) === true) ? true : exit(call_user_func_array($callback, array_slice($parts, 1)));
 			}
 		}
