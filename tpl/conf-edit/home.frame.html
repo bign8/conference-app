@@ -1,0 +1,57 @@
+<div class="page-header">
+	<h1>
+		<small class="pull-right">Logo</small>
+		Title 
+		<small>Theme</small>
+	</h1>
+	Start - End<br/>
+	<i>Location</i>.name &mdash; <i>Location</i>.city, <i>Location</i>.state
+</div>
+
+Landing HTML
+
+<hr/>
+
+<div class="row">
+	<div class="col-md-4">
+		<div class="form-group">
+			<label for="conf.title">Title: *</label>
+			<input type="text" id="conf.title" name="conf.title" class="form-control" value="<?=$event['title']; ?>" required />
+		</div>
+	</div>
+	<div class="col-md-4">
+		<div class="form-group">
+			<label for="conf.theme">Theme: *</label>
+			<input type="text" id="conf.theme" name="conf.theme" class="form-control" value="<?=$event['theme']; ?>" required />
+		</div>
+	</div>
+	<div class="col-md-4">
+		<div class="form-group">
+			<label for="conf.logo">Logo: *</label>
+			<input type="text" id="conf.logo" name="conf.logo" class="form-control" value="<?=$event['logo']; ?>" required />
+			<p class="help-block">Should be uploaded to <code>/data/logo/</code> or already there.</p>
+		</div>
+	</div>
+</div>
+
+<div class="row">
+	<div class="col-md-6">
+		<div class="form-group">
+			<label for="conf.start_stamp">Start: *</label>
+			<input type="text" id="conf.start_stamp" name="conf.start_stamp" class="form-control" value="<?=$event['start_stamp']; ?>" required />
+			<p class="help-block">Enter <code>2014-07-13</code> to be printed like <code>July 13, 2014</code></p>
+		</div>
+	</div>
+	<div class="col-md-6">
+		<div class="form-group">
+			<label for="conf.end_stamp">End: *</label>
+			<input type="text" id="conf.end_stamp" name="conf.end_stamp" class="form-control" value="<?=$event['end_stamp']; ?>" required />
+			<p class="help-block">Enter <code>2014-07-14</code> to be printed like <code>July 14, 2014</code></p>
+		</div>
+	</div>
+</div>
+
+<div class="form-group">
+	<label for="conf.html_landing">Landing HTML:</label>
+	<textarea id="conf.html_landing" class="form-control"><?=$event['html_landing']; ?></textarea>
+</div>

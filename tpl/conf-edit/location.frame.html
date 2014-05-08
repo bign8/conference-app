@@ -1,0 +1,95 @@
+<div class="page-header">
+	<h1>Location <small>Location.name</small></h1>
+</div>
+
+<div class="row">
+	<div class="col-md-6">
+
+		<div style="background-color: white; border: 1px solid #E3E3E3" class="well">
+			<h3 style="margin-top: 0; text-align: center">Location Name</h3>
+			<div class="row">
+				<div class="col-md-6">
+					<div class="well" style="margin-bottom:0">
+						<h4 style="margin-top:0">Address:</h4>
+						<address style="margin-bottom:0">
+							Address<br>
+							City&nbsp;State
+						</address>
+					</div>	
+				</div>
+				<div class="col-md-6">
+					<div class="well" style="margin-bottom:0">
+						<h4 style="margin-top:0">Maps:</h4>
+						Hotel Map: <a href="#">(PDF)</a><br/>
+						Local Map: <em>unavailable</em><br/>
+					</div>
+				</div>
+			</div>
+		</div>
+		
+		<div class="row">
+			<div class="col-md-6">
+				<div class="form-group">
+					<label for="loc.name">Location Name:</label>
+					<input type="text" id="loc.name" name="loc.name" class="form-control" value="<?=$event['location']['name']; ?>" required />
+				</div>
+			</div>
+			<div class="col-md-6">
+				<div class="form-group">
+					<label for="loc.address">Address:</label>
+					<input type="text" id="loc.address" name="loc.address" class="form-control" value="<?=$event['location']['address']; ?>" required />
+				</div>
+			</div>
+		</div>
+
+		<div class="row">
+			<div class="col-md-6">
+				<div class="form-group">
+					<label for="loc.city">City:</label>
+					<input type="text" id="loc.city" name="loc.city" class="form-control" value="<?=$event['location']['city']; ?>" required />
+				</div>
+			</div>
+			<div class="col-md-6">
+				<div class="form-group">
+					<label for="loc.state">State:</label>
+					<input type="text" id="loc.state" name="loc.state" class="form-control" value="<?=$event['location']['state']; ?>" required />
+				</div>
+			</div>
+		</div>
+
+		<div class="row">
+			<div class="col-md-6">
+				<div class="form-group">
+					<label for="loc.hotel">Hotel Map:</label>
+					<input type="text" id="loc.hotel" name="loc.hotel" class="form-control" value="<?=$event['location']['hotel_map']; ?>" required />
+				</div>
+			</div>
+			<div class="col-md-6">
+				<div class="form-group">
+					<label for="loc.loc_map">Local Map:</label>
+					<input type="text" id="loc.loc_map" name="loc.loc_map" class="form-control" value="<?=$event['location']['location_map']; ?>" required />
+				</div>
+			</div>
+		</div>
+	</div>
+	<div class="col-md-6">
+		<div class="form-group">
+			<label for="html_location">Location HTML:</label>
+			<textarea id="html_location" class="form-control"><?=$event['html_location']; ?></textarea>
+			<p class="help-block">Should be uploaded to <code>/data/doc/</code> or already there.</p>
+		</div>
+
+		<div class="form-group">
+			<label for="loc.desc">Location Description:</label>
+			<textarea id="loc.desc" class="form-control"><?=$event['desc']; ?></textarea>
+			<p class="help-block">Should be uploaded to <code>/data/doc/</code> or already there.</p>
+		</div>
+	</div>
+</div>
+
+
+<div id="map-canvas" class="full-map"></div>
+
+<script type="text/javascript">
+	var my_map = new ELA_MAP_EDIT( document.getElementById('map-canvas') );
+</script>

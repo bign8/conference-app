@@ -1,0 +1,108 @@
+<div class="page-header">
+	<h1>Attendees</h1>
+</div>
+<?php echo $event['html_attendees']; ?>
+<div data-ng-controller="event-attendee">
+	<div class="row" style="display:none" data-ng-style="{display:'inherit'}">
+
+		<!-- search -->
+		<div class="col-md-7 col-sm-8">
+			<div class="input-group">
+				<label class="input-group-addon" for="search_field">Search</label>
+				<input type="text" class="form-control" id="search_field" placeholder="Type here..." data-ng-model="search_str">
+				<span class="input-group-btn">
+					<button class="btn btn-danger" data-ng-click="search_str=''">
+						<i class="glyphicon glyphicon-remove" style="top:2px"></i>
+					</button>
+				</span>
+			</div>
+		</div>
+
+		<!-- order -->
+		<div class="col-md-3 col-sm-4 hidden-xs">
+			<div class="input-group">
+				<label class="input-group-addon" for="search_order">Order</label>
+				<select data-ng-model="field" class="form-control" id="search_order" 
+					data-ng-options="x.field as x.disp for x in fields" 
+					data-ng-change="sort_order=false">
+					<option value="" disabled>Order By...</option>
+				</select>
+				<span class="input-group-btn">
+					<button class="btn btn-info" data-ng-click="sort_order=!sort_order">
+						<i class="glyphicon" data-ng-class="{'glyphicon-chevron-down':sort_order, 'glyphicon-chevron-up':!sort_order}"></i>
+					</button>
+				</span>
+			</div>
+		</div>
+
+		<!-- pagination -->
+		<div class="col-md-2 hidden-xs hidden-sm">
+			<div class="input-group">
+				<label class="input-group-addon" for="search_page">Limit</label>
+				<select data-ng-model="limit" class="form-control" id="search_page" data-ng-options="x for x in limits">
+					<option value="" disabled>Per Page...</option>
+				</select>
+			</div>
+		</div>
+	</div>
+
+	<div style="min-height: 600px" class="col-xs-12"><!-- eases the scroll jerk on small searches -->
+		<table class="table table-hover" id="attendee">
+			<thead>
+				<tr>
+					<th>Name</th>
+					<th>Title</th>
+					<th>
+						Firm
+						<small class="pull-right text-right" style="font-weight:normal" data-ng-bind="total_rows();">
+							Total: <?=count($event['attendees']); ?>
+						</small>
+					</th>
+				</tr>
+			</thead>
+			<tbody>
+				<tr data-ng-repeat="item in (filtered_data = (data | filter:search_str)) | orderBy:field:sort_order | pagination:page:limit" 
+					style="display:none" data-ng-style="{display:'table-row'}">
+					<td data-ng-bind-html="item.safe.name"></td>
+					<td data-ng-bind-html="item.safe.title"></td>
+					<td>
+						<span data-ng-bind-html="item.safe.firm"></span>
+						<div class="pull-right">
+							<a href="tel:{{item.phone}}"><i class="glyphicon glyphicon-phone-alt"></i></a>
+							<a href="mailto:{{item.email}}"><i class="glyphicon glyphicon-envelope"></i></a>
+						</div>
+					</td>
+				</tr>
+				<?php foreach ($event['attendees'] as $attendee): ?>
+					<tr class="data" data-ng-style="{display:'none'}">
+						<td><?=$attendee['name']; ?></td>
+						<td><?=$attendee['title']; ?></td>
+						<td>
+							<?=$attendee['firm']; ?>
+							<div class="pull-right">
+								<a href="tel:<?=$attendee['phone']; ?>"><i class="glyphicon glyphicon-phone-alt"></i></a>
+								<a href="mailto:<?=$attendee['email']; ?>"><i class="glyphicon glyphicon-envelope"></i></a>
+							</div>
+						</td>
+					</tr>
+				<?php endforeach; ?>
+			</tbody>
+		</table>
+	</div>
+
+	<div class="text-center" data-ng-show="num_pages !== 1"><!-- pager -->
+		<span 
+			data-pagination
+			data-total-items="filtered_data.length"
+			data-items-per-page="limit"
+			data-page="page"
+			data-max-size="5"
+			data-boundary-links="true"
+			data-previous-text="&lsaquo;"
+			data-next-text="&rsaquo;"
+			data-first-text="&laquo;"
+			data-last-text="&raquo;"
+			data-num-pages="num_pages">
+		</span>
+	</div>
+</div>

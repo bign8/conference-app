@@ -1,0 +1,51 @@
+<div class="page-header">
+	<h1>Agenda</h1>
+</div>
+<?php echo $event['html_agenda']; ?>
+
+<?php
+
+// Pre-processing data
+$days = array(); $old = null;
+foreach ($event['agenda'] as $item) {
+	if (!array_key_exists($item['date'], $days)) $days[$item['date']] = array();
+	array_push($days[$item['date']], $item);
+}
+foreach ($days as $date => $day):
+?>
+	<div class="page-header">
+		<h3><?=date("l, F j, Y", strtotime($date)); ?></h3>
+	</div>
+
+	<table class="table" data-ng-controller="event-agenda">
+		<thead>
+			<tr>
+				<th class="col-md-2">Time</th>
+				<th class="col-md-3">Title</th>
+				<th class="col-md-5">Descripiton</th>
+				<th class="col-md-2">Speaker(s)</th>
+			</tr>
+		</thead>
+		<tbody>
+			<?php foreach ($day as $item): ?>
+				<!-- if it's a new day...re-print the start with new day title -->
+				<tr>
+					<td><?=date("g:i a", strtotime($item['start'])); ?> - <?=date("g:i a", strtotime($item['end'])); ?></td>
+					<td>
+						<?=(count($item['speakers']) > 0) ? '<b>' . $item['title'] . '</b>' : $item['title']; ?>
+					</td>
+					<td><?=($item['desc']=='') ? '-' : $item['desc']; ?></td>
+					<td>
+						<?php 
+							if (count($item['speakers']) == 0) echo '-';
+							foreach ($item['speakers'] as $speaker) {
+								echo '<a href="#" title="' . $speaker['title'] . ' - ' . $speaker['firm'] . '" data-ng-click="show_user(' . $speaker['userID'] . ')" >' . $speaker['name'] . '</a><br/>';
+							}
+						?>
+					</td>
+				</tr>
+			<?php endforeach; ?>
+		</tbody>
+	</table>
+
+<?php endforeach; ?>
