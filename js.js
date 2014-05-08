@@ -77,7 +77,6 @@ jQuery(document).ready(function() {
 	// soft scroll links
 	jQuery('a').on('click', function (e){
 		e.target = $(e.target).closest('a')[0];
-		console.log(e.target.hash);
 		if ( e.target.hash ) {
 			jQuery( e.target.hash ).scroll_top(function() {
 				if (e.target.hash == '#login') jQuery('#inputUser').focus();

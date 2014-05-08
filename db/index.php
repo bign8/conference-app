@@ -1,23 +1,7 @@
 <?php
 
-$forbidden = array(
-	'error' => array(
-		'code' => 403,
-		'status' => 'Forbidden'
-	)
-);
-
 // TODO security
 $dsn = 'sqlite:' . implode(DIRECTORY_SEPARATOR, array(__DIR__, '..', 'php', 'db.db'));
-
-// N8-ADD: only allow these actions and provide these fields on these tables
-$whitelist = array(
-	'user' => array(
-		'actions' => array('GET'),
-		'fields' => array('userID', 'name', 'title', 'firm', 'phone', 'photo', 'bio', 'email', 'seen')
-	),
-);
-// N8-END
 
 /**
 * The MIT License
@@ -29,16 +13,7 @@ $whitelist = array(
 
 if (strcmp(PHP_SAPI, 'cli') === 0) exit('ArrestDB should not be run from CLI.' . PHP_EOL);
 
-if (ArrestDB::Query($dsn) === false) {
-	$result = array(
-		'error' => array(
-			'code' => 503,
-			'status' => 'Service Unavailable',
-		),
-	);
-	
-	exit(ArrestDB::Reply($result));
-}
+if (ArrestDB::Query($dsn) === false) exit(ArrestDB::Reply( ArrestDB::$SERVICE_UNAVAILABLE ));
 
 if (array_key_exists('_method', $_GET) === true) {
 	$_SERVER['REQUEST_METHOD'] = strtoupper(trim($_GET['_method']));
@@ -47,9 +22,8 @@ if (array_key_exists('_method', $_GET) === true) {
 }
 
 ArrestDB::Serve('GET', '/(#any)/(#any)/(#any)', function ($table, $id, $data) {
-	global $whitelist; // N8-ADD
 	$query = array(
-		sprintf('SELECT %s FROM "%s"', implode(', ', $whitelist[$table]['fields']), $table), // N8-MOD
+		sprintf('SELECT %s FROM "%s"', implode(', ', ArrestDB::$WHITELIST[$table]['fields']), $table), // N8-MOD
 		sprintf('WHERE "%s" %s ?', $id, (ctype_digit($data) === true) ? '=' : 'LIKE'),
 	);
 
@@ -78,9 +52,8 @@ ArrestDB::Serve('GET', '/(#any)/(#any)/(#any)', function ($table, $id, $data) {
 });
 
 ArrestDB::Serve('GET', '/(#any)/(#num)?', function ($table, $id = null) {
-	global $whitelist; // N8-ADD
 	$query = array(
-		sprintf('SELECT %s FROM "%s"', implode(', ', $whitelist[$table]['fields']), $table), // N8-MOD
+		sprintf('SELECT %s FROM "%s"', implode(', ', ArrestDB::$WHITELIST[$table]['fields']), $table), // N8-MOD
 	);
 
 	if (isset($id) === true) {
@@ -187,13 +160,8 @@ ArrestDB::Serve('POST', '/(#any)', function ($table) {
 		if ($result === false) {
 			$result = ArrestDB::$CONFLICT;
 		} else {
-			$result = array(
-				'success' => array(
-					'code' => 201,
-					'status' => 'Created',
-					'data' => $result,
-				),
-			);
+			$result = ArrestDB::$CREATED;
+			$result['success']['data'] = $result;
 		}
 	}
 
@@ -202,12 +170,7 @@ ArrestDB::Serve('POST', '/(#any)', function ($table) {
 
 ArrestDB::Serve('PUT', '/(#any)/(#num)', function ($table, $id) {
 	if (empty($GLOBALS['_PUT']) === true) {
-		$result = array(
-			'error' => array(
-				'code' => 204,
-				'status' => 'No Content',
-			),
-		);
+		$result = ArrestDB::$NO_CONTENT;
 	} else if (is_array($GLOBALS['_PUT']) === true) {
 		$data = array();
 
@@ -230,20 +193,29 @@ ArrestDB::Serve('PUT', '/(#any)/(#num)', function ($table, $id) {
 	return ArrestDB::Reply($result);
 });
 
-$result = array(
-	'error' => array(
-		'code' => 400,
-		'status' => 'Bad Request',
-	),
-);
-
-exit(ArrestDB::Reply($result));
+exit(ArrestDB::Reply( ArrestDB::$BAD_REQUEST ));
 
 class ArrestDB {
+
+	// Whitelist (List of abailable tables/operations/fields from db)
+	public static $WHITELIST = array(
+		'user' => array(
+			'actions' => array('GET'),
+			'fields' => array('userID', 'name', 'title', 'firm', 'phone', 'photo', 'bio', 'email', 'seen'),
+		),
+	);
+
+	// Result Messages
 	public static $OK = array(
 		'success' => array(
 			'code' => 200,
 			'status' => 'OK',
+		),
+	);
+	public static $CREATED = array(
+		'success' => array(
+			'code' => 201,
+			'status' => 'Created',
 		),
 	);
 	public static $NO_CONTENT = array(
@@ -251,6 +223,18 @@ class ArrestDB {
 			'code' => 204,
 			'status' => 'No Content',
 		),
+	);
+	public static $BAD_REQUEST = array(
+		'error' => array(
+			'code' => 400,
+			'status' => 'Bad Request',
+		),
+	);
+	public static $FORBIDDEN = array(
+		'error' => array(
+			'code' => 403,
+			'status' => 'Forbidden'
+		)
 	);
 	public static $NOT_FOUND = array(
 		'error' => array(
@@ -264,7 +248,14 @@ class ArrestDB {
 			'status' => 'Conflict',
 		),
 	);
+	public static $SERVICE_UNAVAILABLE = array(
+		'error' => array(
+			'code' => 503,
+			'status' => 'Service Unavailable',
+		),
+	);
 
+	// Operating Functions
 	public static function Query($query = null) {
 		static $db = null;
 		static $result = array();
@@ -417,9 +408,8 @@ class ArrestDB {
 			if (preg_match('~^' . str_replace(array('#any', '#num'), array('[^/]++', '[0-9]++'), $route) . '~i', $root, $parts) > 0) {
 
 				// N8-ADD: Can we perform action on table?
-				global $whitelist, $forbidden;
-				$actions = @$whitelist[$parts[1]]['actions'];
-				if (!is_array($actions) || !in_array($on, $actions)) exit(ArrestDB::Reply($forbidden));
+				$actions = @ArrestDB::$WHITELIST[$parts[1]]['actions'];
+				if (!is_array($actions) || !in_array($on, $actions)) exit(ArrestDB::Reply( ArrestDB::$FORBIDDEN ));
 				// N8-END
 
 				return (empty($callback) === true) ? true : exit(call_user_func_array($callback, array_slice($parts, 1)));
