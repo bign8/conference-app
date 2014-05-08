@@ -69,19 +69,9 @@ ArrestDB::Serve('GET', '/(#any)/(#any)/(#any)', function ($table, $id, $data) {
 	$result = ArrestDB::Query($query, $data);
 
 	if ($result === false) {
-		$result = array(
-			'error' => array(
-				'code' => 404,
-				'status' => 'Not Found',
-			),
-		);
+		$result = ArrestDB::$NOT_FOUND;
 	} else if (empty($result) === true) {
-		$result = array(
-			'error' => array(
-				'code' => 204,
-				'status' => 'No Content',
-			),
-		);
+		$result = ArrestDB::$NO_CONTENT;
 	}
 
 	return ArrestDB::Reply($result);
@@ -113,19 +103,9 @@ ArrestDB::Serve('GET', '/(#any)/(#num)?', function ($table, $id = null) {
 	$result = (isset($id) === true) ? ArrestDB::Query($query, $id) : ArrestDB::Query($query);
 
 	if ($result === false) {
-		$result = array(
-			'error' => array(
-				'code' => 404,
-				'status' => 'Not Found',
-			),
-		);
+		$result = ArrestDB::$NOT_FOUND;
 	} else if (empty($result) === true) {
-		$result = array(
-			'error' => array(
-				'code' => 204,
-				'status' => 'No Content',
-			),
-		);
+		$result = ArrestDB::$NO_CONTENT;
 	} else if (isset($id) === true) {
 		$result = array_shift($result);
 	}
@@ -142,26 +122,11 @@ ArrestDB::Serve('DELETE', '/(#any)/(#num)', function ($table, $id) {
 	$result = ArrestDB::Query($query, $id);
 
 	if ($result === false) {
-		$result = array(
-			'error' => array(
-				'code' => 404,
-				'status' => 'Not Found',
-			),
-		);
+		$result = ArrestDB::$NOT_FOUND;
 	} else if (empty($result) === true) {
-		$result = array(
-			'error' => array(
-				'code' => 204,
-				'status' => 'No Content',
-			),
-		);
+		$result = ArrestDB::$NO_CONTENT;
 	} else {
-		$result = array(
-			'success' => array(
-				'code' => 200,
-				'status' => 'OK',
-			),
-		);
+		$result = ArrestDB::$OK;
 	}
 
 	return ArrestDB::Reply($result);
@@ -186,12 +151,7 @@ if (in_array($http = strtoupper($_SERVER['REQUEST_METHOD']), array('POST', 'PUT'
 
 ArrestDB::Serve('POST', '/(#any)', function ($table) {
 	if (empty($_POST) === true) {
-		$result = array(
-			'error' => array(
-				'code' => 204,
-				'status' => 'No Content',
-			),
-		);
+		$result = ArrestDB::$NO_CONTENT;
 	} else if (is_array($_POST) === true) {
 		$queries = array();
 
@@ -225,12 +185,7 @@ ArrestDB::Serve('POST', '/(#any)', function ($table) {
 		}
 
 		if ($result === false) {
-			$result = array(
-				'error' => array(
-					'code' => 409,
-					'status' => 'Conflict',
-				),
-			);
+			$result = ArrestDB::$CONFLICT;
 		} else {
 			$result = array(
 				'success' => array(
@@ -266,19 +221,9 @@ ArrestDB::Serve('PUT', '/(#any)/(#num)', function ($table, $id) {
 		$result = ArrestDB::Query($query, $GLOBALS['_PUT'], $id);
 
 		if ($result === false) {
-			$result = array(
-				'error' => array(
-					'code' => 409,
-					'status' => 'Conflict',
-				),
-			);
+			$result = ArrestDB::$CONFLICT;
 		} else {
-			$result = array(
-				'success' => array(
-					'code' => 200,
-					'status' => 'OK',
-				),
-			);
+			$result = ArrestDB::$OK;
 		}
 	}
 
@@ -295,6 +240,31 @@ $result = array(
 exit(ArrestDB::Reply($result));
 
 class ArrestDB {
+	public static $OK = array(
+		'success' => array(
+			'code' => 200,
+			'status' => 'OK',
+		),
+	);
+	public static $NO_CONTENT = array(
+		'error' => array(
+			'code' => 204,
+			'status' => 'No Content',
+		),
+	);
+	public static $NOT_FOUND = array(
+		'error' => array(
+			'code' => 404,
+			'status' => 'Not Found',
+		),
+	);
+	public static $CONFLICT = array(
+		'error' => array(
+			'code' => 409,
+			'status' => 'Conflict',
+		),
+	);
+
 	public static function Query($query = null) {
 		static $db = null;
 		static $result = array();
