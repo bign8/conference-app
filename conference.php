@@ -10,7 +10,7 @@
 
 	$is_edit = isset($_REQUEST['edit']);
 	$path = $is_edit ? 'conf-edit' : 'conf';
-	$wrap = $is_edit ? 'form' : 'div';
+	$wrap = $is_edit ? 'form method="POST" action="./' . $_REQUEST['slug'] . '?edit" data-ng-non-bindable' : 'div';
 ?>
 
 <?php if ($is_edit): ?>
@@ -25,7 +25,10 @@
 	</script>
 <?php endif; ?>
 
+<pre><?=print_r($_REQUEST, true); ?></pre>
+
 <<?=$wrap; ?> id="wrap">
+	<?php if ($is_edit) echo '<input type="hidden" name="conferenceID" value="' . $event['conferenceID'] . '" />'; ?>
 	<?php $panel_include('tpl/' . $path . '/home.frame.html',      'home',      $event); ?>
 	<?php $panel_include('tpl/' . $path . '/about.frame.html',     'about',     $event); ?>
 	<?php $panel_include('tpl/' . $path . '/location.frame.html',  'location',  $event); ?>

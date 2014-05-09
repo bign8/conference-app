@@ -77,12 +77,12 @@
 	<div class="col-md-6">
 		<div class="form-group">
 			<label for="html_location">Location HTML:</label>
-			<textarea id="html_location" class="form-control"><?=$event['html_location']; ?></textarea>
+			<textarea id="html_location" name="html_location" class="form-control"><?=$event['html_location']; ?></textarea>
 		</div>
 
 		<div class="form-group">
 			<label for="loc.desc">Location Description:</label>
-			<textarea id="loc.desc" class="form-control"><?=$event['location']['desc']; ?></textarea>
+			<textarea id="loc.desc" name="loc.desc" class="form-control"><?=$event['location']['desc']; ?></textarea>
 		</div>
 	</div>
 </div>
@@ -93,3 +93,5 @@ Zoom map and move pointer to desired location.
 <script type="text/javascript">
 	var my_map = new ELA_MAP_EDIT( document.getElementById('map-canvas'), {<?=''; ?>} );
 </script>
+
+<input type="submit" value="Save Conference" onclick="document.forms[0].submit()" class="btn btn-default pull-right">

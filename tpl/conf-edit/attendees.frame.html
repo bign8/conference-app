@@ -3,7 +3,7 @@
 </div>
 
 <div class="form-group">
-	<textarea id="conf.html_attendees" class="form-control"><?=$event['html_attendees']; ?></textarea>
+	<textarea name="conf.html_attendees" class="form-control"><?=$event['html_attendees']; ?></textarea>
 </div>
 
 <div data-ng-controller="event-attendee">
@@ -110,3 +110,5 @@
 		</span>
 	</div>
 </div>
+
+<input type="submit" value="Save Conference" onclick="document.forms[0].submit()" class="btn btn-default pull-right">

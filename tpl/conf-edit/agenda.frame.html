@@ -3,7 +3,7 @@
 </div>
 
 <div class="form-group">
-	<textarea id="conf.html_agenda" class="form-control"><?=$event['html_agenda']; ?></textarea>
+	<textarea name="conf.html_agenda" class="form-control"><?=$event['html_agenda']; ?></textarea>
 </div>
 
 <?php
@@ -75,3 +75,5 @@ foreach ($days as $date => $day):
 	</table>
 
 <?php endforeach; ?>
+
+<input type="submit" value="Save Conference" onclick="document.forms[0].submit()" class="btn btn-default pull-right">

@@ -3,11 +3,13 @@
 </div>
 
 <div class="form-group">
-	<textarea id="conf.desc" class="form-control"><?=$event['desc']; ?></textarea>
+	<textarea name="conf.desc" class="form-control"><?=$event['desc']; ?></textarea>
 </div>
 
 <h3>FAQ</h3>
 
 <div class="form-group">
-	<textarea id="conf.faq" class="form-control"><?=$event['faq']; ?></textarea>
+	<textarea name="conf.faq" class="form-control"><?=$event['faq']; ?></textarea>
 </div>
+
+<input type="submit" value="Save Conference" onclick="document.forms[0].submit()" class="btn btn-default pull-right">
