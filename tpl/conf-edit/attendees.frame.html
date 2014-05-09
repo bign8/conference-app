@@ -1,7 +1,11 @@
 <div class="page-header">
 	<h1>Attendees</h1>
 </div>
-<?php echo $event['html_attendees']; ?>
+
+<div class="form-group">
+	<textarea id="conf.html_attendees" class="form-control"><?=$event['html_attendees']; ?></textarea>
+</div>
+
 <div data-ng-controller="event-attendee">
 	<div class="row" style="display:none" data-ng-style="{display:'inherit'}">
 

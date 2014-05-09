@@ -6,10 +6,10 @@
 <?php
 
 // Pre-processing data
-$days = array(); $old = null;
+$days = array();
 foreach ($event['agenda'] as $item) {
-	if (!array_key_exists($item['date'], $days)) $days[$item['date']] = array();
-	array_push($days[$item['date']], $item);
+	if (!array_key_exists($item['date'], $days)) $days[ $item['date'] ] = array();
+	array_push($days[ $item['date'] ], $item);
 }
 foreach ($days as $date => $day):
 ?>

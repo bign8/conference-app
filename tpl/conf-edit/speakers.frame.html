@@ -1,7 +1,11 @@
 <div class="page-header">
 	<h1>Speakers</h1>
 </div>
-<?php echo $event['html_speakers']; ?>
+
+<div class="form-group">
+	<textarea id="conf.html_speakers" class="form-control"><?=$event['html_speakers']; ?></textarea>
+</div>
+
 <div data-ng-controller="event-speaker">
 	<div class="row">
 		<?php 

@@ -1,15 +1,18 @@
 <div class="page-header">
 	<h1>Agenda</h1>
 </div>
-<?php echo $event['html_agenda']; ?>
+
+<div class="form-group">
+	<textarea id="conf.html_agenda" class="form-control"><?=$event['html_agenda']; ?></textarea>
+</div>
 
 <?php
 
 // Pre-processing data
-$days = array(); $old = null;
+$days = array();
 foreach ($event['agenda'] as $item) {
-	if (!array_key_exists($item['date'], $days)) $days[$item['date']] = array();
-	array_push($days[$item['date']], $item);
+	if (!array_key_exists($item['date'], $days)) $days[ $item['date'] ] = array();
+	array_push($days[ $item['date'] ], $item);
 }
 foreach ($days as $date => $day):
 ?>

@@ -8,7 +8,7 @@
 // Constructor
 var ELA_MAP_EDIT = function (ele, opt, name) {
 	this.ele = ele;
-	this.opt = opt;
+	this.opt = opt || {};
 	this.name = name;
 	ELA_MAP_EDIT._instances.push(this);
 	this.init();
@@ -35,13 +35,24 @@ ELA_MAP_EDIT.prototype = {
 	init: function() {
 		if (!ELA_MAP_EDIT.map_src) return ELA_MAP_EDIT.load_google();
 
+		// Default Options
+		this.opt.lat  = this.opt.lat  ? this.opt.lat  :   46.59605657583841; //   39.75024007131259
+		this.opt.lng  = this.opt.lng  ? this.opt.lng  : -112.03749943418501; // -104.99197203559874
+		this.opt.zoom = this.opt.zoom ? this.opt.zoom :   12; // 13
+
+		// Forced Options
+		this.opt.scrollwheel       = false;
+		this.opt.mapTypecontrol    = false;
+		this.opt.streetViewControl = false;
+
 		// Generate new map
-		// this.opt.center = new google.maps.LatLng(this.opt.lat, this.opt.lng);
+		this.opt.center = new google.maps.LatLng(this.opt.lat, this.opt.lng);
 		this.map = new google.maps.Map(this.ele, this.opt);
 
 		// Generate new marker
 		this.marker = new google.maps.Marker({
 			animation: google.maps.Animation.DROP,
+			draggable: true,
 			position:  this.opt.center,
 			title:     this.name,
 			map:       this.map,
@@ -57,5 +68,13 @@ ELA_MAP_EDIT.prototype = {
 			google.maps.event.addListener(this.marker, 'click', cb.bind(this));
 			cb.call(this);
 		}
+	},
+
+	get_opts: function() {
+		return {
+			lat: this.marker.position.lat(),
+			lng: this.marker.position.lng(),
+			zoom: this.map.zoom,
+		};
 	}
 };

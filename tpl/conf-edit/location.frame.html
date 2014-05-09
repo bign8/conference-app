@@ -62,12 +62,14 @@
 				<div class="form-group">
 					<label for="loc.hotel">Hotel Map:</label>
 					<input type="text" id="loc.hotel" name="loc.hotel" class="form-control" value="<?=$event['location']['hotel_map']; ?>" required />
+					<p class="help-block">Should be uploaded to <code>/data/doc/</code> or already there.</p>
 				</div>
 			</div>
 			<div class="col-md-6">
 				<div class="form-group">
 					<label for="loc.loc_map">Local Map:</label>
 					<input type="text" id="loc.loc_map" name="loc.loc_map" class="form-control" value="<?=$event['location']['location_map']; ?>" required />
+					<p class="help-block">Should be uploaded to <code>/data/doc/</code> or already there.</p>
 				</div>
 			</div>
 		</div>
@@ -76,20 +78,18 @@
 		<div class="form-group">
 			<label for="html_location">Location HTML:</label>
 			<textarea id="html_location" class="form-control"><?=$event['html_location']; ?></textarea>
-			<p class="help-block">Should be uploaded to <code>/data/doc/</code> or already there.</p>
 		</div>
 
 		<div class="form-group">
 			<label for="loc.desc">Location Description:</label>
-			<textarea id="loc.desc" class="form-control"><?=$event['desc']; ?></textarea>
-			<p class="help-block">Should be uploaded to <code>/data/doc/</code> or already there.</p>
+			<textarea id="loc.desc" class="form-control"><?=$event['location']['desc']; ?></textarea>
 		</div>
 	</div>
 </div>
 
-
+Zoom map and move pointer to desired location.
 <div id="map-canvas" class="full-map"></div>
 
 <script type="text/javascript">
-	var my_map = new ELA_MAP_EDIT( document.getElementById('map-canvas') );
+	var my_map = new ELA_MAP_EDIT( document.getElementById('map-canvas'), {<?=''; ?>} );
 </script>
