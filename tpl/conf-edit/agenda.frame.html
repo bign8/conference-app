@@ -14,6 +14,23 @@ foreach ($event['agenda'] as $item) {
 	if (!array_key_exists($item['date'], $days)) $days[ $item['date'] ] = array();
 	array_push($days[ $item['date'] ], $item);
 }
+
+function render_row($item, $has_date = true) {
+	$html = '';
+
+	if ($has_date) $html .= date("g:i a", strtotime($item['start'])) . ' - ' . date("g:i a", strtotime($item['end'])) . "</td>\n";
+	$html .= '<td>' . ( count( $item['speakers'] ) > 0 ? '<b>' . $item['title'] . '</b>' : $item['title'] ) . "</td>\n";
+	$html .= '<td>' . ( ($item['desc']=='') ? '-' : $item['desc'] ) . "</td>\n";
+	$html .= '<td>';
+
+	if (count($item['speakers']) == 0) $html .= '-';
+	foreach ($item['speakers'] as $speaker) {
+		$html .= '<a href="#" title="' . $speaker['title'] . ' - ' . $speaker['firm'] . '" data-ng-click="show_user(' . $speaker['userID'] . ')" >' . $speaker['name'] . '</a><br/>';
+	}
+
+	return $html . "</td>\n</tr>\n";
+}
+
 foreach ($days as $date => $day):
 ?>
 	<div class="page-header">
@@ -30,24 +47,30 @@ foreach ($days as $date => $day):
 			</tr>
 		</thead>
 		<tbody>
-			<?php foreach ($day as $item): ?>
-				<!-- if it's a new day...re-print the start with new day title -->
-				<tr>
-					<td><?=date("g:i a", strtotime($item['start'])); ?> - <?=date("g:i a", strtotime($item['end'])); ?></td>
-					<td>
-						<?=(count($item['speakers']) > 0) ? '<b>' . $item['title'] . '</b>' : $item['title']; ?>
-					</td>
-					<td><?=($item['desc']=='') ? '-' : $item['desc']; ?></td>
-					<td>
-						<?php 
-							if (count($item['speakers']) == 0) echo '-';
-							foreach ($item['speakers'] as $speaker) {
-								echo '<a href="#" title="' . $speaker['title'] . ' - ' . $speaker['firm'] . '" data-ng-click="show_user(' . $speaker['userID'] . ')" >' . $speaker['name'] . '</a><br/>';
-							}
-						?>
-					</td>
-				</tr>
-			<?php endforeach; ?>
+			<?php 
+				$last = null; // hold on to last stamp signature
+				$buffer = ''; // buffer of rendered rows with same stamp
+				$count = 1;   // count of rows in buffer
+
+				foreach ($day as $item) {
+					$stamp = $item['date'] . ' ' . $item['start'] . '-' . $item['end']; // new stamp signature
+
+					if ($stamp == $last) {
+
+						// if same: append to buffer and increment count
+						$count++;
+						$buffer .= render_row($item, false);
+					} else {
+
+						// if different: print buffer as necessary and restart buffers
+						if (strlen($buffer) > 0) echo '<tr><td' . ( $count > 1 ? ' rowspan="'.$count.'"' : '' ) . '>' . $buffer;
+						$buffer = render_row($item, true);
+						$count = 1;
+						$last = $stamp; // store new stamp signature
+					}
+				}
+				if (strlen($buffer) > 0) echo '<tr><td' . ( $count > 1 ? ' rowspan="'.$count.'"' : '' ) . '>' . $buffer; // print leftover buffer
+			?>
 		</tbody>
 	</table>
 
