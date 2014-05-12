@@ -26,7 +26,7 @@ if (array_key_exists('_method', $_GET) === true) {
 
 ArrestDB::Serve('GET', '/(#any)/(#any)/(#any)', function ($table, $id, $data) {
 	$query = array(
-		sprintf('SELECT %s FROM "%s"', implode(', ', ArrestDB::$WHITELIST[$table]['fields']), $table), // N8-MOD
+		sprintf('SELECT %s FROM "%s"', implode(', ', ArrestDB::whitelist($table, 'fields')), $table), // N8-MOD
 		sprintf('WHERE "%s" %s ?', $id, (ctype_digit($data) === true) ? '=' : 'LIKE'),
 	);
 
@@ -56,7 +56,7 @@ ArrestDB::Serve('GET', '/(#any)/(#any)/(#any)', function ($table, $id, $data) {
 
 ArrestDB::Serve('GET', '/(#any)/(#num)?', function ($table, $id = null) {
 	$query = array(
-		sprintf('SELECT %s FROM "%s"', implode(', ', ArrestDB::$WHITELIST[$table]['fields']), $table), // N8-MOD
+		sprintf('SELECT %s FROM "%s"', implode(', ', ArrestDB::whitelist($table, 'fields')), $table), // N8-MOD
 	);
 
 	if (isset($id) === true) {
@@ -201,12 +201,21 @@ exit(ArrestDB::Reply( ArrestDB::$BAD_REQUEST ));
 class ArrestDB {
 
 	// Whitelist (List of abailable tables/operations/fields from db)
-	public static $WHITELIST = array(
-		'user' => array(
+	private static $WHITELIST = array(
+		'user-USER' => array(
 			'actions' => array('GET'),
 			'fields' => array('userID', 'name', 'title', 'firm', 'phone', 'photo', 'bio', 'email', 'seen'),
 		),
+		// 'user-ADMIN' => array(
+		// 	'actions' => array('GET'),
+		// 	'fields' => array('userID', 'name', 'title', 'firm', 'phone', 'photo', 'bio', 'email', 'seen', 'admin'),
+		// ),
 	);
+	public static function whitelist( $table, $area ) {
+		$suffix = (isset($_SESSION['user']['admin']) && $_SESSION['user']['admin'] == 'true') ? '-ADMIN' : '-USER'; // access level
+		$suffix = array_key_exists($table . $suffix, ArrestDb::$WHITELIST) ? $suffix : '-USER'; // fallback if necessary
+		return ArrestDb::$WHITELIST[$table . $suffix][$area];
+	}
 
 	// Result Messages
 	public static $OK = array(
@@ -411,7 +420,7 @@ class ArrestDB {
 			if (preg_match('~^' . str_replace(array('#any', '#num'), array('[^/]++', '[0-9]++'), $route) . '~i', $root, $parts) > 0) {
 
 				// N8-ADD: Can we perform action on table?
-				$actions = @ArrestDB::$WHITELIST[$parts[1]]['actions'];
+				$actions = @ArrestDB::whitelist( $parts[1], 'actions' );
 				if (!is_array($actions) || !in_array($on, $actions)) exit(ArrestDB::Reply( ArrestDB::$FORBIDDEN ));
 				// N8-END
 
