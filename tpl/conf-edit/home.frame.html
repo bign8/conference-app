@@ -8,7 +8,10 @@
 	<i>Location</i>.name &mdash; <i>Location</i>.city, <i>Location</i>.state
 </div>
 
-Landing HTML
+<div class="lead">
+	Landing HTML
+</div>
+Conference HTML
 
 <hr/>
 
@@ -54,6 +57,11 @@ Landing HTML
 <div class="form-group">
 	<label for="conf.html_landing">Landing HTML:</label>
 	<textarea id="conf.html_landing" name="conf.html_landing" class="form-control"><?=$event['html_landing']; ?></textarea>
+</div>
+
+<div class="form-group">
+	<label for="conf.html_conference">Conference HTML:</label>
+	<textarea id="conf.html_conference" name="conf.html_conference" class="form-control"><?=$event['html_conference']; ?></textarea>
 </div>
 
 <input type="submit" value="Save Conference" onclick="document.forms[0].submit()" class="btn btn-default pull-right">

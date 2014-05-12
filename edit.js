@@ -6,10 +6,10 @@
  * ------------------------------------------------------------------- */
 
 // Constructor
-var ELA_MAP_EDIT = function (ele, opt, name) {
-	this.ele = ele;
-	this.opt = opt || {};
-	this.name = name;
+var ELA_MAP_EDIT = function (ele, inp) {
+	this.ele = ele; // DOM output element (display map + controls)
+	this.inp = inp; // DOM input element (to store string options) // TODO: write options back on change
+	this.opt = JSON.parse(inp.value.replace(/'/g, '"'));
 	ELA_MAP_EDIT._instances.push(this);
 	this.init();
 };
@@ -58,16 +58,13 @@ ELA_MAP_EDIT.prototype = {
 			map:       this.map,
 		});
 
-		// InfWwindow
-		if (this.txt) {
-			this.info = new google.maps.InfoWindow({ content: this.txt, maxWidth: 600 });
-
-			var cb = function() {
-				this.info.open(this.map, this.marker);
-			};
-			google.maps.event.addListener(this.marker, 'click', cb.bind(this));
-			cb.call(this);
-		}
+		// Update options on map change
+		var update_input = function () {
+			this.inp.value = JSON.stringify(this.get_opts()).replace(/"/g, "'");
+		};
+		google.maps.event.addListener( this.map, 'zoom_changed', update_input.bind(this) );
+		google.maps.event.addListener( this.marker, 'position_changed', update_input.bind(this) );
+		update_input.call(this);
 	},
 
 	get_opts: function() {

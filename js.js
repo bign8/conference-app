@@ -36,6 +36,11 @@ ELA_MAP.prototype = {
 	init: function() {
 		if (!ELA_MAP.map_src) return ELA_MAP.load_google();
 
+		// Forced Options
+		this.opt.scrollwheel       = false;
+		this.opt.mapTypecontrol    = false;
+		this.opt.streetViewControl = false;
+
 		// Generate new map
 		this.opt.center = new google.maps.LatLng(this.opt.lat, this.opt.lng);
 		this.map = new google.maps.Map(this.ele, this.opt);
