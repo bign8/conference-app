@@ -193,14 +193,9 @@ angular.module('helpers', []).filter('pagination', function () {
 	};
 }).factory('API', ['$http', function ($http) { // TODO: improve with browser data cashe
 	var base = './db/';
-	var cleanup = function (result) { /*clear_new.call(this);*/ return result.data; };
+	var cleanup = function (result) { return result.data.hasOwnProperty('error') ? [] : result.data; };
 	var rem_obj = function (item) { this.list.splice(this.list.indexOf(item), 1); };
-	// var clear_new = function() {
-	// 	var len = (this.list || []).length;
-	// 	for (var i = 0; i < len; i++) this.list[i].is_new = false;
-	// };
 	var add_obj = function (item, data) {
-		// item.is_new = true;
 		item[ this.id ] = data.success.data;
 		this.list.unshift(item);
 	};

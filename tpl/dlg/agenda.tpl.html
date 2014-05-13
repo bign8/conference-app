@@ -30,8 +30,98 @@
 						<input type="text" class="form-control" id="time_end" name="time_end" placholder="17:00" data-ng-model="session.end">
 					</div>
 				</div>
-				<p class="help-block">Time Format: <code>14:00</code> for 5:00 pm</p>
+				<p class="help-block">Time Format: <code>17:00</code> for 5:00 pm</p>
 			</div>
+		</div>
+	</div>
+
+	<hr />
+
+	<div class="row">
+		<div class="col-xs-6">
+			<table class="table">
+				<thead>
+					<tr>
+						<th>
+							<h4 style="margin-bottom:0;font-weight:bold">Speaker{{speaker.length > 1 ? 's' : ''}}</h4>
+						</th>
+						<th>Title</th>
+						<th style="width:75px">Edit</th>
+					</tr>
+				</thead>
+				<tbody>
+					<tr>
+						<td colspan="3">
+							<div class="input-group" style="width:100%">
+								<!-- <input type="text" class="form-control input-sm"> -->
+								<select class="form-control input-sm" ng-model="new_speaker" 
+									ng-options="value.name for value in users | orderObjectBy:'name':false" >
+									<option value="" disabled> &mdash; New Speaker &mdash; </option>
+								</select>
+								<!-- select over users -->
+								<span class="input-group-btn">
+									<button class="btn btn-default btn-success btn-sm" type="button">Add</button>
+								</span>
+							</div>
+						</td>
+					</tr>
+					<tr data-ng-repeat="user in speaker | orderBy:'name'">
+						<td>{{user.name}}</td>
+						<td>{{user.title}}</td>
+						<td>
+							<button type="button" class="close" aria-hidden="true">&times;</button>
+							<button class="btn btn-xs btn-default">Edit</button>
+						</td>
+					</tr>
+					<tr ng-if="speaker.length == 0">
+						<td colspan="3" class="text-center">
+							<em>No Speakers</em>
+						</td>
+					</tr>
+				</tbody>
+			</table>
+
+			<!-- <pre>{{speaker | json}}</pre> -->
+		</div>
+		<div class="col-xs-6">
+			<table class="table">
+				<thead>
+					<tr>
+						<th>
+							<h4 style="margin-bottom:0;font-weight:bold">File{{file.length > 1 ? 's' : ''}}</h4>
+						</th>
+						<th>Location</th>
+						<th style="width:75px">Edit</th>
+					</tr>
+				</thead>
+				<tbody>
+					<tr>
+						<td>
+							<input type="text" ng-model="new_file.name" placeholder="Session Notes" class="form-control input-sm">
+						</td>
+						<td>
+							<input type="text" ng-model="new_file.file" placeholder="Notes.pdf" class="form-control input-sm">
+						</td>
+						<td>
+							<button type="button" class="btn btn-sm btn-success">Add</button>
+						</td>
+					</tr>
+					<tr data-ng-repeat="file in files | orderBy:'name'">
+						<td>{{file.name}}</td>
+						<td>{{file.file}}</td>
+						<td>
+							<button type="button" class="close" aria-hidden="true">&times;</button>
+						</td>
+					</tr>
+					<tr ng-if="files.length == 0">
+						<td colspan="3" class="text-center">
+							<em>No Files</em>
+						</td>
+					</tr>
+				</tbody>
+			</table>
+
+			<!-- <pre>{{file | json}}</pre> -->
 		</div>
 	</div>
 

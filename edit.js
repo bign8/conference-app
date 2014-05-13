@@ -87,23 +87,26 @@ angular.module('event-edit', ['event']).
 controller('event-edit-agenda', ['$scope', 'API', '$sce', '$modal', function ($scope, API, $sce, $modal) {
 	var conferenceID = document.getElementById('conferenceID').value ;
 
-	// var File = new API('file');
-	// var User = new API('user');
+	var File = new API('file');
 	var Session = new API('session', undefined, undefined, '/conferenceID/' + conferenceID);
-	// var Speaker = new API('speaker');
+	var Speaker = new API('speaker');
+	var UserMap = {}, User = new API('user', undefined, function() {
+		for (var i = 0; i < User.list.length; i++) UserMap[User.list[i].userID] = User.list[i];
+	});
 
 	// $scope.sessions = Session.list;
 	// $scope.getHTML = function(html) { return $sce.trustAsHtml(html); };
 
 	$scope.edit = function(sessionID) {
-		console.log(sessionID);
-		// Session.get(sessionID);
 		var modalInstance = $modal.open({
 			templateUrl: 'tpl/dlg/agenda.tpl.html',
 			controller: 'event-edit-agenda-modal',
 			size: 'lg',
 			resolve: {
-				session: Session.get.bind(Session, sessionID)
+				session: Session.get.bind(Session, sessionID),
+				speaker: Speaker.all.bind(Speaker, '/sessionID/' + sessionID),
+				user: function() { return UserMap; },
+				file: File.all.bind(File, '/sessionID/' + sessionID)
 			}
 		});
 		modalInstance.result.then(function (obj) {
@@ -114,19 +117,35 @@ controller('event-edit-agenda', ['$scope', 'API', '$sce', '$modal', function ($s
 	};
 }]).
 
-controller('event-edit-agenda-modal', ['$scope', '$modalInstance', 'session', function ($scope, $modalInstance, session) {
+controller('event-edit-agenda-modal', ['$scope', '$modalInstance', 'session', 'speaker', 'user', 'file', function ($scope, $modalInstance, session, speaker, user, file) {
+	$scope.files = file;
+	$scope.users = user;
 	$scope.session = session;
-
-	console.log(tinymce);
+	$scope.speaker = speaker;
+	for (var i = 0; i < speaker.length; i++) angular.extend(speaker[i], user[speaker[i].userID]);
 
 	$scope.ok = function () {
-		$modalInstance.close($scope.selected.item);
+		$modalInstance.close($scope.session);
 	};
-
 	$scope.cancel = function () {
 		$modalInstance.dismiss('cancel');
 	};
 }]).
+
+// http://justinklemm.com/angularjs-filter-ordering-objects-ngrepeat/
+filter('orderObjectBy', function() {
+	return function (items, field, reverse) {
+		var filtered = [];
+		angular.forEach(items, function (item) {
+			filtered.push(item);
+		});
+		filtered.sort(function (a, b) {
+			return (a[field] > b[field] ? 1 : -1);
+		});
+		if(reverse) filtered.reverse();
+		return filtered;
+	};
+}).
 
 directive('ngTinymce', function() { // requires jquery.tinymce.js
 	return {
