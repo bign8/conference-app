@@ -201,15 +201,29 @@ exit(ArrestDB::Reply( ArrestDB::$BAD_REQUEST ));
 class ArrestDB {
 
 	// Whitelist (List of abailable tables/operations/fields from db)
+	// WARNING: POST + PUT do not care about `fields` parameter (can everwrite anything)
 	private static $WHITELIST = array(
-		'user-USER' => array(
+		'user-USER'   => array(
+			// alternative? 'GET' => array(...)
 			'actions' => array('GET'),
-			'fields' => array('userID', 'name', 'title', 'firm', 'phone', 'photo', 'bio', 'email', 'seen'),
+			'fields'  => array('userID', 'name', 'title', 'firm', 'phone', 'photo', 'bio', 'email', 'seen'),
 		),
-		// 'user-ADMIN' => array(
-		// 	'actions' => array('GET'),
-		// 	'fields' => array('userID', 'name', 'title', 'firm', 'phone', 'photo', 'bio', 'email', 'seen', 'admin'),
-		// ),
+		'user-ADMIN'  => array(
+			'actions' => array('GET'),
+			'fields'  => array('userID', 'name', 'title', 'firm', 'phone', 'photo', 'bio', 'email', 'seen', 'admin'),
+		),
+		'file-ADMIN'  => array(
+			'actions' => array('GET'),
+			'fields'  => array('fileID', 'name', 'file', 'sessionID'),
+		),
+		'session-ADMIN' => array(
+			'actions' => array('GET'),
+			'fields'  => array('sessionID', 'title', 'desc', 'date', 'start', 'end', 'logo', 'conferenceID'),
+		),
+		'speaker-ADMIN' => array(
+			'actions' => array('GET'),
+			'fields'  => array('speakerID', 'userID', 'sessionID', 'featured'),
+		),
 	);
 	public static function whitelist( $table, $area ) {
 		$suffix = (isset($_SESSION['user']['admin']) && $_SESSION['user']['admin'] == 'true') ? '-ADMIN' : '-USER'; // access level

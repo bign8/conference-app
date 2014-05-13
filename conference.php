@@ -3,13 +3,13 @@
 	set_exception_handler(function () { header('Location: /#login'); });
 
 	// Conference security
-	if (!isset($_SESSION['user']) || !$app->is_my_conf($_REQUEST['slug'], $_SESSION['user']['userID'])) throw new Exception('un-authed');
+	if (!isset($_SESSION['user']) || !$app->is_my_conf($_REQUEST['slug'], $_SESSION['user']['userID'])) throw new Exception('un-authed'); // TODO: fix!
 
 	// Edit Mode
 	$is_edit = isset($_REQUEST['edit']);
 	if ($is_edit && $_SESSION['user']['admin'] != 'true') header('Location: ?'); // permissions
 	$path = $is_edit ? 'conf-edit' : 'conf';
-	$wrap = $is_edit ? 'form method="POST" action="./' . $_REQUEST['slug'] . '?edit" data-ng-non-bindable' : 'div';
+	$wrap = $is_edit ? 'form method="POST" action="./' . $_REQUEST['slug'] . '?edit"' : 'div';
 
 	// Save Data
 	if ($is_edit && isset($_REQUEST['conferenceID']) && isset($_REQUEST['locationID'])) $app->save_conf($_REQUEST);
@@ -21,20 +21,22 @@
 ?>
 
 <?php if ($is_edit): ?>
-	<script src="//tinymce.cachefly.net/4.0/tinymce.min.js"></script>
+	<script src="//cdnjs.cloudflare.com/ajax/libs/tinymce/4.0.21/tinymce.min.js"></script>
+	<script src="./jquery.tinymce.min.js"></script>
 	<script src="./edit.js"></script>
 	<script>
 		tinymce.init({
 			selector: 'textarea',
 			menubar: false,
 			toolbar_items_size: 'small',
+			statusbar : false,
 		});
 	</script>
 <?php endif; ?>
 
 <<?=$wrap; ?> id="wrap">
 	<?php if ($is_edit): ?>
-		<input type="hidden" name="conferenceID" value="<?=$event['conferenceID']; ?>" />
+		<input type="hidden" id="conferenceID" name="conferenceID" value="<?=$event['conferenceID']; ?>" />
 		<input type="hidden" name="locationID" value="<?=$event['locationID']; ?>" />
 	<?php endif; ?>
 

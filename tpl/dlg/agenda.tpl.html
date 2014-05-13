@@ -1,0 +1,43 @@
+<div class="modal-header">
+	<h3 class="modal-title">Session Edit</h3>
+</div>
+<div class="modal-body">
+
+	<div class="row">
+		<div class="col-xs-8">
+			<div class="form-group">
+				<label for="title">Title</label>
+				<input type="text" class="form-control" id="title" name="title" placeholder="Title" data-ng-model="session.title">
+			</div>
+			<div class="form-group">
+				<label for="desc">Description</label>
+				<textarea class="form-control" id="desc" name="desc" data-ng-model="session.desc" rows="5" data-ng-tinymce></textarea>
+			</div>
+		</div>
+		<div class="col-xs-4">
+			<div class="form-group">
+				<label for="date">Date</label>
+				<input type="text" class="form-control" id="date" name="date" placeholder="Date" data-ng-model="session.date">
+				<p class="help-block">Date Format: <code>YYYY-MM-DD</code></p>
+			</div>
+			<div class="form-group">
+				<label for="time_start">Time</label>
+				<div class="row">
+					<div class="col-xs-6">
+						<input type="text" class="form-control" id="time_start" name="time_start" placholder="16:00" data-ng-model="session.start">
+					</div>
+					<div class="col-xs-6">
+						<input type="text" class="form-control" id="time_end" name="time_end" placholder="17:00" data-ng-model="session.end">
+					</div>
+				</div>
+				<p class="help-block">Time Format: <code>14:00</code> for 5:00 pm</p>
+			</div>
+		</div>
+	</div>
+
+	<!-- <pre>{{session | json}}</pre> -->
+</div>
+<div class="modal-footer">
+	<button class="btn btn-primary" ng-click="ok()">OK</button>
+	<button class="btn btn-warning" ng-click="cancel()">Cancel</button>
+</div>

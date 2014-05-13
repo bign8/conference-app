@@ -204,18 +204,18 @@ angular.module('helpers', []).filter('pagination', function () {
 		item[ this.id ] = data.success.data;
 		this.list.unshift(item);
 	};
-	var service = function(table, identifier, cb) {
+	var service = function(table, identifier, cb, suffix) {
 		this.list = [];
 		this.table = table;
 		this.id = identifier || (table + 'ID'); // standard convention (tablename + ID, ie: faq = faqID)
-		this.all().then(angular.extend.bind(undefined, this.list)).then(cb);
+		this.all(suffix).then(angular.extend.bind(undefined, this.list)).then(cb);
 	};
 	service.prototype = {
-		all: function () {
-			return $http.get(base + this.table).then( cleanup.bind(this) );
+		all: function (suffix) {
+			return $http.get(base + this.table + (suffix ? suffix : '')).then( cleanup.bind(this) );
 		},
-		get: function (itemID) {
-			return $http.get(base + this.table + '/' + itemID).then( cleanup.bind(this) );
+		get: function (itemID, suffix) {
+			return $http.get(base + this.table + '/' + itemID + (suffix ? suffix : '')).then( cleanup.bind(this) );
 		},
 		set: function (item) {
 			return $http.put(base + this.table + '/' + item[ this.id ], item).then( cleanup.bind(this) );
@@ -230,4 +230,45 @@ angular.module('helpers', []).filter('pagination', function () {
 	return service;
 }]).config(['$locationProvider', function ($locationProvider) {
 	$locationProvider.html5Mode(true); // fix link hashes
+}]).directive('colEditor', function () {
+	return {
+		replace: true,
+		scope: {
+			colField: '=',
+			saveCb: '&'
+		},
+		template: '<td ng-class="{editing:active}"><div class="view" ng-click="start_editing()" ng-hide="active"><span ng-bind="colField ? colField : \'-\'"></span></div><form ng-submit="done_editing()"><input type="text" ng-show="active" class="edit form-control input-sm" ng-model="colField" ng-blur="done_editing()" edit-escape="undo_editing()" edit-focus="active"></form></td>',
+		link: function (scope, elem, attrs) {
+			var origional = null;
+			scope.active = false;
+			scope.start_editing = function () {
+				origional = angular.copy(scope.colField);
+				scope.active = true;
+			};
+			scope.done_editing = function () {
+				if (scope.active && scope.colField != origional) scope.saveCb();
+				scope.active = false;
+			};
+			scope.undo_editing = function () {
+				scope.colField = origional;
+				scope.done_editing();
+			};
+		}
+	};
+}).directive('editEscape', function () {
+	var ESCAPE_KEY = 27;
+	return function (scope, elem, attrs) {
+		elem.bind('keydown', function (event) {
+			if (event.keyCode === ESCAPE_KEY) 
+				scope.$apply(attrs.editEscape);
+		});
+	};
+}).directive('editFocus', ['$timeout', function ($timeout) {
+	return function (scope, elem, attrs) {
+		scope.$watch(attrs.editFocus, function (newVal) {
+			if (newVal) $timeout(function () {
+				elem[0].focus();
+			}, 0, false);
+		});
+	};
 }]);

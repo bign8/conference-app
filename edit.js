@@ -75,3 +75,77 @@ ELA_MAP_EDIT.prototype = {
 		};
 	}
 };
+
+/* ------------------------------------------------------------------- *|
+ * angular page accents
+ * docs:  https://docs.angularjs.org/api/
+ * ------------------------------------------------------------------- */
+
+angular.module('event-edit', ['event']).
+
+//  data-ng-non-bindable
+controller('event-edit-agenda', ['$scope', 'API', '$sce', '$modal', function ($scope, API, $sce, $modal) {
+	var conferenceID = document.getElementById('conferenceID').value ;
+
+	// var File = new API('file');
+	// var User = new API('user');
+	var Session = new API('session', undefined, undefined, '/conferenceID/' + conferenceID);
+	// var Speaker = new API('speaker');
+
+	// $scope.sessions = Session.list;
+	// $scope.getHTML = function(html) { return $sce.trustAsHtml(html); };
+
+	$scope.edit = function(sessionID) {
+		console.log(sessionID);
+		// Session.get(sessionID);
+		var modalInstance = $modal.open({
+			templateUrl: 'tpl/dlg/agenda.tpl.html',
+			controller: 'event-edit-agenda-modal',
+			size: 'lg',
+			resolve: {
+				session: Session.get.bind(Session, sessionID)
+			}
+		});
+		modalInstance.result.then(function (obj) {
+			console.log(obj);
+		}, function () {
+			console.log('rejected');
+		});
+	};
+}]).
+
+controller('event-edit-agenda-modal', ['$scope', '$modalInstance', 'session', function ($scope, $modalInstance, session) {
+	$scope.session = session;
+
+	console.log(tinymce);
+
+	$scope.ok = function () {
+		$modalInstance.close($scope.selected.item);
+	};
+
+	$scope.cancel = function () {
+		$modalInstance.dismiss('cancel');
+	};
+}]).
+
+directive('ngTinymce', function() { // requires jquery.tinymce.js
+	return {
+		require: 'ngModel',
+		link: function ($scope, element, attrs, ngModel) {
+			element.tinymce({
+				menubar: false,
+				statusbar : false,
+				toolbar_items_size: 'small',
+				setup: function (editor) {
+					editor.on('change', function (e) {
+						if (this.isDirty()) this.save();
+					});
+					editor.on('SaveContent', function (e) {
+						ngModel.$setViewValue(this.getContent());
+						$scope.$apply();
+					});
+				}
+			});
+		}
+	}
+});

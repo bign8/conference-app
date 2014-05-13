@@ -19,7 +19,8 @@ function render_row($item, $has_date = true) {
 	$html = '';
 
 	if ($has_date) $html .= date("g:i a", strtotime($item['start'])) . ' - ' . date("g:i a", strtotime($item['end'])) . "</td>\n";
-	$html .= '<td>' . ( count( $item['speakers'] ) > 0 ? '<b>' . $item['title'] . '</b>' : $item['title'] ) . "</td>\n";
+	$html .= '<td><button type="button" class="btn btn-default btn-xs pull-right" data-ng-click="edit(' . $item["sessionID"] . ')">Edit</button>';
+	$html .= ( count( $item['speakers'] ) > 0 ? '<b>' . $item['title'] . '</b>' : $item['title'] ) . "</td>\n";
 	$html .= '<td>' . ( ($item['desc']=='') ? '-' : $item['desc'] ) . "</td>\n";
 	$html .= '<td>';
 
@@ -31,13 +32,13 @@ function render_row($item, $has_date = true) {
 	return $html . "</td>\n</tr>\n";
 }
 
-foreach ($days as $date => $day):
+if (true) foreach ($days as $date => $day):
 ?>
 	<div class="page-header">
 		<h3><?=date("l, F j, Y", strtotime($date)); ?></h3>
 	</div>
 
-	<table class="table" data-ng-controller="event-agenda">
+	<table class="table" data-ng-controller="event-edit-agenda">
 		<thead>
 			<tr>
 				<th class="col-md-2">Time</th>
