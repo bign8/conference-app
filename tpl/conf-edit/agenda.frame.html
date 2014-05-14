@@ -7,31 +7,38 @@
 </div>
 
 <!-- clipped content -->
+<div data-ng-controller="event-edit-agenda">
+	<table class="table">
+		<thead>
+			<tr>
+				<th class="col-md-2">Date</th>
+				<th class="col-md-2">Time</th>
+				<th class="col-md-3">Title</th>
+				<th class="col-md-5">
+					<button type="button" class="btn btn-success btn-xs pull-right" data-ng-click="add('top')">Add Session</button>
+					Descripiton
+				</th>
+			</tr>
+		</thead>
+		<tbody>
+			<tr data-ng-repeat="session in sessions | orderBy:['date','start','end','title','desc']">
+				<td>{{session.date | date:'EEEE, MMMM d, yyyy'}}</td>
+				<td>
+					<span>{{'0000-01-01T' + session.start | date:'h:mm a'}}</span> -
+					<span>{{'0000-01-01T' + session.end | date:'h:mm a'}}</span>
+				</td>
+				<td>{{session.title}}</td>
+				<td>
+					<button type="button" class="close" aria-hidden="true" ng-click="rem(session)" style="margin-left:5px">&times;</button>
+					<button type="button" class="btn btn-default btn-xs pull-right" data-ng-click="edit(session.sessionID)">Edit</button>
+					<span ng-bind-html="getHTML(session.desc)"></span>
+				</td>
+			</tr>
+		</tbody>
+	</table>
 
-<table class="table" data-ng-controller="event-edit-agenda">
-	<thead>
-		<tr>
-			<th class="col-md-2">Date</th>
-			<th class="col-md-2">Time</th>
-			<th class="col-md-3">Title</th>
-			<th class="col-md-5">Descripiton</th>
-		</tr>
-	</thead>
-	<tbody>
-		<tr data-ng-repeat="session in sessions | orderBy:['date','start','end','title','desc']">
-			<td>{{session.date | date:'EEEE, MMMM d, yyyy'}}</td>
-			<td>
-				<span>{{'0000-01-01T' + session.start | date:'h:mm a'}}</span> -
-				<span>{{'0000-01-01T' + session.end | date:'h:mm a'}}</span>
-			</td>
-			<td>{{session.title}}</td>
-			<td>
-				<button type="button" class="btn btn-default btn-xs pull-right" data-ng-click="edit(session.sessionID)">Edit</button>
-				<span ng-bind-html="getHTML(session.desc)"></span>
-			</td>
-		</tr>
-	</tbody>
-</table>
+	<button type="button" class="btn btn-success" data-ng-click="add('bot')">Add Session</button>
+</div>
 
 <!-- <input type="text" ng-model="test"> <span>{{test|date:'medium'}}</span> -->
 

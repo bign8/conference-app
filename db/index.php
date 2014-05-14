@@ -226,7 +226,7 @@ class ArrestDB {
 			'fields'  => array('fileID', 'name', 'file', 'sessionID'),
 		),
 		'session-ADMIN' => array(
-			'actions' => array('GET', 'PUT'),
+			'actions' => array('GET', 'PUT', 'POST', 'DELETE'),
 			'fields'  => array('sessionID', 'title', 'desc', 'date', 'start', 'end', 'logo', 'conferenceID'),
 		),
 		'speaker-ADMIN' => array(

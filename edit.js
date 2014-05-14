@@ -92,9 +92,25 @@ controller('event-edit-agenda', ['$scope', 'API', '$sce', '$modal', function ($s
 		for (var i = 0; i < User.list.length; i++) UserMap[User.list[i].userID] = User.list[i];
 	});
 
+	// Assign for pretty printing
 	$scope.sessions = Session.list;
 	$scope.getHTML = function(html) { return $sce.trustAsHtml(html); };
 
+	// Editing functions
+	$scope.add = function (location) {
+		var date = Session.list.length ? Session.list[0].date : '2000-01-01';
+		if (location == 'bot') date = Session.list[ Session.list.length - 1].date;
+
+		Session.add({
+			title: 'New Session',
+			date: date,
+			start: '01:00',
+			end: '01:01',
+			conferenceID: conferenceID,
+		}).then(function (obj) {
+			$scope.edit(obj.sessionID);
+		});
+	};
 	$scope.edit = function(sessionID) {
 		var modalInstance = $modal.open({
 			templateUrl: 'tpl/dlg/agenda.tpl.html',
@@ -107,6 +123,7 @@ controller('event-edit-agenda', ['$scope', 'API', '$sce', '$modal', function ($s
 		});
 		modalInstance.result.then( Session.set.bind(Session) );
 	};
+	$scope.rem = Session.rem.bind( Session );
 }]).
 
 controller('event-edit-agenda-modal', ['$scope', '$modalInstance', 'session', 'user', 'API', function ($scope, $modalInstance, session, user, API) {
