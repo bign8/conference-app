@@ -178,7 +178,15 @@ ArrestDB::Serve('PUT', '/(#any)/(#num)', function ($table, $id) {
 	} else if (is_array($GLOBALS['_PUT']) === true) {
 		$data = array();
 
-		foreach ($GLOBALS['_PUT'] as $key => $value) $data[$key] = sprintf('"%s" = ?', $key);
+		// Clean Fields
+		$fields = ArrestDB::whitelist( $table, 'fields');
+		foreach ($GLOBALS['_PUT'] as $key => $value) {
+			if (in_array($key, $fields)) {
+				$data[$key] = sprintf('"%s" = ?', $key);
+			} else {
+				unset($GLOBALS['_PUT'][$key]);
+			}
+		}
 
 		$query = array(
 			sprintf('UPDATE "%s" SET %s WHERE "%s" = ?', $table, implode(', ', $data), $table.'ID'),
