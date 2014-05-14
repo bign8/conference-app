@@ -6,75 +6,33 @@
 	<textarea name="conf.html_agenda" class="form-control"><?=$event['html_agenda']; ?></textarea>
 </div>
 
-<?php
+<!-- clipped content -->
 
-// Pre-processing data
-$days = array();
-foreach ($event['agenda'] as $item) {
-	if (!array_key_exists($item['date'], $days)) $days[ $item['date'] ] = array();
-	array_push($days[ $item['date'] ], $item);
-}
+<table class="table" data-ng-controller="event-edit-agenda">
+	<thead>
+		<tr>
+			<th class="col-md-2">Date</th>
+			<th class="col-md-2">Time</th>
+			<th class="col-md-3">Title</th>
+			<th class="col-md-5">Descripiton</th>
+		</tr>
+	</thead>
+	<tbody>
+		<tr data-ng-repeat="session in sessions | orderBy:['date','start','end','title','desc']">
+			<td>{{session.date | date:'EEEE, MMMM d, yyyy'}}</td>
+			<td>
+				<span>{{'0000-01-01T' + session.start | date:'h:mm a'}}</span> -
+				<span>{{'0000-01-01T' + session.end | date:'h:mm a'}}</span>
+			</td>
+			<td>{{session.title}}</td>
+			<td>
+				<button type="button" class="btn btn-default btn-xs pull-right" data-ng-click="edit(session.sessionID)">Edit</button>
+				<span ng-bind-html="getHTML(session.desc)"></span>
+			</td>
+		</tr>
+	</tbody>
+</table>
 
-function render_row($item, $has_date = true) {
-	$html = '';
-
-	if ($has_date) $html .= date("g:i a", strtotime($item['start'])) . ' - ' . date("g:i a", strtotime($item['end'])) . "</td>\n";
-	$html .= '<td><button type="button" class="btn btn-default btn-xs pull-right" data-ng-click="edit(' . $item["sessionID"] . ')">Edit</button>';
-	$html .= ( count( $item['speakers'] ) > 0 ? '<b>' . $item['title'] . '</b>' : $item['title'] ) . "</td>\n";
-	$html .= '<td>' . ( ($item['desc']=='') ? '-' : $item['desc'] ) . "</td>\n";
-	$html .= '<td>';
-
-	if (count($item['speakers']) == 0) $html .= '-';
-	foreach ($item['speakers'] as $speaker) {
-		$html .= '<a href="#" title="' . $speaker['title'] . ' - ' . $speaker['firm'] . '" data-ng-click="show_user(' . $speaker['userID'] . ')" >' . $speaker['name'] . '</a><br/>';
-	}
-
-	return $html . "</td>\n</tr>\n";
-}
-
-if (true) foreach ($days as $date => $day):
-?>
-	<div class="page-header">
-		<h3><?=date("l, F j, Y", strtotime($date)); ?></h3>
-	</div>
-
-	<table class="table" data-ng-controller="event-edit-agenda">
-		<thead>
-			<tr>
-				<th class="col-md-2">Time</th>
-				<th class="col-md-3">Title</th>
-				<th class="col-md-5">Descripiton</th>
-				<th class="col-md-2">Speaker(s)</th>
-			</tr>
-		</thead>
-		<tbody>
-			<?php 
-				$last = null; // hold on to last stamp signature
-				$buffer = ''; // buffer of rendered rows with same stamp
-				$count = 1;   // count of rows in buffer
-
-				foreach ($day as $item) {
-					$stamp = $item['date'] . ' ' . $item['start'] . '-' . $item['end']; // new stamp signature
-
-					if ($stamp == $last) {
-
-						// if same: append to buffer and increment count
-						$count++;
-						$buffer .= render_row($item, false);
-					} else {
-
-						// if different: print buffer as necessary and restart buffers
-						if (strlen($buffer) > 0) echo '<tr><td' . ( $count > 1 ? ' rowspan="'.$count.'"' : '' ) . '>' . $buffer;
-						$buffer = render_row($item, true);
-						$count = 1;
-						$last = $stamp; // store new stamp signature
-					}
-				}
-				if (strlen($buffer) > 0) echo '<tr><td' . ( $count > 1 ? ' rowspan="'.$count.'"' : '' ) . '>' . $buffer; // print leftover buffer
-			?>
-		</tbody>
-	</table>
-
-<?php endforeach; ?>
+<!-- <input type="text" ng-model="test"> <span>{{test|date:'medium'}}</span> -->
 
 <input type="submit" value="Save Conference" onclick="document.forms[0].submit()" class="btn btn-default pull-right">

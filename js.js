@@ -199,6 +199,13 @@ angular.module('helpers', []).filter('pagination', function () {
 		item[ this.id ] = data.success.data;
 		this.list.unshift(item);
 	};
+	var mod_obj = function (item, data) {
+		if (data.hasOwnProperty('success')) for (var i = 0; i < this.list.length; i++) if (this.list[i][this.id] == item[this.id]) {
+			this.list[i] = item;
+			break;
+		}
+		return data;
+	};
 	var service = function(table, identifier, cb, suffix) {
 		this.list = [];
 		this.table = table;
@@ -213,10 +220,10 @@ angular.module('helpers', []).filter('pagination', function () {
 			return $http.get(base + this.table + '/' + itemID + (suffix ? suffix : '')).then( cleanup.bind(this) );
 		},
 		set: function (item) {
-			return $http.put(base + this.table + '/' + item[ this.id ], item).then( cleanup.bind(this) );
+			return $http.put(base + this.table + '/' + item[ this.id ], item).then( cleanup.bind(this) ).then( mod_obj.bind(this, item) );
 		},
 		rem: function (item) {
-			return $http.delete(base + this.table + '/' + item[ this.id ]).then( cleanup.bind(this) ).then(rem_obj.bind(this, item));
+			return $http.delete(base + this.table + '/' + item[ this.id ]).then( cleanup.bind(this) ).then( rem_obj.bind(this, item) );
 		},
 		add: function (item) {
 			return $http.post(base + this.table, item).then( cleanup.bind(this) ).then(add_obj.bind(this, item));

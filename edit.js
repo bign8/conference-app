@@ -94,8 +94,8 @@ controller('event-edit-agenda', ['$scope', 'API', '$sce', '$modal', function ($s
 		for (var i = 0; i < User.list.length; i++) UserMap[User.list[i].userID] = User.list[i];
 	});
 
-	// $scope.sessions = Session.list;
-	// $scope.getHTML = function(html) { return $sce.trustAsHtml(html); };
+	$scope.sessions = Session.list;
+	$scope.getHTML = function(html) { return $sce.trustAsHtml(html); };
 
 	$scope.edit = function(sessionID) {
 		var modalInstance = $modal.open({
@@ -109,11 +109,7 @@ controller('event-edit-agenda', ['$scope', 'API', '$sce', '$modal', function ($s
 				file: File.all.bind(File, '/sessionID/' + sessionID)
 			}
 		});
-		modalInstance.result.then(function (obj) {
-			console.log(obj);
-		}, function () {
-			console.log('rejected');
-		});
+		modalInstance.result.then( Session.set.bind(Session) );
 	};
 }]).
 
@@ -124,12 +120,10 @@ controller('event-edit-agenda-modal', ['$scope', '$modalInstance', 'session', 's
 	$scope.speaker = speaker;
 	for (var i = 0; i < speaker.length; i++) angular.extend(speaker[i], user[speaker[i].userID]);
 
-	$scope.ok = function () {
-		$modalInstance.close($scope.session);
-	};
-	$scope.cancel = function () {
-		$modalInstance.dismiss('cancel');
-	};
+	
+
+	$scope.ok = function () { $modalInstance.close($scope.session); };
+	$scope.cancel = function () { $modalInstance.dismiss('cancel'); };
 }]).
 
 // http://justinklemm.com/angularjs-filter-ordering-objects-ngrepeat/

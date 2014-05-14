@@ -1,4 +1,4 @@
-<div class="modal-header">
+<div class="modal-header" style="padding-bottom:5px">
 	<h3 class="modal-title">Session Edit</h3>
 </div>
 <div class="modal-body">
@@ -16,12 +16,21 @@
 		</div>
 		<div class="col-xs-4">
 			<div class="form-group">
-				<label for="date">Date</label>
+				<label for="date">
+					Date&nbsp;
+					<small style="font-weight:normal" class="text-muted">{{session.date | date:'EEEE, MMMM d, yyyy'}}</small>
+				</label>
 				<input type="text" class="form-control" id="date" name="date" placeholder="Date" data-ng-model="session.date">
 				<p class="help-block">Date Format: <code>YYYY-MM-DD</code></p>
 			</div>
 			<div class="form-group">
-				<label for="time_start">Time</label>
+				<label for="time_start">
+					Time&nbsp;
+					<small style="font-weight:normal" class="text-muted">
+						<span>{{'0000-01-01T' + session.start | date:'h:mm a'}}</span> -
+						<span>{{'0000-01-01T' + session.end | date:'h:mm a'}}</span>
+					</small>
+				</label>
 				<div class="row">
 					<div class="col-xs-6">
 						<input type="text" class="form-control" id="time_start" name="time_start" placholder="16:00" data-ng-model="session.start">
@@ -39,7 +48,7 @@
 
 	<div class="row">
 		<div class="col-xs-6">
-			<table class="table">
+			<table class="table" style="margin-bottom:0">
 				<thead>
 					<tr>
 						<th>
@@ -50,21 +59,6 @@
 					</tr>
 				</thead>
 				<tbody>
-					<tr>
-						<td colspan="3">
-							<div class="input-group" style="width:100%">
-								<!-- <input type="text" class="form-control input-sm"> -->
-								<select class="form-control input-sm" ng-model="new_speaker" 
-									ng-options="value.name for value in users | orderObjectBy:'name':false" >
-									<option value="" disabled> &mdash; New Speaker &mdash; </option>
-								</select>
-								<!-- select over users -->
-								<span class="input-group-btn">
-									<button class="btn btn-default btn-success btn-sm" type="button">Add</button>
-								</span>
-							</div>
-						</td>
-					</tr>
 					<tr data-ng-repeat="user in speaker | orderBy:'name'">
 						<td>{{user.name}}</td>
 						<td>{{user.title}}</td>
@@ -74,8 +68,21 @@
 						</td>
 					</tr>
 					<tr ng-if="speaker.length == 0">
-						<td colspan="3" class="text-center">
-							<em>No Speakers</em>
+						<td colspan="3" class="text-center text-muted">
+							<em>&mdash; No Speakers &mdash;</em>
+						</td>
+					</tr>
+					<tr>
+						<td colspan="3">
+							<div class="input-group" style="width:100%">
+								<select class="form-control input-sm" ng-model="new_speaker" 
+									ng-options="value.name for value in users | orderObjectBy:'name':false" >
+									<option value="" disabled> &mdash; New Speaker &mdash; </option>
+								</select>
+								<span class="input-group-btn">
+									<button class="btn btn-default btn-success btn-sm" type="button">Add</button>
+								</span>
+							</div>
 						</td>
 					</tr>
 				</tbody>
@@ -84,17 +91,32 @@
 			<!-- <pre>{{speaker | json}}</pre> -->
 		</div>
 		<div class="col-xs-6">
-			<table class="table">
+			<table class="table" style="margin-bottom:0">
 				<thead>
 					<tr>
 						<th>
-							<h4 style="margin-bottom:0;font-weight:bold">File{{file.length > 1 ? 's' : ''}}</h4>
+							<h4 style="margin-bottom:0;font-weight:bold">
+								File{{file.length > 1 ? 's' : ''}}
+								<small style="font-weight:normal" class="text-muted"><code>/data/session/</code></small>
+							</h4>
 						</th>
 						<th>Location</th>
 						<th style="width:75px">Edit</th>
 					</tr>
 				</thead>
 				<tbody>
+					<tr data-ng-repeat="file in files | orderBy:'name'">
+						<td>{{file.name}}</td>
+						<td>{{file.file}}</td>
+						<td>
+							<button type="button" class="close" aria-hidden="true">&times;</button>
+						</td>
+					</tr>
+					<tr ng-if="files.length == 0">
+						<td colspan="3" class="text-center text-muted">
+							<em>&mdash; No Files &mdash;</em>
+						</td>
+					</tr>
 					<tr>
 						<td>
 							<input type="text" ng-model="new_file.name" placeholder="Session Notes" class="form-control input-sm">
@@ -106,28 +128,16 @@
 							<button type="button" class="btn btn-sm btn-success">Add</button>
 						</td>
 					</tr>
-					<tr data-ng-repeat="file in files | orderBy:'name'">
-						<td>{{file.name}}</td>
-						<td>{{file.file}}</td>
-						<td>
-							<button type="button" class="close" aria-hidden="true">&times;</button>
-						</td>
-					</tr>
-					<tr ng-if="files.length == 0">
-						<td colspan="3" class="text-center">
-							<em>No Files</em>
-						</td>
-					</tr>
 				</tbody>
 			</table>
-
+			
 			<!-- <pre>{{file | json}}</pre> -->
 		</div>
 	</div>
 
 	<!-- <pre>{{session | json}}</pre> -->
 </div>
-<div class="modal-footer">
+<div class="modal-footer" style="margin-top:0">
 	<button class="btn btn-primary" ng-click="ok()">OK</button>
 	<button class="btn btn-warning" ng-click="cancel()">Cancel</button>
 </div>
