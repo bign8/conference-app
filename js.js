@@ -198,6 +198,7 @@ angular.module('helpers', []).filter('pagination', function () {
 	var add_obj = function (item, data) {
 		item[ this.id ] = data.success.data;
 		this.list.unshift(item);
+		return item;
 	};
 	var mod_obj = function (item, data) {
 		if (data.hasOwnProperty('success')) for (var i = 0; i < this.list.length; i++) if (this.list[i][this.id] == item[this.id]) {
@@ -226,51 +227,10 @@ angular.module('helpers', []).filter('pagination', function () {
 			return $http.delete(base + this.table + '/' + item[ this.id ]).then( cleanup.bind(this) ).then( rem_obj.bind(this, item) );
 		},
 		add: function (item) {
-			return $http.post(base + this.table, item).then( cleanup.bind(this) ).then(add_obj.bind(this, item));
+			return $http.post(base + this.table, item).then( cleanup.bind(this) ).then( add_obj.bind(this, item) );
 		}
 	};
 	return service;
 }]).config(['$locationProvider', function ($locationProvider) {
 	$locationProvider.html5Mode(true); // fix link hashes
-}]).directive('colEditor', function () {
-	return {
-		replace: true,
-		scope: {
-			colField: '=',
-			saveCb: '&'
-		},
-		template: '<td ng-class="{editing:active}"><div class="view" ng-click="start_editing()" ng-hide="active"><span ng-bind="colField ? colField : \'-\'"></span></div><form ng-submit="done_editing()"><input type="text" ng-show="active" class="edit form-control input-sm" ng-model="colField" ng-blur="done_editing()" edit-escape="undo_editing()" edit-focus="active"></form></td>',
-		link: function (scope, elem, attrs) {
-			var origional = null;
-			scope.active = false;
-			scope.start_editing = function () {
-				origional = angular.copy(scope.colField);
-				scope.active = true;
-			};
-			scope.done_editing = function () {
-				if (scope.active && scope.colField != origional) scope.saveCb();
-				scope.active = false;
-			};
-			scope.undo_editing = function () {
-				scope.colField = origional;
-				scope.done_editing();
-			};
-		}
-	};
-}).directive('editEscape', function () {
-	var ESCAPE_KEY = 27;
-	return function (scope, elem, attrs) {
-		elem.bind('keydown', function (event) {
-			if (event.keyCode === ESCAPE_KEY) 
-				scope.$apply(attrs.editEscape);
-		});
-	};
-}).directive('editFocus', ['$timeout', function ($timeout) {
-	return function (scope, elem, attrs) {
-		scope.$watch(attrs.editFocus, function (newVal) {
-			if (newVal) $timeout(function () {
-				elem[0].focus();
-			}, 0, false);
-		});
-	};
 }]);

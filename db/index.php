@@ -222,7 +222,7 @@ class ArrestDB {
 			'fields'  => array('userID', 'name', 'title', 'firm', 'phone', 'photo', 'bio', 'email', 'seen', 'admin'),
 		),
 		'file-ADMIN'  => array(
-			'actions' => array('GET'),
+			'actions' => array('GET', 'PUT', 'POST', 'DELETE'),
 			'fields'  => array('fileID', 'name', 'file', 'sessionID'),
 		),
 		'session-ADMIN' => array(
@@ -230,7 +230,7 @@ class ArrestDB {
 			'fields'  => array('sessionID', 'title', 'desc', 'date', 'start', 'end', 'logo', 'conferenceID'),
 		),
 		'speaker-ADMIN' => array(
-			'actions' => array('GET'),
+			'actions' => array('GET', 'PUT', 'POST', 'DELETE'),
 			'fields'  => array('speakerID', 'userID', 'sessionID', 'featured'),
 		),
 	);

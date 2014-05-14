@@ -87,9 +87,7 @@ angular.module('event-edit', ['event']).
 controller('event-edit-agenda', ['$scope', 'API', '$sce', '$modal', function ($scope, API, $sce, $modal) {
 	var conferenceID = document.getElementById('conferenceID').value ;
 
-	var File = new API('file');
 	var Session = new API('session', undefined, undefined, '/conferenceID/' + conferenceID);
-	var Speaker = new API('speaker');
 	var UserMap = {}, User = new API('user', undefined, function() {
 		for (var i = 0; i < User.list.length; i++) UserMap[User.list[i].userID] = User.list[i];
 	});
@@ -104,24 +102,50 @@ controller('event-edit-agenda', ['$scope', 'API', '$sce', '$modal', function ($s
 			size: 'lg',
 			resolve: {
 				session: Session.get.bind(Session, sessionID),
-				speaker: Speaker.all.bind(Speaker, '/sessionID/' + sessionID),
-				user: function() { return UserMap; },
-				file: File.all.bind(File, '/sessionID/' + sessionID)
+				user: function() { return UserMap; }
 			}
 		});
 		modalInstance.result.then( Session.set.bind(Session) );
 	};
 }]).
 
-controller('event-edit-agenda-modal', ['$scope', '$modalInstance', 'session', 'speaker', 'user', 'file', function ($scope, $modalInstance, session, speaker, user, file) {
-	$scope.files = file;
+controller('event-edit-agenda-modal', ['$scope', '$modalInstance', 'session', 'user', 'API', function ($scope, $modalInstance, session, user, API) {
 	$scope.users = user;
 	$scope.session = session;
-	$scope.speaker = speaker;
-	for (var i = 0; i < speaker.length; i++) angular.extend(speaker[i], user[speaker[i].userID]);
 
-	
+	// Init speaker and file stuff;
+	var File = new API('file', undefined, undefined, '/sessionID/' + session.sessionID);
+	var Speaker = new API('speaker', undefined, function () {
+		for (var i = 0; i < Speaker.list.length; i++) angular.extend(Speaker.list[i], user[Speaker.list[i].userID]);
+	}, '/sessionID/' + session.sessionID);
+	$scope.files = File.list;
+	$scope.speakers = Speaker.list;
 
+	// Speaker Functions
+	$scope.new_speaker = {};
+	$scope.add_speaker = function () {
+		$scope.new_speaker.featured = 'true';
+		$scope.new_speaker.sessionID = session.sessionID;
+		Speaker.add($scope.new_speaker).then(function (item) {
+			$scope.new_speaker = {};
+			angular.extend(item, user[item.userID]);
+		});
+	};
+	$scope.rem_speaker = Speaker.rem.bind( Speaker );
+	$scope.set_speaker = Speaker.set.bind( Speaker );
+
+	// Files funcitons
+	$scope.new_file = {};
+	$scope.add_file = function () {
+		$scope.new_file.sessionID = session.sessionID;
+		File.add($scope.new_file).then(function () {
+			$scope.new_file = {};
+		});
+	};
+	$scope.rem_file = File.rem.bind( File );
+	$scope.set_file = File.set.bind( File );
+
+	// Closing functions
 	$scope.ok = function () { $modalInstance.close($scope.session); };
 	$scope.cancel = function () { $modalInstance.dismiss('cancel'); };
 }]).
@@ -161,4 +185,52 @@ directive('ngTinymce', function() { // requires jquery.tinymce.js
 			});
 		}
 	}
-});
+}).
+
+directive('colEditor', function () {
+	return {
+		replace: true,
+		scope: {
+			colField: '=',
+			saveCb: '&'
+		},
+		template: '<td ng-class="{editing:active}"><div class="view" ng-click="start_editing()" ng-hide="active"><span ng-bind="colField ? colField : \'-\'"></span></div><form ng-submit="done_editing()"><input type="text" ng-show="active" class="edit form-control input-sm" ng-model="colField" ng-blur="done_editing()" edit-escape="undo_editing()" edit-focus="active"></form></td>',
+		link: function (scope, elem, attrs) {
+			var origional = null;
+			scope.active = false;
+			scope.start_editing = function () {
+				origional = angular.copy(scope.colField);
+				scope.active = true;
+			};
+			scope.done_editing = function () {
+				if (scope.active && scope.colField != origional) scope.saveCb();
+				scope.active = false;
+			};
+			scope.undo_editing = function () {
+				scope.colField = origional;
+				scope.done_editing();
+			};
+		}
+	};
+}).
+
+directive('editEscape', function () {
+	var ESCAPE_KEY = 27;
+	return function (scope, elem, attrs) {
+		elem.bind('keydown', function (event) {
+			if (event.keyCode === ESCAPE_KEY) 
+				scope.$apply(attrs.editEscape);
+			event.stopPropagation();
+		});
+	};
+}).
+
+directive('editFocus', ['$timeout', function ($timeout) {
+	return function (scope, elem, attrs) {
+		scope.$watch(attrs.editFocus, function (newVal) {
+			if (newVal) $timeout(function () {
+				elem[0].focus();
+			}, 0, false);
+		});
+	};
+}]);

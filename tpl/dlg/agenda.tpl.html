@@ -52,22 +52,25 @@
 				<thead>
 					<tr>
 						<th>
-							<h4 style="margin-bottom:0;font-weight:bold">Speaker{{speaker.length > 1 ? 's' : ''}}</h4>
+							<h4 style="margin-bottom:0;font-weight:bold">Speaker{{speakers.length > 1 ? 's' : ''}}</h4>
 						</th>
 						<th>Title</th>
 						<th style="width:75px">Edit</th>
 					</tr>
 				</thead>
 				<tbody>
-					<tr data-ng-repeat="user in speaker | orderBy:'name'">
-						<td>{{user.name}}</td>
+					<tr data-ng-repeat="user in speakers | orderBy:'name'">
+						<td>
+							<input type="checkbox" ng-model="user.featured" ng-true-value="true" ng-false-value="false" ng-change="set_speaker(user)" title="Feature this Speaker?">
+							&nbsp;{{user.name}}
+						</td>
 						<td>{{user.title}}</td>
 						<td>
-							<button type="button" class="close" aria-hidden="true">&times;</button>
+							<button type="button" class="close" aria-hidden="true" ng-click="rem_speaker(user)">&times;</button>
 							<button class="btn btn-xs btn-default">Edit</button>
 						</td>
 					</tr>
-					<tr ng-if="speaker.length == 0">
+					<tr ng-if="speakers.length == 0">
 						<td colspan="3" class="text-center text-muted">
 							<em>&mdash; No Speakers &mdash;</em>
 						</td>
@@ -75,12 +78,12 @@
 					<tr>
 						<td colspan="3">
 							<div class="input-group" style="width:100%">
-								<select class="form-control input-sm" ng-model="new_speaker" 
-									ng-options="value.name for value in users | orderObjectBy:'name':false" >
+								<select class="form-control input-sm" ng-model="new_speaker.userID" 
+									ng-options="value.userID as value.name for value in users | orderObjectBy:'name':false" >
 									<option value="" disabled> &mdash; New Speaker &mdash; </option>
 								</select>
 								<span class="input-group-btn">
-									<button class="btn btn-default btn-success btn-sm" type="button">Add</button>
+									<button class="btn btn-default btn-success btn-sm" type="button" ng-click="add_speaker()">Add</button>
 								</span>
 							</div>
 						</td>
@@ -88,7 +91,7 @@
 				</tbody>
 			</table>
 
-			<!-- <pre>{{speaker | json}}</pre> -->
+			<!-- <pre>{{speakers | json}}</pre> -->
 		</div>
 		<div class="col-xs-6">
 			<table class="table" style="margin-bottom:0">
@@ -100,16 +103,16 @@
 								<small style="font-weight:normal" class="text-muted"><code>/data/session/</code></small>
 							</h4>
 						</th>
-						<th>Location</th>
+						<th>Path</th>
 						<th style="width:75px">Edit</th>
 					</tr>
 				</thead>
 				<tbody>
 					<tr data-ng-repeat="file in files | orderBy:'name'">
-						<td>{{file.name}}</td>
-						<td>{{file.file}}</td>
+						<td data-col-editor data-col-field="file.name" data-save-cb="set_file(file)">-</td>
+						<td data-col-editor data-col-field="file.file" data-save-cb="set_file(file)">-</td>
 						<td>
-							<button type="button" class="close" aria-hidden="true">&times;</button>
+							<button type="button" class="close" aria-hidden="true" ng-click="rem_file(file)">&times;</button>
 						</td>
 					</tr>
 					<tr ng-if="files.length == 0">
@@ -125,13 +128,13 @@
 							<input type="text" ng-model="new_file.file" placeholder="Notes.pdf" class="form-control input-sm">
 						</td>
 						<td>
-							<button type="button" class="btn btn-sm btn-success">Add</button>
+							<button type="button" class="btn btn-sm btn-success" ng-click="add_file()">Add</button>
 						</td>
 					</tr>
 				</tbody>
 			</table>
 			
-			<!-- <pre>{{file | json}}</pre> -->
+			<!-- <pre>{{files | json}}</pre> -->
 		</div>
 	</div>
 
