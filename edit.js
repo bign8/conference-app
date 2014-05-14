@@ -98,16 +98,23 @@ controller('event-edit-agenda', ['$scope', 'API', '$sce', '$modal', function ($s
 
 	// Editing functions
 	$scope.add = function (location) {
-		var date = Session.list.length ? Session.list[0].date : '2000-01-01';
-		if (location == 'bot') date = Session.list[ Session.list.length - 1].date;
-
-		Session.add({
+		var new_item = {
 			title: 'New Session',
-			date: date,
+			date: '2000-01-01',
 			start: '01:00',
 			end: '01:01',
 			conferenceID: conferenceID,
-		}).then(function (obj) {
+		};
+
+		// Grab from past element
+		if (Session.list.length > 0) {
+			var index = location == 'bot' ? Session.list.length - 1 : 0;
+			new_item.end = Session.list[ index ].end;
+			new_item.date = Session.list[ index ].date;
+			new_item.start = Session.list[ index ].end;
+		}
+
+		Session.add(new_item).then(function (obj) {
 			$scope.edit(obj.sessionID);
 		});
 	};

@@ -197,7 +197,7 @@ angular.module('helpers', []).filter('pagination', function () {
 	var rem_obj = function (item) { this.list.splice(this.list.indexOf(item), 1); };
 	var add_obj = function (item, data) {
 		item[ this.id ] = data.success.data;
-		this.list.unshift(item);
+		this.list.push(item);
 		return item;
 	};
 	var mod_obj = function (item, data) {
