@@ -189,14 +189,11 @@ filter('orderObjectBy', function() {
 	};
 }).
 
-directive('ngTinymce', function() { // requires jquery.tinymce.js
+directive('ngTinymce', function() { // requires jquery.tinymce.js and Global MCE_OBJ for settings
 	return {
 		require: 'ngModel',
 		link: function ($scope, element, attrs, ngModel) {
-			element.tinymce({
-				menubar: false,
-				statusbar : false,
-				toolbar_items_size: 'small',
+			element.tinymce( angular.extend( MCE_OBJ || {}, {
 				setup: function (editor) {
 					editor.on('change', function (e) {
 						if (this.isDirty()) this.save();
@@ -206,7 +203,7 @@ directive('ngTinymce', function() { // requires jquery.tinymce.js
 						$scope.$apply();
 					});
 				}
-			});
+			} ) );
 		}
 	}
 }).

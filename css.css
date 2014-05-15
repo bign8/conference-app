@@ -131,3 +131,7 @@ textarea.text-auto-scale { resize: none; }
 	border-radius: 5px;
 	border: 1px solid #808080;
 }
+
+/* tinyMCE styles */
+.mce-path > .mce-path-item, .mce-path > .mce-divider { visibility: hidden; }
+.mce-path { padding: 0px !important; }

@@ -25,12 +25,18 @@
 	<script src="./jquery.tinymce.min.js"></script>
 	<script src="./edit.js"></script>
 	<script>
-		tinymce.init({
+		var MCE_OBJ = {
 			selector: 'textarea',
 			menubar: false,
 			toolbar_items_size: 'small',
-			statusbar : false,
-		});
+			plugins: 'link image code',
+			toolbar: "undo redo | styleselect | bold italic underline | alignleft aligncenter alignright alignjustify | bullist numlist outdent indent | link image code",
+			setup: function (editor) { // cleanup for angular
+				delete MCE_OBJ.selector;
+				delete MCE_OBJ.setup;
+			}
+		};
+		tinymce.init( MCE_OBJ );
 	</script>
 <?php endif; ?>
 
