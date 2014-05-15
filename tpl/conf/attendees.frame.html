@@ -75,7 +75,7 @@
 				</tr>
 				<?php foreach ($event['attendees'] as $attendee): ?>
 					<tr class="data" data-ng-style="{display:'none'}">
-						<td><?=$attendee['name']; ?></td>
+						<td data-user-id="<?=$attendee['userID']; ?>"><?=$attendee['name']; ?></td>
 						<td><?=$attendee['title']; ?></td>
 						<td>
 							<?=$attendee['firm']; ?>

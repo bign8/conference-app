@@ -21,8 +21,11 @@
 ?>
 
 <?php if ($is_edit): ?>
+	<!-- pre-loading tinymce style -->
+	<link rel="stylesheet" href="//cdnjs.cloudflare.com/ajax/libs/tinymce/4.0.21/skins/lightgray/skin.min.css">
 	<script src="//cdnjs.cloudflare.com/ajax/libs/tinymce/4.0.21/tinymce.min.js"></script>
 	<script src="./jquery.tinymce.min.js"></script>
+
 	<script src="./edit.js"></script>
 	<script>
 		var MCE_OBJ = {
@@ -31,7 +34,7 @@
 			toolbar_items_size: 'small',
 			plugins: 'link image code',
 			toolbar: "undo redo | styleselect | bold italic underline | alignleft aligncenter alignright alignjustify | bullist numlist outdent indent | link image code",
-			setup: function (editor) { // cleanup for angular
+			setup: function () { // cleanup for angular
 				delete MCE_OBJ.selector;
 				delete MCE_OBJ.setup;
 			}

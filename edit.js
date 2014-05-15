@@ -83,6 +83,53 @@ ELA_MAP_EDIT.prototype = {
 
 angular.module('event-edit', ['event']).
 
+controller('event-edit-attendee', ['$scope', '$controller', 'UserModal', function ($scope, $controller, UserModal) {
+	angular.extend(this, $controller('event-attendee', {$scope: $scope}));
+
+	$scope.edit = function (user, $event) {
+		$event.preventDefault();
+		UserModal.open( user.userID ).then( angular.extend.bind(undefined, user) );
+	};
+}]).
+
+factory('UserModal', ['API', '$modal', '$sce', function (API, $modal, $sce) {
+	var User = new API('user');
+
+	return {
+		open: function (userID) {
+			var modalInstance = $modal.open({
+				templateUrl: 'tpl/dlg/user.tpl.html',
+				controller: 'event-user-modal',
+				size: 'lg',
+				resolve: {
+					user: User.get.bind( User, userID )
+				}
+			});
+			return modalInstance.result.then(function (user) {
+				User.set(user); // Note: assumes successful
+				user.safe = { // for event-edit-attendee
+					firm:  $sce.trustAsHtml( user.firm ),
+					name:  $sce.trustAsHtml( user.name ),
+					title: $sce.trustAsHtml( user.title )
+				};
+				return user;
+			});
+		}
+	};
+}]).
+
+controller('event-user-modal', ['$scope', '$modalInstance', 'user', function ($scope, $modalInstance, user) {
+	$scope.user = user;
+
+	$scope.ok = function () {
+		$modalInstance.close( $scope.user );
+	};
+
+	$scope.cancel = function () {
+		$modalInstance.dismiss('cancel');
+	};
+}]).
+
 //  data-ng-non-bindable
 controller('event-edit-agenda', ['$scope', 'API', '$sce', '$modal', function ($scope, API, $sce, $modal) {
 	var conferenceID = document.getElementById('conferenceID').value ;

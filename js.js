@@ -145,16 +145,17 @@ angular.module('event-agenda', []).controller('event-agenda', ['$scope', '$contr
 angular.module('event-attendee', []).controller('event-attendee', ['$scope', '$sce', function ($scope, $sce) {
 	
 	// Parse data (http://regexpal.com/)
-	var data, obj, regex = />([^<]*).*[\s]+[^>]+>([^<]*)<.*[\s]+[^>]+>([\s]+[^<]*)<.*[\s]+.*tel:([^"]*).*[\s]+.*mailto:([^"]*)/;
+	var data, obj, regex = /([0-9]+)">([^<]*).*[\s]+[^>]+>([^<]*)<.*[\s]+[^>]+>([\s]+[^<]*)<.*[\s]+.*tel:([^"]*).*[\s]+.*mailto:([^"]*)/;
 	$scope.data = [];
 	$('#attendee tr.data').each(function (i, e){
 		data = e.innerHTML.match(regex);
 		obj = {
-			name : data[1].trim(),
-			title: data[2].trim(),
-			firm : data[3].trim(),
-			phone: data[4].trim(),
-			email: data[5].trim(),
+			userID: data[1].trim(),
+			name  : data[2].trim(),
+			title : data[3].trim(),
+			firm  : data[4].trim(),
+			phone : data[5].trim(),
+			email : data[6].trim(),
 		};
 		obj.safe = {
 			name : $sce.trustAsHtml(obj.name ),
