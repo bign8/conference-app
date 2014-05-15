@@ -95,11 +95,11 @@
 	</div>
 
 	<div class="text-center" data-ng-show="num_pages !== 1"><!-- pager -->
-		<!-- <span 
+		<span 
 			data-pagination
 			data-total-items="filtered_data.length"
 			data-items-per-page="limit"
-			data-page="page"
+			data-ng-model="page"
 			data-max-size="5"
 			data-boundary-links="true"
 			data-previous-text="&lsaquo;"
@@ -107,7 +107,7 @@
 			data-first-text="&laquo;"
 			data-last-text="&raquo;"
 			data-num-pages="num_pages">
-		</span> -->
+		</span>
 	</div>
 </div>
 
