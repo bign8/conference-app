@@ -120,14 +120,8 @@ factory('UserModal', ['API', '$modal', '$sce', function (API, $modal, $sce) {
 
 controller('event-user-modal', ['$scope', '$modalInstance', 'user', function ($scope, $modalInstance, user) {
 	$scope.user = user;
-
-	$scope.ok = function () {
-		$modalInstance.close( $scope.user );
-	};
-
-	$scope.cancel = function () {
-		$modalInstance.dismiss('cancel');
-	};
+	$scope.ok = function () { $modalInstance.close( $scope.user ); };
+	$scope.cancel = $modalInstance.dismiss.bind(undefined, 'cancel');
 }]).
 
 //  data-ng-non-bindable
@@ -180,7 +174,7 @@ controller('event-edit-agenda', ['$scope', 'API', '$sce', '$modal', function ($s
 	$scope.rem = Session.rem.bind( Session );
 }]).
 
-controller('event-edit-agenda-modal', ['$scope', '$modalInstance', 'session', 'user', 'API', function ($scope, $modalInstance, session, user, API) {
+controller('event-edit-agenda-modal', ['$scope', '$modalInstance', 'session', 'user', 'API', 'UserModal', function ($scope, $modalInstance, session, user, API, UserModal) {
 	$scope.users = user;
 	$scope.session = session;
 
@@ -195,6 +189,7 @@ controller('event-edit-agenda-modal', ['$scope', '$modalInstance', 'session', 'u
 	// Speaker Functions
 	$scope.new_speaker = {};
 	$scope.add_speaker = function () {
+		if (!$scope.new_speaker.userID) return alert('Adding users not allowed here (yet)');
 		$scope.new_speaker.featured = 'true';
 		$scope.new_speaker.sessionID = session.sessionID;
 		Speaker.add($scope.new_speaker).then(function (item) {
@@ -204,6 +199,9 @@ controller('event-edit-agenda-modal', ['$scope', '$modalInstance', 'session', 'u
 	};
 	$scope.rem_speaker = Speaker.rem.bind( Speaker );
 	$scope.set_speaker = Speaker.set.bind( Speaker );
+	$scope.edit_speaker = function (user) {
+		UserModal.open( user.userID ).then( angular.extend.bind(undefined, user) );
+	};
 
 	// Files funcitons
 	$scope.new_file = {};

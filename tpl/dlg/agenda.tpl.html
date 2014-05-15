@@ -67,7 +67,7 @@
 						<td>{{user.title}}</td>
 						<td>
 							<button type="button" class="close" aria-hidden="true" ng-click="rem_speaker(user)">&times;</button>
-							<button class="btn btn-xs btn-default">Edit</button>
+							<button class="btn btn-xs btn-default" ng-click="edit_speaker(user)">Edit</button>
 						</td>
 					</tr>
 					<tr ng-if="speakers.length == 0">
@@ -80,7 +80,7 @@
 							<div class="input-group" style="width:100%">
 								<select class="form-control input-sm" ng-model="new_speaker.userID" 
 									ng-options="value.userID as value.name for value in users | orderObjectBy:'name':false" >
-									<option value="" disabled> &mdash; New Speaker &mdash; </option>
+									<option value=""> &mdash; New Speaker &mdash; </option>
 								</select>
 								<span class="input-group-btn">
 									<button class="btn btn-default btn-success btn-sm" type="button" ng-click="add_speaker()">Add</button>

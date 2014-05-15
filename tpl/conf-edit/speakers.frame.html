@@ -6,7 +6,9 @@
 	<textarea name="conf.html_speakers" class="form-control"><?=$event['html_speakers']; ?></textarea>
 </div>
 
-<div data-ng-controller="event-speaker">
+<p>Speakers appear here automatically based off of the Agenda settings below.</p>
+
+<!-- <div data-ng-controller="event-speaker">
 	<div class="row">
 		<?php 
 			$count = count($event['speakers']);
@@ -28,6 +30,6 @@
 			</div>
 		<?php endfor; ?>
 	</div>
-</div>
+</div> -->
 
 <input type="submit" value="Save Conference" onclick="document.forms[0].submit()" class="btn btn-default pull-right">
