@@ -218,7 +218,7 @@ class ArrestDB {
 			'fields'  => array('userID', 'name', 'title', 'firm', 'phone', 'photo', 'bio', 'email', 'seen'),
 		),
 		'user-ADMIN'  => array(
-			'actions' => array('GET', 'PUT'),
+			'actions' => array('GET', 'PUT', 'POST'),
 			'fields'  => array('userID', 'name', 'title', 'firm', 'phone', 'photo', 'bio', 'email', 'seen', 'admin'),
 		),
 		'file-ADMIN'  => array(
@@ -232,6 +232,10 @@ class ArrestDB {
 		'speaker-ADMIN' => array(
 			'actions' => array('GET', 'PUT', 'POST', 'DELETE'),
 			'fields'  => array('speakerID', 'userID', 'sessionID', 'featured'),
+		),
+		'attendee-ADMIN' => array(
+			'actions' => array('GET', 'POST', 'DELETE'),
+			'fields'  => array('attendeeID', 'userID', 'conferenceID'),
 		),
 	);
 	public static function whitelist( $table, $area ) {

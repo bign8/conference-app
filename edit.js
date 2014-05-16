@@ -83,20 +83,78 @@ ELA_MAP_EDIT.prototype = {
 
 angular.module('event-edit', ['event']).
 
-controller('event-edit-attendee', ['$scope', '$controller', 'UserModal', function ($scope, $controller, UserModal) {
-	angular.extend(this, $controller('event-attendee', {$scope: $scope}));
+controller('event-edit-attendee', ['$scope', 'UserModal', 'API', '$q', function ($scope, UserModal, API, $q) {
 
+	/* --- start initialization --- */
+	var conferenceID = document.getElementById('conferenceID').value ;
+	var load_user = $q.defer(), load_attendee = $q.defer();
+	var User = new API('user', undefined, load_user.resolve);
+	var Attendee = new API('attendee', undefined, load_attendee.resolve, '/conferenceID/' + conferenceID);
+
+	$scope.users = User.list; // manual join
+	var manual_join = function () {
+		var atten = {}; // O(n + m) join ( because of hash lookup O(n*ln(m)) )
+		for (var i = 0; i < Attendee.list.length; i++) atten[ Attendee.list[i].userID ] =  Attendee.list[i].attendeeID;
+		for (var i = 0; i < User.list.length; i++) User.list[i].attendeeID = atten[ User.list[i].userID ] || null ;
+	};
+	$q.all([ load_user.promise, load_attendee.promise ]).then( manual_join );
+	/* --- end initialization --- */
+
+	/* --- start navigation --- */
+	$scope.total_rows = function () { // Searching
+		$scope.filtered_data = $scope.filtered_data ? $scope.filtered_data : [];
+		var tail = ($scope.filtered_data.length == Attendee.list.length) ? '' : (' of ' + Attendee.list.length);
+		return 'Total: ' + $scope.filtered_data.length + tail;
+	};
+	$scope.limits = [15,25,50,100]; // Pagination
+	$scope.limit = $scope.limits[0];
+	$scope.page = 1;
+	$scope.fields = [ // Order By
+		{field: ['name'], disp: 'Name'},
+		{field: ['title','name'], disp: 'Title'},
+		{field: ['firm','name'], disp: 'Firm'},
+	];
+	$scope.field = $scope.fields[0].field;
+	$scope.sort_order = false;
+	/* --- end navigation --- */
+
+	/* --- start editing --- */
+	$scope.new_attendee = null;
+	$scope.add = function () {
+
+		// Create new user or use old one
+		var new_attendee = $scope.new_attendee ? $q.when( $scope.new_attendee ) : User.add({
+			name: 'New User ' + (Math.random() * 10000 >> 0)
+		}).then(function (user) {
+			return UserModal.open( user.userID, User ); // chain promises
+		});
+
+		// Add attendee
+		new_attendee.then(function (user) {
+			Attendee.add({
+				userID: user.userID,
+				conferenceID: conferenceID
+			}).then(function () {
+				$scope.new_attendee = null;
+				manual_join();
+			});
+		});
+	};
 	$scope.edit = function (user, $event) {
 		$event.preventDefault();
 		UserModal.open( user.userID ).then( angular.extend.bind(undefined, user) );
 	};
+	$scope.rem = function (user, $event) {
+		$event.preventDefault();
+		Attendee.rem( user ).then( manual_join );
+	};
+	/* --- end editing --- */
 }]).
 
 factory('UserModal', ['API', '$modal', '$sce', function (API, $modal, $sce) {
-	var User = new API('user');
-
 	return {
-		open: function (userID) {
+		open: function (userID, their_user) {
+			var User = their_user || new API('user');
 			var modalInstance = $modal.open({
 				templateUrl: 'tpl/dlg/user.tpl.html',
 				controller: 'event-user-modal',
@@ -105,15 +163,7 @@ factory('UserModal', ['API', '$modal', '$sce', function (API, $modal, $sce) {
 					user: User.get.bind( User, userID )
 				}
 			});
-			return modalInstance.result.then(function (user) {
-				User.set(user); // Note: assumes successful
-				user.safe = { // for event-edit-attendee
-					firm:  $sce.trustAsHtml( user.firm ),
-					name:  $sce.trustAsHtml( user.name ),
-					title: $sce.trustAsHtml( user.title )
-				};
-				return user;
-			});
+			return modalInstance.result.then( User.set.bind( User ) ); // Chained promises
 		}
 	};
 }]).

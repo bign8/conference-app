@@ -206,7 +206,7 @@ angular.module('helpers', []).filter('pagination', function () {
 			this.list[i] = item;
 			break;
 		}
-		return data;
+		return item;
 	};
 	var service = function(table, identifier, cb, suffix) {
 		this.list = [];
