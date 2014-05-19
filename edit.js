@@ -83,6 +83,19 @@ ELA_MAP_EDIT.prototype = {
 
 angular.module('event-edit', ['event']).
 
+directive('ngInitial', function() {
+	return {
+		restrict: 'A',
+		controller: ['$scope', '$attrs', '$parse', function ($scope, $attrs, $parse) {
+			$parse( $attrs.ngModel ).assign( $scope, $attrs.ngInitial || $attrs.value );
+		}]
+	};
+}).
+
+controller('event-edit-head', ['$scope', function ($scope) {
+	$scope.test = '';
+}]).
+
 controller('event-edit-attendee', ['$scope', 'UserModal', 'API', '$q', function ($scope, UserModal, API, $q) {
 
 	/* --- start initialization --- */
