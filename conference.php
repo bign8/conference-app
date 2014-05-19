@@ -21,9 +21,13 @@
 ?>
 
 <?php if ($is_edit): ?>
-	<!-- pre-loading tinymce style -->
+	<!-- pre-loading tinymce style + js -->
 	<link rel="stylesheet" href="//cdnjs.cloudflare.com/ajax/libs/tinymce/4.0.21/skins/lightgray/skin.min.css">
 	<script src="//cdnjs.cloudflare.com/ajax/libs/tinymce/4.0.21/tinymce.min.js"></script>
+	<script src="//cdnjs.cloudflare.com/ajax/libs/tinymce/4.0.21/themes/modern/theme.min.js"></script>
+	<script src="//cdnjs.cloudflare.com/ajax/libs/tinymce/4.0.21/plugins/link/plugin.min.js"></script>
+	<script src="//cdnjs.cloudflare.com/ajax/libs/tinymce/4.0.21/plugins/image/plugin.min.js"></script>
+	<script src="//cdnjs.cloudflare.com/ajax/libs/tinymce/4.0.21/plugins/code/plugin.min.js"></script>
 	<script src="./jquery.tinymce.min.js"></script>
 
 	<script src="./edit.js"></script>

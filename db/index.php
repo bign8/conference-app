@@ -213,7 +213,7 @@ class ArrestDB {
 	// WARNING: POST + PUT do not care about `fields` parameter (can everwrite anything)
 	private static $WHITELIST = array(
 		'user-USER'   => array(
-			// alternative? 'GET' => array(...)
+			// alternative? 'GET' => array(...), 'POST' => array(/* postable fields */)
 			'actions' => array('GET'),
 			'fields'  => array('userID', 'name', 'title', 'firm', 'phone', 'photo', 'bio', 'email', 'seen'),
 		),
@@ -236,6 +236,18 @@ class ArrestDB {
 		'attendee-ADMIN' => array(
 			'actions' => array('GET', 'POST', 'DELETE'),
 			'fields'  => array('attendeeID', 'userID', 'conferenceID'),
+		),
+		'company-ADMIN' => array(
+			'actions' => array('GET', 'PUT', 'POST'),
+			'fields'  => array('companyID', 'name', 'bio', 'logo', 'site'),
+		),
+		'sponsor-ADMIN' => array(
+			'actions' => array('GET', 'PUT', 'POST', 'DELETE'),
+			'fields'  => array('sponsorID', 'conferenceID', 'companyID', 'priority', 'advert'),
+		),
+		'rep-ADMIN' => array(
+			'actions' => array('GET', 'POST', 'DELETE'),
+			'fields'  => array('repID', 'sponsorID', 'userID'),
 		),
 	);
 	public static function whitelist( $table, $area ) {

@@ -6,34 +6,47 @@
 	<textarea name="conf.html_sponsors" class="form-control"><?=$event['html_sponsors']; ?></textarea>
 </div>
 
-<div class="row">
-	<?php 
-		$count = count($event['sponsors']);
-		for ($i=0; $i < $count; $i++): 
-			if ($i % 3 == 0 && $i != 0) {
-				$left = $count - $i;
-				echo $left < 3 ? '</div><div class="row"><div class="col-md-' . (3 - $left) * 2 . '"></div>' : '</div><div class="row">' ;
-			}
-			$sponsor = $event['sponsors'][$i];
-		?>
-		<div class="col-sm-6 col-md-4">
-			<div class="thumbnail" style="text-align: center;">
-				<?php if (!is_null($sponsor['logo'])): ?>
-					<img src="./data/sponsor/<?=$sponsor['logo']; ?>" alt="..." style="max-height:300px">
-				<?php endif; ?>
-				<div class="caption">
-					<h3>
-						<?php if (is_null($sponsor['site'])): ?>
-							<?=$sponsor['name']; ?>
-						<?php else: ?>
-							<a href="<?=$sponsor['site']; ?>" style="color:#333;" target="_blank"><?=$sponsor['name']; ?></a>
-						<?php endif; ?>
-					</h3>
-					<p><?=$sponsor['bio']; ?></p>
-				</div>
-			</div>
-		</div>
-	<?php endfor; ?>
+<div data-ng-controller="event-edit-sponsor">
+
+	<div class="input-group" style="width:100%">
+		<label for="new_sponsor" class="input-group-addon">Add Sponsor</label>
+		<select class="form-control input-sm" ng-model="new_sponsor" id="new_sponsor"
+			ng-options="value.name for value in companies | filter:{sponsorID:'!'} | orderBy:'name'" >
+			<option value=""> &mdash; New Company &mdash; </option>
+		</select>
+		<span class="input-group-btn">
+			<button class="btn btn-default btn-success btn-sm" type="button" data-ng-click="add()">Add</button>
+		</span>
+	</div>
+
+	<table class="table">
+		<thead>
+			<tr>
+				<th>Company</th>
+				<th>Advertisement <small style="font-weight:normal">Click to edit</small></th>
+				<th>Logo</th>
+			</tr>
+		</thead>
+		<tbody>
+			<tr data-ng-repeat=" company in companies | filter:{sponsorID:'!!'} | orderBy:['priority','name'] ">
+				<td><a data-ng-href="{{company.site}}">{{company.name}}</a></td>
+				<td data-col-editor data-col-field="company.advert" data-save-cb="set(company)">-</td>
+				<td>
+					{{company.logo}}
+					<div class="pull-right">
+						<small>#{{company.priority}}</small>
+						<button type="button" class="btn btn-default btn-xs" data-ng-click="move(company, -1)"><i class="glyphicon glyphicon-chevron-up"></i></button>
+						<button type="button" class="btn btn-default btn-xs" data-ng-click="move(company, +1)"><i class="glyphicon glyphicon-chevron-down"></i></button>
+						<button type="button" class="btn btn-default btn-xs" data-ng-click="edit(company)"><i class="glyphicon glyphicon-edit"></i></button>
+						<button type="button" class="btn btn-default btn-xs" data-ng-click="rem(company)"><i class="glyphicon glyphicon-remove"></i></button>
+					</div>
+				</td>
+			</tr>
+		</tbody>
+	</table>
+
+	<!-- <pre>{{companies | json}}</pre> -->
+
 </div>
 
 <input type="submit" value="Save Conference" onclick="document.forms[0].submit()" class="btn btn-default pull-right">

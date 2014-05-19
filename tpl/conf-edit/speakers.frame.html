@@ -8,28 +8,4 @@
 
 <p>Speakers appear here automatically based off of the Agenda settings below.</p>
 
-<!-- <div data-ng-controller="event-speaker">
-	<div class="row">
-		<?php 
-			$count = count($event['speakers']);
-			for ($i=0; $i < $count; $i++): 
-				if ($i % 3 == 0 && $i != 0) {
-					$left = $count - $i;
-					echo $left < 3 ? '</div><div class="row"><div class="col-md-' . (3 - $left) * 2 . '"></div>' : '</div><div class="row">' ;
-				}
-				$speaker = $event['speakers'][$i];
-			?>
-			<div class="col-sm-6 col-md-4">
-				<div class="thumbnail" style="text-align: center;cursor: pointer" data-ng-click="show_user(<?=$speaker['userID']; ?>)">
-					<img src="./data/usr/<?=$speaker['photo']; ?>" alt="..." style="max-height:300px">
-					<div class="caption">
-						<h3><?=$speaker['name']; ?></h3>
-						<p><?=$speaker['title']; ?><br/><?=$speaker['firm']; ?></p>
-					</div>
-				</div>
-			</div>
-		<?php endfor; ?>
-	</div>
-</div> -->
-
 <input type="submit" value="Save Conference" onclick="document.forms[0].submit()" class="btn btn-default pull-right">

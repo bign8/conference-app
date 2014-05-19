@@ -83,18 +83,7 @@ ELA_MAP_EDIT.prototype = {
 
 angular.module('event-edit', ['event']).
 
-directive('ngInitial', function() {
-	return {
-		restrict: 'A',
-		controller: ['$scope', '$attrs', '$parse', function ($scope, $attrs, $parse) {
-			$parse( $attrs.ngModel ).assign( $scope, $attrs.ngInitial || $attrs.value );
-		}]
-	};
-}).
-
-controller('event-edit-head', ['$scope', function ($scope) {
-	$scope.test = '';
-}]).
+controller('event-edit-head', angular.noop).
 
 controller('event-edit-attendee', ['$scope', 'UserModal', 'API', '$q', function ($scope, UserModal, API, $q) {
 
@@ -107,7 +96,7 @@ controller('event-edit-attendee', ['$scope', 'UserModal', 'API', '$q', function 
 	$scope.users = User.list; // manual join
 	var manual_join = function () {
 		var atten = {}; // O(n + m) join ( because of hash lookup O(n*ln(m)) )
-		for (var i = 0; i < Attendee.list.length; i++) atten[ Attendee.list[i].userID ] =  Attendee.list[i].attendeeID;
+		for (var i = 0; i < Attendee.list.length; i++) atten[ Attendee.list[i].userID ] = Attendee.list[i].attendeeID;
 		for (var i = 0; i < User.list.length; i++) User.list[i].attendeeID = atten[ User.list[i].userID ] || null ;
 	};
 	$q.all([ load_user.promise, load_attendee.promise ]).then( manual_join );
@@ -282,6 +271,118 @@ controller('event-edit-agenda-modal', ['$scope', '$modalInstance', 'session', 'u
 	$scope.cancel = function () { $modalInstance.dismiss('cancel'); };
 }]).
 
+controller('event-edit-sponsor', ['$scope', '$modal', 'API', '$q', function ($scope, $modal, API, $q) {
+	var conferenceID = document.getElementById('conferenceID').value ;
+	var load_company = $q.defer(), load_sponsor = $q.defer();
+	var Company = new API('company', undefined, load_company.resolve);
+	var Sponsor = new API('sponsor', undefined, load_sponsor.resolve, '/conferenceID/' + conferenceID);
+
+	// Init + Process Companies and Sponsors
+	$scope.companies = Company.list;
+	var manual_join_sponsor = function () {
+		var spon = {}; // O(n + m) join ( because of hash lookup O(n*ln(m)) )
+		for (var i = 0; i < Sponsor.list.length; i++) {
+			Sponsor.list[i].priority = parseInt(Sponsor.list[i].priority);
+			spon[ Sponsor.list[i].companyID ] = Sponsor.list[i];
+		}
+		for (var i = 0; i < Company.list.length; i++) angular.extend( Company.list[i], spon[ Company.list[i].companyID ] || null );
+	};
+	$q.all([ load_company.promise, load_sponsor.promise ]).then( manual_join_sponsor );
+
+	// Sponsor Editing
+	$scope.new_sponsor = null;
+	$scope.add = function () {
+		var new_sponsor = $scope.new_sponsor ? $q.when( $scope.new_sponsor ) : Company.add({
+			name: 'New Company ' + (Math.random() * 10000 >> 0)
+		}).then(function (company) {
+			return $scope.edit(company);
+		});
+		
+		new_sponsor.then(function (company) {
+			Sponsor.add({
+				conferenceID: conferenceID,
+				priority: 0,
+				advert: null,
+				companyID: company.companyID,
+			}).then(function () {
+				$scope.new_sponsor = null;
+				manual_join_sponsor();
+			});	
+		});
+	};
+	$scope.rem = function (sponsor) {
+		Sponsor.rem( sponsor ).then(function() {
+			var obj = Company.list[ Company.list.indexOf(sponsor) ];
+			delete obj.sponsorID;
+			delete obj.conferenceID;
+			delete obj.priority;
+			delete obj.advert;
+		}).then( manual_join_sponsor );
+	};
+	$scope.set = Sponsor.set.bind( Sponsor );
+	$scope.move = function (obj, diff) {
+		obj.priority = parseInt(obj.priority) + diff;
+		$scope.set(obj);
+	};
+
+	// Company Editing
+	$scope.edit = function (company) {
+		var modalInstance = $modal.open({
+			templateUrl: 'tpl/dlg/sponsor.tpl.html',
+			controller: 'event-edit-sponsor-modal',
+			size: 'lg',
+			resolve: {
+				company: function() { return company; },
+			}
+		});
+		return modalInstance.result.then( Company.set.bind( Company ) );
+	};
+}]).
+
+controller('event-edit-sponsor-modal', ['$scope', '$modalInstance', 'company', 'API', '$q', 'UserModal', function ($scope, $modalInstance, company, API, $q, UserModal) {
+	$scope.company = company;
+
+	var load_rep = $q.defer(), load_usr = $q.defer();
+	var Rep  = new API('rep' , undefined, load_rep.resolve, '/sponsorID/' + company.sponsorID);
+	var User = new API('user', undefined, load_usr.resolve);
+
+	// init data
+	$scope.users = User.list;
+	var manual_join_reps = function () {
+		var reps = {};
+		for (var i = 0; i < Rep.list.length; i++) reps[ Rep.list[i].userID ] = Rep.list[i];
+		for (var i = 0; i < User.list.length; i++) angular.extend( User.list[i], reps[ User.list[i].userID ] || null );
+	};
+	$q.all([ load_rep.promise, load_usr.promise ]).then( manual_join_reps );
+
+	// Reps editing
+	$scope.edit = function (user) {
+		UserModal.open( user.userID ).then( angular.extend.bind(undefined, user) );
+	};
+	$scope.rem = function (user) {
+		Rep.rem( user ).then(function () {
+			var obj = User.list[ User.list.indexOf(user) ];
+			delete obj.repID;
+			delete obj.sponsorID;
+		}).then( manual_join_reps );
+	};
+	$scope.new_rep = null;
+	$scope.add = function () {
+		if (!$scope.new_rep) return alert('new users not yet allowed');
+		Rep.add({
+			sponsorID: company.sponsorID,
+			userID: $scope.new_rep.userID,
+		}).then(function () {
+			$scope.new_rep = null;
+			manual_join_reps();
+		});
+	};
+
+	// Closing functions
+	$scope.ok = function () { $modalInstance.close($scope.company); };
+	$scope.cancel = function () { $modalInstance.dismiss('cancel'); };
+}]).
+
 // http://justinklemm.com/angularjs-filter-ordering-objects-ngrepeat/
 filter('orderObjectBy', function() {
 	return function (items, field, reverse) {
@@ -294,6 +395,15 @@ filter('orderObjectBy', function() {
 		});
 		if(reverse) filtered.reverse();
 		return filtered;
+	};
+}).
+
+directive('ngInitial', function() {
+	return {
+		restrict: 'A',
+		controller: ['$scope', '$attrs', '$parse', function ($scope, $attrs, $parse) {
+			$parse( $attrs.ngModel ).assign( $scope, $attrs.ngInitial || $attrs.value );
+		}]
 	};
 }).
 
