@@ -24,6 +24,8 @@ if (array_key_exists('_method', $_GET) === true) {
 	$_SERVER['REQUEST_METHOD'] = strtoupper(trim($_SERVER['HTTP_X_HTTP_METHOD_OVERRIDE']));
 }
 
+require('custom.php'); // Custom API calls! (still need permissions)
+
 ArrestDB::Serve('GET', '/(#any)/(#any)/(#any)', function ($table, $id, $data) {
 	$query = array(
 		sprintf('SELECT %s FROM "%s"', implode(', ', ArrestDB::whitelist($table, 'fields')), $table), // N8-MOD
@@ -212,14 +214,18 @@ class ArrestDB {
 	// Whitelist (List of abailable tables/operations/fields from db)
 	// WARNING: POST + PUT do not care about `fields` parameter (can everwrite anything)
 	private static $WHITELIST = array(
+		'atten-USER' => array(
+			'actions' => array('GET'),
+			'fields'  => array('*'),
+		),
 		'user-USER'   => array(
 			// alternative? 'GET' => array(...), 'POST' => array(/* postable fields */)
 			'actions' => array('GET'),
-			'fields'  => array('userID', 'name', 'title', 'firm', 'phone', 'photo', 'bio', 'email', 'seen'),
+			'fields'  => array('userID', 'name', 'title', 'firm', 'phone', 'photo', 'bio', 'email', 'seen', 'city', 'state', 'member'),
 		),
 		'user-ADMIN'  => array(
 			'actions' => array('GET', 'PUT', 'POST'),
-			'fields'  => array('userID', 'name', 'title', 'firm', 'phone', 'photo', 'bio', 'email', 'seen', 'admin'),
+			'fields'  => array('userID', 'name', 'title', 'firm', 'phone', 'photo', 'bio', 'email', 'seen', 'admin', 'city', 'state', 'member'),
 		),
 		'file-ADMIN'  => array(
 			'actions' => array('GET', 'PUT', 'POST', 'DELETE'),
