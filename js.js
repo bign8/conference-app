@@ -142,28 +142,10 @@ angular.module('event-agenda', []).controller('event-agenda', ['$scope', '$contr
 	// TODO: Notes on agenda item
 }]);
 
-angular.module('event-attendee', []).controller('event-attendee', ['$scope', '$sce', function ($scope, $sce) {
-	
-	// Parse data (http://regexpal.com/)
-	var data, obj, regex = /([0-9]+)">([^<]*).*[\s]+[^>]+>([^<]*)<.*[\s]+[^>]+>([\s]+[^<]*)<.*[\s]+.*tel:([^"]*).*[\s]+.*mailto:([^"]*)/;
-	$scope.data = [];
-	$('#attendee tr.data').each(function (i, e){
-		data = e.innerHTML.match(regex);
-		obj = {
-			userID: data[1].trim(),
-			name  : data[2].trim(),
-			title : data[3].trim(),
-			firm  : data[4].trim(),
-			phone : data[5].trim(),
-			email : data[6].trim(),
-		};
-		obj.safe = {
-			name : $sce.trustAsHtml(obj.name ),
-			title: $sce.trustAsHtml(obj.title),
-			firm : $sce.trustAsHtml(obj.firm ),
-		};
-		$scope.data.push(obj);
-	});
+angular.module('event-attendee', []).controller('event-attendee', ['$scope', '$sce', 'API', function ($scope, $sce, API) {
+	var conferenceID = document.getElementById('conferenceID').value ;
+	var Atten = new API('atten/' + conferenceID);
+	$scope.data = Atten.list;
 
 	// Searching
 	$scope.total_rows = function () {

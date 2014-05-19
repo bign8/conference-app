@@ -48,8 +48,8 @@
 <?php endif; ?>
 
 <<?=$wrap; ?> id="wrap">
+	<input type="hidden" id="conferenceID" name="conferenceID" value="<?=$event['conferenceID']; ?>" />
 	<?php if ($is_edit): ?>
-		<input type="hidden" id="conferenceID" name="conferenceID" value="<?=$event['conferenceID']; ?>" />
 		<input type="hidden" name="locationID" value="<?=$event['locationID']; ?>" />
 	<?php endif; ?>
 
