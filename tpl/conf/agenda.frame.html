@@ -16,13 +16,14 @@ function render_row($item, $has_date = true) {
 	$html = '';
 
 	if ($has_date) $html .= date("g:i a", strtotime($item['start'])) . ' - ' . date("g:i a", strtotime($item['end'])) . "</td>\n";
-	$html .= '<td>' . ( count( $item['speakers'] ) > 0 ? '<b>' . $item['title'] . '</b>' : $item['title'] ) . "</td>\n";
+	$html .= '<td>' . ( count( $item['speakers'] ) > 0 ? '<b>' . $item['title'] . '</b>' : $item['title'] );
+	$html .= "<button ng-click=\"show_note({$item['sessionID']}, '" . str_replace("'", "\'", $item['title']) . "')\" class=\"btn btn-default btn-xs pull-right\"><i class=\"glyphicon glyphicon-pushpin\"></i></button></td>\n";
 	$html .= '<td>' . ( ($item['desc']=='') ? '-' : $item['desc'] ) . "</td>\n";
 	$html .= '<td>';
 
 	if (count($item['speakers']) == 0) $html .= '-';
 	foreach ($item['speakers'] as $speaker) {
-		$html .= '<a href="#" title="' . $speaker['title'] . ' - ' . $speaker['firm'] . '" data-ng-click="show_user(' . $speaker['userID'] . ')" >' . $speaker['name'] . '</a><br/>';
+		$html .= '<a href="#" title="' . $speaker['title'] . ' - ' . $speaker['firm'] . '" data-ng-click="show_user(' . $speaker['userID'] . ', $event)" >' . $speaker['name'] . '</a><br/>';
 	}
 
 	return $html . "</td>\n</tr>\n";

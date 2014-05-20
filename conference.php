@@ -48,7 +48,9 @@
 <?php endif; ?>
 
 <<?=$wrap; ?> id="wrap">
+	
 	<input type="hidden" id="conferenceID" name="conferenceID" value="<?=$event['conferenceID']; ?>" />
+	<input type="hidden" id="userID" name="userID" value="<?=$_SESSION['user']['userID']; ?>" />
 	<?php if ($is_edit): ?>
 		<input type="hidden" name="locationID" value="<?=$event['locationID']; ?>" />
 	<?php endif; ?>

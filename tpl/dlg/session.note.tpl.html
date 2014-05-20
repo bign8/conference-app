@@ -1,0 +1,10 @@
+<div class="modal-header">
+	<h2>{{session.name}}</h2>
+</div>
+<div class="modal-body">
+	<textarea ng-model="note.note" class="form-control text-auto-scale" placeholder="Notes..." ></textarea>
+</div>
+<div class="modal-footer" style="margin-top:0">
+	<button class="btn btn-primary btn-sm" ng-click="ok()"><i class="glyphicon glyphicon-floppy-disk"></i> &nbsp;Save</button>
+	<button class="btn btn-warning pull-left btn-sm" ng-click="cancel()">Cancel</button>
+</div>

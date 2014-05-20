@@ -121,25 +121,49 @@ angular.module('event', [
 	'ui.bootstrap',
 ]);
 
-angular.module('event-speaker', []).controller('event-speaker', ['$scope', '$modal', 'API', function ($scope, $modal, API) {
+angular.module('event-speaker', []).controller('event-speaker', ['$scope','$modal','API','Notes',function ($scope, $modal, API, Notes) {
+
+	// Dialog Functions
 	var User = new API('user');
-	$scope.show_user = function (userID) {
+	$scope.show_user = function (userID, $event) {
+		if ($event) $event.preventDefault();
 		var instance = $modal.open({
-			templateUrl: 'tpl/user.dialog.tpl.html',
-			resolve: { user: User.get.bind(User, userID) },
-			controller: ['$scope', 'user', '$modalInstance', function ($scope, user, $modalInstance) {
+			templateUrl: 'tpl/dlg/user.note.tpl.html',
+			resolve: {
+				user: User.get.bind(User, userID),
+				note: Notes.getNote.bind($scope, 'user', userID),
+			},
+			controller: ['$scope', 'user', '$modalInstance', 'note', function ($scope, user, $modalInstance, note) {
 				$scope.user = user;
-				$scope.ok = function () { $modalInstance.close($scope.person); };
+				$scope.note = note;
+				$scope.ok = function () { $modalInstance.close($scope.note); };
 				$scope.cancel = function () { $modalInstance.dismiss('cancel'); };
 			}]
 		});
-		// TODO: Notes on speaker
+		instance.result.then( Notes.setNote );
 	};
 }]);
 
-angular.module('event-agenda', []).controller('event-agenda', ['$scope', '$controller', function ($scope, $controller) {
+angular.module('event-agenda', []).controller('event-agenda', ['$scope','$controller','$modal','Notes',function ($scope, $controller, $modal, Notes) {
 	angular.extend(this, $controller('event-speaker', {$scope: $scope}));
-	// TODO: Notes on agenda item
+
+	// Notes on agenda item
+	$scope.show_note = function (sessionID, name) {
+		var instance = $modal.open({
+			templateUrl: 'tpl/dlg/session.note.tpl.html',
+			resolve: {
+				session: function() { return { sessionID:sessionID, name:name }; },
+				note: Notes.getNote.bind($scope, 'session', sessionID),
+			},
+			controller: ['$scope', 'session', 'note', '$modalInstance', function ($scope, session, note, $modalInstance) {
+				$scope.session = session;
+				$scope.note = note;
+				$scope.ok = function () { $modalInstance.close($scope.note); };
+				$scope.cancel = function () { $modalInstance.dismiss('cancel'); };
+			}]
+		});
+		instance.result.then( Notes.setNote );
+	};
 }]);
 
 angular.module('event-attendee', []).controller('event-attendee', ['$scope', '$sce', 'API', function ($scope, $sce, API) {
@@ -169,12 +193,16 @@ angular.module('event-attendee', []).controller('event-attendee', ['$scope', '$s
 	$scope.sort_order = false;
 }]);
 
-angular.module('helpers', []).filter('pagination', function () {
+angular.module('helpers', []).
+
+filter('pagination', function () {
 	return function (inputArray, selectedPage, pageSize) {
 		var start = (selectedPage-1) * pageSize;
 		return inputArray.slice(start, start + pageSize);
 	};
-}).factory('API', ['$http', function ($http) { // TODO: improve with browser data cashe
+}).
+
+factory('API', ['$http', function ($http) { // TODO: improve with browser data cashe
 	var base = './db/';
 	var cleanup = function (result) { return result.data.hasOwnProperty('error') ? [] : result.data; };
 	var rem_obj = function (item) { this.list.splice(this.list.indexOf(item), 1); };
@@ -214,6 +242,49 @@ angular.module('helpers', []).filter('pagination', function () {
 		}
 	};
 	return service;
-}]).config(['$locationProvider', function ($locationProvider) {
+}]).
+
+factory('Notes', ['API', '$q', function (API, $q) {
+	var userID = document.getElementById('userID').value;
+	var Note = new API('note', undefined, undefined, '/userID/' + userID);
+
+	var getNote = function (type, id) {
+		for (var i = 0, len = Note.list.length; i < len; i++) // Look for previous note
+			if (Note.list[i]['dest_' + type + 'ID'] == id) 
+				return $q.when(Note.list[i]);
+
+		return Note.add({ // Create new note
+			userID: userID,
+			dest_userID: (type == 'user') ? id : null,
+			dest_sessionID: (type == 'session') ? id : null,
+			note: '',
+			stamp: Date.now(),
+		});
+	};
+	var setNote = function (data) {
+		data.stamp = Date.now();
+		Note[ data.note ? 'set' : 'rem' ]( data );
+	};
+
+	return {
+		getNote: getNote,
+		setNote: setNote,
+	}
+}]).
+
+config(['$locationProvider', function ($locationProvider) {
 	$locationProvider.html5Mode(true); // fix link hashes
-}]);
+}]).
+
+directive('textAutoScale', function () {
+	return {
+		restrict: 'C',
+		link: function(scope, element, attrs) {
+			element.on('keyup', function (e) {
+				e.target.style.height = "1px";
+    			e.target.style.height = (25+e.target.scrollHeight)+"px";
+			});
+			scope.$watch(function () { return element.is(':visible'); }, function () { element.keyup(); });
+		}
+	}
+});
