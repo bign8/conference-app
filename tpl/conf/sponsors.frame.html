@@ -14,7 +14,7 @@
 			$sponsor = $event['sponsors'][$i];
 		?>
 		<div class="col-sm-6 col-md-4">
-			<div class="thumbnail" style="text-align: center;">
+			<div class="thumbnail" style="text-align:center;">
 				<?php if (!is_null($sponsor['logo'])): ?>
 					<img src="./data/sponsor/<?=$sponsor['logo']; ?>" alt="..." style="max-height:300px">
 				<?php endif; ?>
@@ -25,8 +25,36 @@
 						<?php else: ?>
 							<a href="<?=$sponsor['site']; ?>" style="color:#333;" target="_blank"><?=$sponsor['name']; ?></a>
 						<?php endif; ?>
+						<?php if (!is_null($sponsor['advert'])): ?>
+							<small>
+								<a href="<?=$sponsor['advert']; ?>" style="color:#999">Flyer</a>
+							</small>
+						<?php endif; ?>
 					</h3>
 					<p><?=$sponsor['bio']; ?></p>
+
+					<?php if (count($sponsor['reps']) > 0): ?>
+						<table class="table" style="text-align:left;margin-bottom:0">
+							<thead>
+								<tr>
+									<th>Attending Representative</th>
+								</tr>
+							</thead>
+							<tbody>
+								<?php foreach ($sponsor['reps'] as $rep): ?>
+									<tr>
+										<td>
+											<?=$rep['name']; ?>
+											<div class="pull-right">
+												<a href="tel:<?=$rep['phone']; ?>"><i class="glyphicon glyphicon-phone-alt"></i></a>
+												<a href="mailto:<?=$rep['email']; ?>"><i class="glyphicon glyphicon-envelope"></i></a>
+											</div>
+										</td>
+									</tr>
+								<?php endforeach; ?>
+							</tbody>
+						</table>
+					<?php endif; ?>
 				</div>
 			</div>
 		</div>
