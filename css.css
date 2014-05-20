@@ -13,8 +13,9 @@ html, body { height: 100%; } /* The html and body elements cannot have any paddi
 	border-radius: 0;
 	margin-bottom: 0;
 }
-#wrap > .color-2 { background-color: #E7E7E7; }
-#wrap > .color > .container { padding: 60px 15px; }
+/*#wrap > .color-2 { background-color: #E7E7E7; }*/
+#wrap > .color > .container { padding: 200px 15px 60px; }
+/*#wrap > .color > .container { padding: 60px 15px; }*/
 #wrap > .color:last-child { min-height: 100%; }
 #wrap > .color:last-child > .container {
 	min-height: 100%;
@@ -44,6 +45,47 @@ img.pull-right { padding: 0; margin: 0 0 1em 1em; }
 	line-height: 0;
 	font-size: 30px;
 }
+
+/* colors */
+.navbar-default {
+	background-color: #151F60;
+	border-color: #FDA044;
+}
+.navbar-default .navbar-nav > li > a,
+.credit, .credit a {
+	color: #FDA044;
+}
+.navbar-default .navbar-brand {
+	color: #FDA044;
+}
+.navbar-default .navbar-nav > .active > a,
+.navbar-default .navbar-nav > .active > a:hover,
+.navbar-default .navbar-nav > li > a:hover,
+.navbar-default .navbar-brand:hover {
+	color: #240D4A;
+	background-color: #FDA044;
+}
+.color-1 > div > .page-header:first-child, .color-1 .page-header small {
+	background-color: #FDB016;
+	color: #240D4A;
+}
+.color-2 > div > .page-header:first-child, .color-2 .page-header small {
+	background-color: #151F60;
+	color: #FDA044;
+}
+.color > div > .page-header:first-child {
+	margin: -200px 0 20px;
+	padding-top: 100px;
+	position: absolute;
+	left: 0;
+	right: 0;
+}
+.color .page-header h1 {
+	font-size: 24px;
+	margin-top: 0;
+}
+/* end colors */
+
 
 /* Person-Notes dialog class */
 .person-notes .modal-header { padding-bottom: 5px; }

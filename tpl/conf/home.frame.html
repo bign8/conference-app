@@ -1,11 +1,13 @@
 <div class="page-header">
-	<h1>
-		<img src="./data/logo/<?php echo $event['logo']; ?>" alt="<?php echo $event['title']; ?>" class="pull-right">
-		<?php echo $event['title']; ?> 
-		<small><?php echo $event['theme']; ?></small>
-	</h1>
-	<?=date("F j, Y", strtotime($event['start_stamp'])); ?> - <?=date("F j, Y", strtotime($event['end_stamp'])); ?><br/>
-	<?=$event['location']['name'] . ' &mdash; ' . $event['location']['city'] . ', ' . $event['location']['state']; ?>
+	<div class="container">
+		<h1>
+			<img src="./data/logo/<?php echo $event['logo']; ?>" alt="<?php echo $event['title']; ?>" class="pull-right">
+			<?php echo $event['title']; ?> 
+			<small><?php echo $event['theme']; ?></small>
+		</h1>
+		<?=date("F j, Y", strtotime($event['start_stamp'])); ?> - <?=date("F j, Y", strtotime($event['end_stamp'])); ?><br/>
+		<?=$event['location']['name'] . ' &mdash; ' . $event['location']['city'] . ', ' . $event['location']['state']; ?>
+	</div>
 </div>
 
 <div class="lead">
