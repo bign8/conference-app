@@ -7,6 +7,9 @@
 <p class="lead">
 	This is where you can Create, Read, Update and Delete (CRUD) conference settings
 </p>
+<p class="text-danger">
+	Warning: If you delete a conference, it's attendees, speakers and sponsors will no longer be able to access it's information.
+</p>
 
 <div ng-controller="conf" class="row">
 	<div class="col-md-6">
@@ -24,35 +27,44 @@
 					<td data-col-editor data-col-field="conf.title" data-save-cb="set_conf(conf)">-</td>
 					<td data-col-editor data-col-field="conf.theme" data-save-cb="set_conf(conf)">-</td>
 					<td data-col-editor data-col-field="conf.slug"  data-save-cb="set_conf(conf)">-</td>
-					<td><a ng-href="./{{conf.slug}}?edit">Edit</a></td>
+					<td>
+						<button type="button" class="close" aria-hidden="true" ng-click="rem_conf(conf)">&times;</button>
+						<a ng-href="./{{conf.slug}}?edit" class="btn btn-default btn-xs">
+							<i class="glyphicon glyphicon-edit"></i>
+						</a>
+					</td>
 				</tr>
 			</tbody>
 		</table>
 	</div>
 	<div class="col-md-6">
-		<form class="form-horizontal" role="form">
+		<form class="form-horizontal" role="form" ng-submit="save()">
 			<div class="form-group">
 				<label for="conf_title" class="col-sm-2 control-label">Title</label>
 				<div class="col-sm-10">
-					<input type="text" class="form-control" id="conf_title" placeholder="Title">
+					<input type="text" class="form-control" id="conf_title" placeholder="Title" ng-model="mod.title" required>
 				</div>
 			</div>
 			<div class="form-group">
 				<label for="conf_theme" class="col-sm-2 control-label">Theme</label>
 				<div class="col-sm-10">
-					<input type="text" class="form-control" id="conf_theme" placeholder="Theme">
+					<input type="text" class="form-control" id="conf_theme" placeholder="Theme" ng-model="mod.theme" required>
 				</div>
 			</div>
 			<div class="form-group">
 				<label for="conf_slug" class="col-sm-2 control-label">Slug</label>
 				<div class="col-sm-10">
-					<input type="text" class="form-control" id="conf_slug" placeholder="Slug">
-					<p class="help-block">This is what will appear in the URL</p>
+					<input type="text" class="form-control" id="conf_slug" placeholder="Slug" ng-model="mod.slug" required>
+					<p class="help-block">
+						This is what will appear in the URL<br/>
+						Should be <em>lowercase characters + numbers</em> ONLY<br/>
+						Should be <b>UNIQUE!</b>
+					</p>
 				</div>
 			</div>
 			<div class="form-group">
 				<div class="col-sm-offset-2 col-sm-10">
-					<button type="submit" class="btn btn-default">Save</button>
+					<button type="submit" class="btn btn-default">Add Conference</button>
 				</div>
 			</div>
 		</form>

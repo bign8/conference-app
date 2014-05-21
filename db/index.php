@@ -260,7 +260,7 @@ class ArrestDB {
 			'fields'  => array('noteID', 'userID', 'dest_userID', 'dest_sessionID', 'note', 'stamp'),
 		),
 		'conference-ADMIN' => array(
-			'actions' => array('GET', 'PUT', 'POST'),
+			'actions' => array('GET', 'PUT', 'POST', 'DELETE'),
 			'fields'  => array('conferenceID', 'title', 'theme', 'slug'),
 		)
 	);
