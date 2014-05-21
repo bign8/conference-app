@@ -61,7 +61,8 @@ img.pull-right { padding: 0; margin: 0 0 1em 1em; }
 .navbar-default .navbar-nav > .active > a,
 .navbar-default .navbar-nav > .active > a:hover,
 .navbar-default .navbar-nav > li > a:hover,
-.navbar-default .navbar-brand:hover {
+.navbar-default .navbar-brand:hover,
+.navbar.navbar-default .navbar-nav > .open > a {
 	color: #240D4A;
 	background-color: #FDA044;
 }
