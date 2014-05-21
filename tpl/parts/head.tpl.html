@@ -36,6 +36,7 @@
 				<?php include(implode(DIRECTORY_SEPARATOR, array(__dir__, '..', 'menu', isset($menu) ? $menu : 'index.menu.html'))); ?>
 				<ul class="nav navbar-nav navbar-right">
 					<?php if ($auth): ?>
+						<?php if (isset($_SESSION['user']['admin']) && $_SESSION['user']['admin'] == 'true'): ?><li><a href="./admin.php">Admin</a></li><?php endif; ?>
 						<li class="dropdown">
 							<a href="#" class="dropdown-toggle" data-toggle="dropdown">
 								<?php echo $_SESSION['user']['name']; ?>
