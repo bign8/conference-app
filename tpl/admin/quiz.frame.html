@@ -6,3 +6,131 @@
 <p class="lead">
 	Lorem ipsum dolor sit amet, consectetur adipiscing elit. Ut ac eleifend nisl. Mauris vitae tincidunt turpis, quis facilisis orci. Maecenas elementum sapien vitae libero semper commodo. Quisque tincidunt, dui vitae laoreet sollicitudin, sem tellus interdum odio, eu ornare tellus tellus ac tortor. Nulla laoreet urna ligula, ut ultrices dui ultricies et. Proin in viverra tellus. Duis vel sem quis neque molestie vehicula id eu mauris. Mauris eleifend ut est at luctus. Sed nec ligula a lectus ultricies bibendum viverra vitae ante. Suspendisse fringilla turpis nisi. Lorem ipsum dolor sit amet, consectetur adipiscing elit. Donec fermentum nisl urna, non dictum dolor facilisis eu.
 </p>
+
+<div ng-controller="quiz">
+	<div class="form-group row">
+		<div class="col-md-2 hidden-xs">
+			<div class="btn-group">
+				<a type="button" class="btn btn-default" ng-class="{active:view=='tile'}" ng-click="view='tile'">
+					<span class="glyphicon glyphicon-th-large"></span>
+				</a>
+				<a type="button" class="btn btn-default" ng-class="{active:view=='list'}" ng-click="view='list'">
+					<span class="glyphicon glyphicon-list"></span>
+				</a>
+			</div>
+			<a type="button" class="btn btn-default" ng-click="shuffle()">
+				<span class="glyphicon glyphicon-refresh"></span>
+			</a>
+		</div>
+
+		<div class="col-md-3">
+			<div class="input-group">
+				<label class="input-group-addon" for="myEvent">Event: </label>
+				<select class="form-control" ng-model="myEvent" id="myEvent" 
+					ng-options="c.conferenceID as c.title for c in confs | orderBy:'title'"
+				>
+					<option value="">&mdash; all events &mdash;</option>
+				</select>
+			</div>
+		</div>
+
+		<div class="col-md-5">
+			<div class="input-group">
+				<label class="input-group-addon" for="query">Search: </label>
+				<input type="text" id="query" class="form-control" ng-model="search_str">
+			</div>
+		</div>
+
+		<div class="hidden-xs col-md-2" ng-hide="filtered.length < 8">
+			<div class="input-group">
+				<span class="input-group-addon">Page Size: </span>
+				<select data-ng-model="limit" class="form-control" id="search_page" data-ng-options="x for x in limits">
+					<option value="" disabled>Per Page...</option>
+				</select>
+			</div>
+		</div>
+	</div>
+
+	<div data-ng-switch="view">
+		<div data-ng-switch-when="tile">
+			<div class="row">
+				<span class="col-md-3" data-ng-repeat="user in (filtered_users = (users | filter:{photo:'!!',conferenceID:myEvent} | filter:search_str)) | orderBy:'random' | pagination:page:limit">
+					<div class="thumbnail" data-ng-click="show_me(user)">
+						<img data-ng-src="http://upstreamacademy.com/images/ELAApp/{{user.photo}}" class="img-rounded" height="100" 
+							data-ng-attr-title="{{user.name}}"
+							data-ng-attr-alt="{{user.name}}" alt="John Doe"/>
+					</div>
+				</span>
+			</div>
+			<div class="text-center clearfix" data-ng-show="num_pages !== 1"><!-- pager -->
+				<span 
+					data-pagination
+					data-total-items="filtered_users.length"
+					data-items-per-page="limit"
+					data-ng-model="page"
+					data-max-size="5"
+					data-boundary-links="true"
+					data-previous-text="&lsaquo;"
+					data-next-text="&rsaquo;"
+					data-first-text="&laquo;"
+					data-last-text="&raquo;"
+					data-num-pages="num_pages">
+				</span>
+			</div>
+		</div>
+		<div data-ng-switch-when="list">
+			<table class="table" data-ng-cloak>
+				<thead>
+					<tr>
+						<th>Contact</th>
+						<th style="width:75%" class="hidden-xs">
+							<small class="pull-right text-right" style="font-weight:normal" data-ng-bind="total_rows()"></small>
+							Bio
+						</th>
+					</tr>
+				</thead>
+				<tbody>
+					<tr data-ng-repeat="user in (filtered_users = (users | filter:{conferenceID:myEvent} | filter:search_str)) | orderBy:['last', 'first'] | pagination:page:limit"
+						data-ng-click="view(user)" >
+						<td>
+							<div class="center-cropped pull-left img-rounded" ng-show="user.photo">
+								<img data-ng-src="http://upstreamacademy.com/images/ELAApp/{{user.photo}}" class="img-rounded" height="100" 
+								data-ng-attr-title="{{user.name}}"
+								data-ng-attr-alt="{{user.name}}" alt="John Doe" />
+							</div>
+							<div class="pull-right">
+								<a data-ng-href="tel:{{user.phone}}" data-ng-show="user.phone"><i class="glyphicon glyphicon-phone-alt"></i></a>
+								<a data-ng-href="mailto:{{user.email}}" data-ng-show="user.email"><i class="glyphicon glyphicon-envelope"></i></a>
+							</div>
+							<strong>
+								<span data-ng-bind="user.name">John Doe</span>&nbsp;
+								<i class="glyphicon glyphicon-comment" data-ng-show="user.note"></i>
+							</strong><br/>
+							<small data-ng-bind="user.title">Intern</small><br/>
+							<span class="text-muted">
+								<span data-ng-bind="user.firm">Temporary INC.</span><br/>
+								<span data-ng-bind="user.city">Two Dot</span>,&nbsp;<span data-ng-bind="user.state">MT</span>
+							</span>
+						</td>
+						<td data-ng-bind="user.bio" class="hidden-xs">was an amazing ...</td>
+					</tr>
+				</tbody>
+			</table>
+			<div class="text-center" data-ng-show="num_pages !== 1"><!-- pager -->
+				<span 
+					data-pagination
+					data-total-items="filtered_users.length"
+					data-items-per-page="limit"
+					data-ng-model="page"
+					data-max-size="5"
+					data-boundary-links="true"
+					data-previous-text="&lsaquo;"
+					data-next-text="&rsaquo;"
+					data-first-text="&laquo;"
+					data-last-text="&raquo;"
+					data-num-pages="num_pages">
+				</span>
+			</div>
+		</div>
+	</div>
+</div>

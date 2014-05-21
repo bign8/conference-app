@@ -241,6 +241,10 @@ factory('API', ['$http', function ($http) { // TODO: improve with browser data c
 			return $http.post(base + this.table, item).then( cleanup.bind(this) ).then( add_obj.bind(this, item) );
 		}
 	};
+
+	service.join = function (target, satalite) {
+		// TODO...
+	};
 	return service;
 }]).
 
