@@ -1,0 +1,9 @@
+<ul class="nav navbar-nav">
+	<li class="active"><a href="#home"><?=$event['title']; ?></a></li>
+	<li><a href="#about">About</a></li>
+	<li><a href="#location">Location</a></li>
+	<?php if (count($event['speakers']) > 0): ?><li><a href="#speakers">Speakers</a></li><?php endif; ?>
+	<?php if (count($event['agenda']) > 0): ?><li><a href="#agenda">Agenda</a></li><?php endif; ?>
+	<li><a href="#attendees">Attendees</a></li>
+	<li><a href="#sponsors">Sponsors</a></li>
+</ul>

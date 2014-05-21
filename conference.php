@@ -16,8 +16,10 @@
 
 	// Get conference
 	if (false === ($event = $app->get_conf($_REQUEST['slug']))) throw new Exception('Un-found event');
+	
 	$title = $event['title'];
-	include('tpl/head.tpl.html');
+	$menu = 'conf.menu.html';
+	include('tpl/parts/head.tpl.html');
 ?>
 
 <?php if ($is_edit): ?>
@@ -65,4 +67,4 @@
 </<?=$wrap; ?>><!-- ./wrap -->
 
 
-<?php include('tpl/foot.tpl.html'); ?>
+<?php include('tpl/parts/foot.tpl.html'); ?>

@@ -3,11 +3,11 @@
 	set_exception_handler(function () { header('Location: .'); });
 	if (!isset($_REQUEST['hash']) || !(new User())->reset_valid($_REQUEST['hash'])) throw new Exception();
 	$title = 'Reset Password';
-	include('tpl/head.tpl.html');
+	include('tpl/parts/head.tpl.html');
 ?>
 
 <div id="wrap">
-	<?php $panel_include('tpl/reset.frame.html', 'home'); ?>
+	<?php $panel_include('tpl/frames/reset.frame.html', 'home'); ?>
 </div><!-- ./wrap -->
 
-<?php include('tpl/foot.tpl.html'); ?>
+<?php include('tpl/parts/foot.tpl.html'); ?>

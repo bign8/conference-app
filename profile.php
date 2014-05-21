@@ -1,10 +1,11 @@
 <?php
 	$title = 'Profile';
-	include('tpl/head.tpl.html');
+	$menu = 'profile.menu.html';
+	include('tpl/parts/head.tpl.html');
 ?>
 
 <div id="wrap">
-	<?php $panel_include('tpl/profile.frame.html', 'home'); ?>
+	<?php $panel_include('tpl/frames/profile.frame.html', 'home'); ?>
 </div><!-- ./wrap -->
 
-<?php include('tpl/foot.tpl.html'); ?>
+<?php include('tpl/parts/foot.tpl.html'); ?>
