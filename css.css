@@ -66,15 +66,18 @@ img.pull-right { padding: 0; margin: 0 0 1em 1em; }
 	color: #240D4A;
 	background-color: #FDA044;
 }
-.color-1 > div > .page-header:first-child, .color-1 .page-header small {
+.color-1 > div > .page-header:first-child, .color-1 .page-header small ,
+.color-1 > div > div > .page-header:first-child, .color-1 .page-header small {
 	background-color: #FDB016;
 	color: #240D4A;
 }
-.color-2 > div > .page-header:first-child, .color-2 .page-header small {
+.color-2 > div > .page-header:first-child, .color-2 .page-header small ,
+.color-2 > div > div > .page-header:first-child, .color-2 .page-header small {
 	background-color: #151F60;
 	color: #FDA044;
 }
-.color > div > .page-header:first-child {
+.color > div > .page-header:first-child,
+.color > div > div > .page-header:first-child {
 	margin: -200px 0 20px;
 	padding-top: 100px;
 	position: absolute;
