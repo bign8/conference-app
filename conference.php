@@ -19,6 +19,7 @@
 	
 	$title = $event['title'];
 	$menu = 'conf.menu.html';
+	$ng_app = $is_edit ? 'event-edit' : 'event';
 	include('tpl/parts/head.tpl.html');
 ?>
 
@@ -30,9 +31,9 @@
 	<script src="//cdnjs.cloudflare.com/ajax/libs/tinymce/4.0.21/plugins/link/plugin.min.js"></script>
 	<script src="//cdnjs.cloudflare.com/ajax/libs/tinymce/4.0.21/plugins/image/plugin.min.js"></script>
 	<script src="//cdnjs.cloudflare.com/ajax/libs/tinymce/4.0.21/plugins/code/plugin.min.js"></script>
-	<script src="./jquery.tinymce.min.js"></script>
+	<script src="./js/jquery.tinymce.min.js"></script>
 
-	<script src="./edit.js"></script>
+	<script src="./js/edit.js"></script>
 	<script>
 		var MCE_OBJ = {
 			selector: 'textarea',

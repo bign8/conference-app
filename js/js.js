@@ -287,4 +287,52 @@ directive('textAutoScale', function () {
 			scope.$watch(function () { return element.is(':visible'); }, function () { element.keyup(); });
 		}
 	}
-});
+}).
+
+directive('colEditor', function () {
+	return {
+		replace: true,
+		scope: {
+			colField: '=',
+			saveCb: '&'
+		},
+		template: '<td ng-class="{editing:active}"><div class="view" ng-click="start_editing()" ng-hide="active"><span ng-bind="colField ? colField : \'-\'"></span></div><form ng-submit="done_editing()"><input type="text" ng-show="active" class="edit form-control input-sm" ng-model="colField" ng-blur="done_editing()" edit-escape="undo_editing()" edit-focus="active"></form></td>',
+		link: function (scope, elem, attrs) {
+			var origional = null;
+			scope.active = false;
+			scope.start_editing = function () {
+				origional = angular.copy(scope.colField);
+				scope.active = true;
+			};
+			scope.done_editing = function () {
+				if (scope.active && scope.colField != origional) scope.saveCb();
+				scope.active = false;
+			};
+			scope.undo_editing = function () {
+				scope.colField = origional;
+				scope.done_editing();
+			};
+		}
+	};
+}).
+
+directive('editEscape', function () {
+	var ESCAPE_KEY = 27;
+	return function (scope, elem, attrs) {
+		elem.bind('keydown', function (event) {
+			if (event.keyCode === ESCAPE_KEY) 
+				scope.$apply(attrs.editEscape);
+			event.stopPropagation();
+		});
+	};
+}).
+
+directive('editFocus', ['$timeout', function ($timeout) {
+	return function (scope, elem, attrs) {
+		scope.$watch(attrs.editFocus, function (newVal) {
+			if (newVal) $timeout(function () {
+				elem[0].focus();
+			}, 0, false);
+		});
+	};
+}]);

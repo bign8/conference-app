@@ -259,6 +259,10 @@ class ArrestDB {
 			'actions' => array('GET', 'PUT', 'POST', 'DELETE'),
 			'fields'  => array('noteID', 'userID', 'dest_userID', 'dest_sessionID', 'note', 'stamp'),
 		),
+		'conference-ADMIN' => array(
+			'actions' => array('GET', 'PUT', 'POST'),
+			'fields'  => array('conferenceID', 'title', 'theme', 'slug'),
+		)
 	);
 	public static function whitelist( $table, $area ) {
 		$suffix = (isset($_SESSION['user']['admin']) && $_SESSION['user']['admin'] == 'true') ? '-ADMIN' : '-USER'; // access level

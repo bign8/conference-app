@@ -7,13 +7,17 @@
 
 	$title = 'Event Administration';
 	$menu = 'admin.menu.html';
+	$ng_app = 'event-admin';
 	include('tpl/parts/head.tpl.html');
 ?>
 
-<script src="./admin.js"></script>
+<script src="./js/admin.js"></script>
 
 <div id="wrap">
-	<?php $panel_include('tpl/admin/manage.frame.html', 'home'); ?>
+	<?php $panel_include('tpl/admin/home.frame.html', 'home'); ?>
+	<?php $panel_include('tpl/admin/quiz.frame.html', 'quiz'); ?>
+	<?php $panel_include('tpl/admin/conf.frame.html', 'conf'); ?>
+	<?php $panel_include('tpl/admin/upld.frame.html', 'upld'); ?>
 </div><!-- ./wrap -->
 
 

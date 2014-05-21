@@ -1,13 +1,15 @@
 <div data-ng-controller="event-edit-head">
 	<div class="page-header">
-		<h1>
-			<small class="pull-right">Logo</small>
-			{{title || 'Title'}} 
-			<small>{{theme || 'Theme'}}</small>
-		</h1>
-		{{ (start | date:'MMMM d, yyyy') || 'Start' }} - 
-		{{ (end | date:'MMMM d, yyyy') || 'End'}}<br/>
-		<i>Location</i>.name &mdash; <i>Location</i>.city, <i>Location</i>.state
+		<div class="container">
+			<h1>
+				<small class="pull-right">Logo</small>
+				{{title || 'Title'}} 
+				<small>{{theme || 'Theme'}}</small>
+			</h1>
+			{{ (start | date:'MMMM d, yyyy') || 'Start' }} - 
+			{{ (end | date:'MMMM d, yyyy') || 'End'}}<br/>
+			<i>Location</i>.name &mdash; <i>Location</i>.city, <i>Location</i>.state
+		</div>
 	</div>
 
 	<div class="lead">

@@ -1,6 +1,6 @@
 <?php
-	$is_edit = false;
 	require_once(implode(DIRECTORY_SEPARATOR, array(__dir__, '..', '..', 'php', 'index.php')));
+	$app_string = isset($ng_app) ? " data-ng-app=\"$ng_app\"" : '';
 ?>
 <!doctype html>
 <html lang="en">
@@ -19,9 +19,9 @@
 	<script src="//cdnjs.cloudflare.com/ajax/libs/angular-ui-bootstrap/0.11.0/ui-bootstrap-tpls.min.js"></script>
 
 	<link href="css.css" rel="stylesheet">
-	<script src="js.js"></script>
+	<script src="js/js.js"></script>
 </head>
-<body data-spy="scroll" data-target=".navbar" data-ng-app="event<?=$is_edit?'-edit':''; ?>">
+<body data-spy="scroll" data-target=".navbar" <?=$app_string; ?>>
 	<div class="navbar navbar-default navbar-fixed-top">
 		<div class="container">
 			<div class="navbar-header">
