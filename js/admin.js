@@ -30,11 +30,7 @@ controller('quiz', ['$scope', 'API', '$q', function ($scope, API, $q) {
 	$scope.confs = Conference.list;
 	$scope.users = User.list;
 
-	$q.all([load_attendee.promise, load_user.promise]).then(function () {
-		var atten = {}; // O(n + m) join ( because of hash lookup O(n*ln(m)) )
-		for (var i = 0; i < Attendee.list.length; i++) atten[ Attendee.list[i].userID ] = Attendee.list[i];
-		for (var i = 0; i < User.list.length; i++) angular.extend(User.list[i], atten[ User.list[i].userID ] || null);
-	});
+	API.left_join( User, Attendee );
 
 	// Controls
 	$scope.view = 'tile';

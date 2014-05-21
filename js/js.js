@@ -218,32 +218,51 @@ factory('API', ['$http', function ($http) { // TODO: improve with browser data c
 		}
 		return item;
 	};
+	var callback = function (data) {
+		for (var i = 0; i < this.callbacks.length; i++) this.callbacks[i].call(this, data);
+		return data;
+	};
 	var service = function(table, identifier, cb, suffix) {
 		this.list = [];
+		this.callbacks = [];
 		this.table = table;
 		this.id = identifier || (table + 'ID'); // standard convention (tablename + ID, ie: faq = faqID)
-		this.all(suffix).then(angular.extend.bind(undefined, this.list)).then(cb);
+		this.all(suffix).then(angular.extend.bind(undefined, this.list)).then(callback.bind(this)).then(cb);
+	};
+	service.left_join = function (left, right) {
+		var manual_join = function (data) {
+			if (!left.list.length || !right.list.length) return; // don't waste time
+			var map = {}; // O(n + m) join ( because of hash lookup O(n*ln(m)) )
+			for (var i = 0, l = right.list.length; i < l; i++) map[ right.list[i][right.id] ] = right.list[i];
+			for (var i = 0, l = left.list.length; i < l; i++) angular.extend( left.list[i], map[ left.list[i][left.id] ] || null );
+		};
+		left.add_cb( manual_join );
+		right.add_cb( manual_join );
+		manual_join();
 	};
 	service.prototype = {
 		all: function (suffix) {
-			return $http.get(base + this.table + (suffix ? suffix : '')).then( cleanup.bind(this) );
+			return $http.get(base + this.table + (suffix ? suffix : '')).then( cleanup.bind(this) ).then( callback.bind(this) );
 		},
 		get: function (itemID, suffix) {
-			return $http.get(base + this.table + '/' + itemID + (suffix ? suffix : '')).then( cleanup.bind(this) );
+			return $http.get(base + this.table + '/' + itemID + (suffix ? suffix : '')).then( cleanup.bind(this) ).then( callback.bind(this) );
 		},
 		set: function (item) {
-			return $http.put(base + this.table + '/' + item[ this.id ], item).then( cleanup.bind(this) ).then( mod_obj.bind(this, item) );
+			return $http.put(base + this.table + '/' + item[ this.id ], item).then( cleanup.bind(this) ).then( mod_obj.bind(this, item) ).then( callback.bind(this) );
 		},
 		rem: function (item) {
-			return $http.delete(base + this.table + '/' + item[ this.id ]).then( cleanup.bind(this) ).then( rem_obj.bind(this, item) );
+			return $http.delete(base + this.table + '/' + item[ this.id ]).then( cleanup.bind(this) ).then( rem_obj.bind(this, item) ).then( callback.bind(this) );
 		},
 		add: function (item) {
-			return $http.post(base + this.table, item).then( cleanup.bind(this) ).then( add_obj.bind(this, item) );
-		}
-	};
-
-	service.join = function (target, satalite) {
-		// TODO...
+			return $http.post(base + this.table, item).then( cleanup.bind(this) ).then( add_obj.bind(this, item) ).then( callback.bind(this) );
+		},
+		add_cb: function (cb) {
+			this.callbacks.push(cb);
+		},
+		rem_cb: function (cb) {
+			var idx = this.callbacks.indexOf(cb);
+			if (idx >= 0) this.callbacks.splice(idx, 1);
+		},
 	};
 	return service;
 }]).
