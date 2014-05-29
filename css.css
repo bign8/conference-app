@@ -47,6 +47,9 @@ img.pull-right { padding: 0; margin: 0 0 1em 1em; }
 }
 
 /* colors */
+.jumbotron, .well {
+	background-color: #FDB016;
+}
 .navbar-default {
 	background-color: #151F60;
 	border-color: #FDA044;
