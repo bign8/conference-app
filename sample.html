@@ -1,0 +1,85 @@
+<!doctype html>
+<html lang="en">
+<head>
+	<meta charset="UTF-8">
+	<meta http-equiv="X-UA-Compatible" content="IE=edge" />
+	<title>Angular Tests</title>
+	<script src="//cdnjs.cloudflare.com/ajax/libs/angular.js/1.2.14/angular.min.js"></script>
+</head>
+<body>
+	<div ng-app="app">
+		<div ng-controller="MainCtrl">
+			 <p>Make sure to open a javascript console so you can see the output.</p>
+		</div>
+	</div>
+
+<script>
+// http://www.realeyes.com/blog/2014/04/16/using-the-angularjs-logprovider/
+// http://blog.projectnibble.org/2013/12/23/enhance-logging-in-angularjs-the-simple-way/
+// http://solutionoptimist.com/2013/10/07/enhance-angularjs-logging-using-decorators/
+
+// Notes -> checkout $interpolate
+
+var test = '';
+angular.module('app', []).
+
+config(['$provide', function ($provide) {
+	$provide.decorator('$log', ['$delegate', '$filter', function ($delegate, $filter) {
+		var _date = $filter('date'), now = function () { return _date(new Date(), 'hh:mm:ss.sss a'); };
+		var custom = function (self, title, style) {
+			return function () {
+				var msg = '%c' + title + ' (' + now() + '): %c' + [].shift.apply(arguments);
+				arguments = [msg, style, 'color:default'].concat([].slice.apply(arguments));
+				self.apply(null, arguments);
+			};
+		};
+
+		$delegate.log   = custom( $delegate.log,   '  Log', 'color:black'     );
+		$delegate.debug = custom( $delegate.debug, 'Debug', 'color:blue'      );
+		$delegate.info  = custom( $delegate.info,  ' Info', 'color:green'     );
+		$delegate.warn  = custom( $delegate.warn,  ' Warn', 'color:darkorange');
+		$delegate.error = custom( $delegate.error, 'Error', 'color:red'       );
+
+		return $delegate;
+	}]);
+}]).
+
+config(['$logProvider', function($logProvider){
+	$logProvider.debugEnabled(true);
+}]).
+
+factory('myLog', ['$log', function ($log) {
+	var instance = function (name) {
+		console.log(name);
+		return $log;
+	};
+
+	return {
+		instance: instance,
+	};
+}]).
+
+controller('MainCtrl', ['$log', '$timeout', 'myLog', function ($log, $timeout, myLog) {
+
+	$log.log('log');
+	$log.debug('Hello Debug!');
+	$log.info('info');
+	$log.warn('warn');
+	$log.error('error');
+
+	myLog = myLog.instance('MainCtrl');
+
+	myLog.log('log');
+	myLog.debug('Hello Debug!');
+	myLog.info('info');
+	myLog.warn('warn');
+	myLog.error('error');
+
+	$timeout(function () {
+		myLog.log('%cred%cgreen','color:red','color:green');
+	}, 3000);
+}]);
+</script>
+
+</body>
+</html>
