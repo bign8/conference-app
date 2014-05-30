@@ -166,7 +166,9 @@ angular.module('event-agenda', []).controller('event-agenda', ['$scope','$contro
 	};
 }]);
 
-angular.module('event-attendee', []).controller('event-attendee', ['$scope', '$sce', 'API', function ($scope, $sce, API) {
+angular.module('event-attendee', []).controller('event-attendee', ['$scope','$sce','API','$controller',function ($scope, $sce, API, $controller) {
+	angular.extend(this, $controller('event-speaker', {$scope: $scope}));
+	
 	var conferenceID = document.getElementById('conferenceID').value ;
 	var Atten = new API('atten/' + conferenceID);
 	$scope.data = Atten.list;

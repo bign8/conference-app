@@ -74,6 +74,7 @@
 							<i class="glyphicon glyphicon-usd"></i>
 						</button>
 						{{item.name}}
+						<button class="btn btn-default btn-xs pull-right" data-ng-click="show_user(item.userID, $event)"><i class="glyphicon glyphicon-pushpin"></i></button>
 					</td>
 					<td data-ng-bind="item.title"></td>
 					<td>{{item.city}} {{item.state}}</td>
