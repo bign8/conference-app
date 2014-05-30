@@ -6,9 +6,10 @@
  * ------------------------------------------------------------------- */
 
 // Constructor
-var ELA_MAP_EDIT = function (ele, inp) {
+var ELA_MAP_EDIT = function (ele, inp, search) {
 	this.ele = ele; // DOM output element (display map + controls)
-	this.inp = inp; // DOM input element (to store string options) // TODO: write options back on change
+	this.inp = inp; // DOM input element (to store string options)
+	this.search = search; // DOM input element (for searching for places)
 	this.opt = JSON.parse(inp.value.replace(/'/g, '"'));
 	ELA_MAP_EDIT._instances.push(this);
 	this.init();
@@ -26,7 +27,7 @@ ELA_MAP_EDIT.load_google = function() {
 	if (ELA_MAP_EDIT.map_src) return;
 	ELA_MAP_EDIT.map_src  = document.createElement('script');
 	ELA_MAP_EDIT.map_src.type = 'text/javascript';
-	ELA_MAP_EDIT.map_src.src  = 'https://maps.googleapis.com/maps/api/js?v=3.exp&sensor=false&callback=ELA_MAP_EDIT.google_maps_loaded&key=AIzaSyC7fARB8SaSEgUDUG6aFfqEutUNCTPzzYE';
+	ELA_MAP_EDIT.map_src.src  = 'https://maps.googleapis.com/maps/api/js?v=3.exp&sensor=false&libraries=places&callback=ELA_MAP_EDIT.google_maps_loaded&key=AIzaSyC7fARB8SaSEgUDUG6aFfqEutUNCTPzzYE';
 	document.body.appendChild(ELA_MAP_EDIT.map_src);
 };
 
@@ -65,6 +66,23 @@ ELA_MAP_EDIT.prototype = {
 		google.maps.event.addListener( this.map, 'zoom_changed', update_input.bind(this) );
 		google.maps.event.addListener( this.marker, 'position_changed', update_input.bind(this) );
 		update_input.call(this);
+
+		// Init search (https://developers.google.com/maps/documentation/javascript/examples/places-searchbox)
+		this.map.controls[google.maps.ControlPosition.TOP_LEFT].push( this.search );
+		this.search_box = new google.maps.places.SearchBox( this.search );
+		$( this.search ).keydown(function (event){ if(event.keyCode == 13) { event.preventDefault(); return false; } });
+		var update_search = function () {
+			var places = this.search_box.getPlaces();
+			this.map.setCenter( places[0].geometry.location );
+			this.marker.setPosition( places[0].geometry.location );
+		};
+		google.maps.event.addListener(this.search_box, 'places_changed', update_search.bind(this) );
+
+		// Bias search
+		var update_bounds = function () {
+			this.search_box.setBounds( this.map.getBounds() );
+		};
+		google.maps.event.addListener(this.map, 'bounds_changed', update_bounds.bind(this) )
 	},
 
 	get_opts: function() {

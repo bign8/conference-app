@@ -90,11 +90,58 @@
 </div>
 
 Zoom map and move pointer to desired location.
+
+<style type="text/css">
+#pac-input {
+	background-color: #fff;
+	padding: 0 11px 0 13px;
+	width: 400px;
+	font-family: Roboto;
+	font-size: 15px;
+	font-weight: 300;
+	text-overflow: ellipsis;
+	/* .controls */
+	margin-top: 16px;
+	border: 1px solid transparent;
+	border-radius: 2px 0 0 2px;
+	box-sizing: border-box;
+	-moz-box-sizing: border-box;
+	height: 32px;
+	outline: none;
+	box-shadow: 0 2px 6px rgba(0, 0, 0, 0.3);
+}
+
+#pac-input:focus {
+	border-color: #4d90fe;
+	margin-left: -1px;
+	padding-left: 14px;  /* Regular padding-left + 1. */
+	width: 401px;
+}
+
+.pac-container {
+	font-family: Roboto;
+}
+
+#type-selector {
+	color: #fff;
+	background-color: #4d90fe;
+	padding: 5px 11px 0px 11px;
+}
+
+#type-selector label {
+	font-family: Roboto;
+	font-size: 13px;
+	font-weight: 300;
+}
+</style>
+
+<input type="text" id="pac-input">
 <div id="map-canvas" class="full-map"></div>
+
 <input type="hidden" id="loc_opt" name="loc_opt" value="<?=$event['location']['map_options']; ?>" />
 
 <script type="text/javascript">
-	var my_map = new ELA_MAP_EDIT( document.getElementById('map-canvas'), document.getElementById('loc_opt') );
+	var my_map = new ELA_MAP_EDIT( document.getElementById('map-canvas'), document.getElementById('loc_opt'), document.getElementById('pac-input') );
 </script>
 
 <input type="submit" value="Save Conference" onclick="document.forms[0].submit()" class="btn btn-default pull-right" style="margin-top:10px">
