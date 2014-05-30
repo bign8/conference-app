@@ -51,6 +51,10 @@
 		</div>
 	</div>
 
+	<a href="#" ng-click="open_this($event)" ng-show="myEvent">View this event</a>
+
+	<pre>{{myEvent | json}}</pre>
+
 	<div data-ng-switch="view">
 		<div data-ng-switch-when="tile">
 			<div class="row">

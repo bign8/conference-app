@@ -48,4 +48,11 @@ controller('quiz', ['$scope', 'API', '$q', function ($scope, API, $q) {
 	$scope.limits = [8,16,32,64,128];
 	$scope.limit = $scope.limits[0];
 	$scope.page = 1;
+
+	$scope.open_this = function ($event) {
+		$event.preventDefault();
+		for (var i = 0; i < Conference.list.length; i++) 
+			if (Conference.list[i].conferenceID == $scope.myEvent) 
+				document.location = './' + Conference.list[i].slug;
+	};
 }]);
