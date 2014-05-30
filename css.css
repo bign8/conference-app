@@ -55,18 +55,16 @@ img.pull-right { padding: 0; margin: 0 0 1em 1em; }
 	border-color: #FDA044;
 }
 .navbar-default .navbar-nav > li > a,
-.credit, .credit a {
-	color: #FDA044;
-}
-.navbar-default .navbar-brand {
-	color: #FDA044;
+.navbar-default .navbar-brand,
+.credit, .credit a, .social a {
+	color: #FFF; /*color: #FDA044;*/
 }
 .navbar-default .navbar-nav > .active > a,
 .navbar-default .navbar-nav > .active > a:hover,
 .navbar-default .navbar-nav > li > a:hover,
 .navbar-default .navbar-brand:hover,
 .navbar.navbar-default .navbar-nav > .open > a {
-	color: #240D4A;
+	color: #FFF; /*color: #240D4A;*/
 	background-color: #FDA044;
 }
 .color-1 > div > .page-header:first-child, .color-1 .page-header small ,
