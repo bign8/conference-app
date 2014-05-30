@@ -6,4 +6,11 @@
 	<?php if (count($event['agenda']) > 0): ?><li><a href="#agenda">Agenda</a></li><?php endif; ?>
 	<li><a href="#attendees">Attendees</a></li>
 	<li><a href="#sponsors">Sponsors</a></li>
+	<?php if (@$_SESSION['user']['admin'] == 'true'): ?>
+		<?php if (isset($_REQUEST['edit'])): ?>
+			<li><a href="?">View Conference</a></li>
+		<?php else: ?>
+			<li><a href="?edit">Edit Conference</a></li>
+		<?php endif; ?>
+	<?php endif; ?>
 </ul>
