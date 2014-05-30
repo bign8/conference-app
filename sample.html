@@ -25,22 +25,58 @@ angular.module('app', []).
 
 config(['$provide', function ($provide) {
 	$provide.decorator('$log', ['$delegate', '$filter', function ($delegate, $filter) {
-		var _date = $filter('date'), now = function () { return _date(new Date(), 'hh:mm:ss.sss a'); };
-		var custom = function (self, title, style) {
+		var log_count = -1;
+		var legend_every = 20;
+		var tpl = {
+			log:   { fn: $delegate.log,   sty:'color:black'     },
+			info:  { fn: $delegate.info,  sty:'color:green'     },
+			warn:  { fn: $delegate.warn,  sty:'color:darkorange'},
+			debug: { fn: $delegate.debug, sty:'color:blue'      },
+			error: { fn: $delegate.error, sty:'color:red'       },
+		};
+		var _date = $filter('date');
+		var now = function () { return _date(new Date(), 'hh:mm:ss.sss a'); };
+		var legend = [
+			'\n%cLegend: %clog, %cdebug, %cinfo, %cwarn, %cerror', 'font-weight:bold', 
+			tpl.log.sty, tpl.debug.sty, tpl.info.sty, tpl.warn.sty, tpl.error.sty
+		];
+		var longest_name = 0;
+		var pad = function (name) {
+			return new Array(longest_name - name.length + 1).join(' ') + name + ' ';
+		};
+
+		var prep_log = function (obj, name) {
+			name = (name !== undefined) ? name : '';
+			if (name.length > longest_name) longest_name = name.length; // pad name
 			return function () {
-				var msg = '%c' + title + ' (' + now() + '): %c' + [].shift.apply(arguments);
-				arguments = [msg, style, 'color:default'].concat([].slice.apply(arguments));
-				self.apply(null, arguments);
+				if (++log_count % legend_every == 0) { // show legend
+					$delegate.log.apply(null, legend);
+					log_count %= legend_every;
+				}
+				var msg = '%c' + pad(name) + '(' + now() + '): %c' + [].shift.apply(arguments);
+				arguments = [msg, obj.sty, 'color:default'].concat( [].slice.apply(arguments) );
+				obj.fn.apply(undefined, arguments);
 			};
 		};
 
-		$delegate.log   = custom( $delegate.log,   '  Log', 'color:black'     );
-		$delegate.debug = custom( $delegate.debug, 'Debug', 'color:blue'      );
-		$delegate.info  = custom( $delegate.info,  ' Info', 'color:green'     );
-		$delegate.warn  = custom( $delegate.warn,  ' Warn', 'color:darkorange');
-		$delegate.error = custom( $delegate.error, 'Error', 'color:red'       );
+		var get_instance = function (name) {
+			return {
+				log:   prep_log( tpl.log,   name ),
+				info:  prep_log( tpl.info,  name ),
+				warn:  prep_log( tpl.warn,  name ),
+				debug: prep_log( tpl.debug, name ),
+				error: prep_log( tpl.error, name ),
+			}
+		};
 
-		return $delegate;
+		return {
+			get:   get_instance,
+			log:   prep_log( tpl.log   ),
+			info:  prep_log( tpl.info  ),
+			warn:  prep_log( tpl.warn  ),
+			debug: prep_log( tpl.debug ),
+			error: prep_log( tpl.error ),
+		};
 	}]);
 }]).
 
@@ -48,26 +84,15 @@ config(['$logProvider', function($logProvider){
 	$logProvider.debugEnabled(true);
 }]).
 
-factory('myLog', ['$log', function ($log) {
-	var instance = function (name) {
-		console.log(name);
-		return $log;
-	};
+controller('MainCtrl', ['$log', '$timeout', function ($log, $timeout) {
 
-	return {
-		instance: instance,
-	};
-}]).
-
-controller('MainCtrl', ['$log', '$timeout', 'myLog', function ($log, $timeout, myLog) {
+	myLog = $log.get('MainCtrl');
 
 	$log.log('log');
 	$log.debug('Hello Debug!');
 	$log.info('info');
 	$log.warn('warn');
 	$log.error('error');
-
-	myLog = myLog.instance('MainCtrl');
 
 	myLog.log('log');
 	myLog.debug('Hello Debug!');
