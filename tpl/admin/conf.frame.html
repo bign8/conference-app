@@ -29,9 +29,14 @@
 					<td data-col-editor data-col-field="conf.slug"  data-save-cb="set_conf(conf)">-</td>
 					<td>
 						<button type="button" class="close" aria-hidden="true" ng-click="rem_conf(conf)">&times;</button>
-						<a ng-href="./{{conf.slug}}?edit" class="btn btn-default btn-xs">
-							<i class="glyphicon glyphicon-edit"></i>
-						</a>
+						<div class="btn-group">
+							<a ng-href="./{{conf.slug}}?edit" class="btn btn-default btn-xs" title="Edit Full Conference">
+								<i class="glyphicon glyphicon-edit"></i>
+							</a>
+							<button type="button" class="btn btn-default btn-xs" ng-model="conf.display_pictures" btn-checkbox btn-checkbox-true="'true'" btn-checkbox-false="'false'" title="Display profile images on attendee visable list of event participants?" ng-change="set_conf(conf)">
+								<i class="glyphicon glyphicon-user"></i>
+							</button>
+						</div>
 					</td>
 				</tr>
 			</tbody>

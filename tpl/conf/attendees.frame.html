@@ -50,57 +50,117 @@
 
 	<div style="min-height: 600px" class="col-xs-12"><!-- eases the scroll jerk on small searches -->
 		<table class="table table-hover" id="attendee">
-			<thead>
-				<tr>
-					<th>Name</th>
-					<th>Title</th>
-					<th>Location</th>
-					<th>
-						Firm
-						<small class="pull-right text-right" style="font-weight:normal" data-ng-bind="total_rows();">
-							Total: <?=count($event['attendees']); ?>
-						</small>
-					</th>
-				</tr>
-			</thead>
-			<tbody>
-				<tr data-ng-repeat="item in (filtered_data = (data | filter:search_str)) | orderBy:field:sort_order | pagination:page:limit" 
-					style="display:none" data-ng-style="{display:'table-row'}">
-					<td>
-						<button type="button" class="btn btn-default btn-xs" title="Speaker" ng-show="item.speakerID">
-							<i class="glyphicon glyphicon-volume-up"></i>
-						</button>
-						<button type="button" class="btn btn-default btn-xs" title="Sponsor Rep" ng-show="item.repID">
-							<i class="glyphicon glyphicon-usd"></i>
-						</button>
-						{{item.name}}
-						<button class="btn btn-default btn-xs pull-right" data-ng-click="show_user(item.userID, $event)"><i class="glyphicon glyphicon-pushpin"></i></button>
-					</td>
-					<td data-ng-bind="item.title"></td>
-					<td>{{item.city}} {{item.state}}</td>
-					<td>
-						<span data-ng-bind="item.firm"></span>
-						<div class="pull-right">
-							<a href="tel:{{item.phone}}"><i class="glyphicon glyphicon-phone-alt"></i></a>
-							<a href="mailto:{{item.email}}"><i class="glyphicon glyphicon-envelope"></i></a>
-						</div>
-					</td>
-				</tr>
-				<?php foreach ($event['attendees'] as $attendee): ?>
-					<tr class="data" data-ng-style="{display:'none'}">
-						<td data-user-id="<?=$attendee['userID']; ?>"><?=$attendee['name']; ?></td>
-						<td><?=$attendee['title']; ?></td>
-						<td><?=$attendee['city']; ?> <?=$attendee['state']; ?></td>
+			<?php if ($event['display_pictures'] !== 'true'): ?>
+				<thead>
+					<tr>
+						<th>Name</th>
+						<th>Title</th>
+						<th>Location</th>
+						<th>
+							Firm
+							<small class="pull-right text-right" style="font-weight:normal" data-ng-bind="total_rows();">
+								Total: <?=count($event['attendees']); ?>
+							</small>
+						</th>
+					</tr>
+				</thead>
+				<tbody>
+					<tr data-ng-repeat="item in (filtered_data = (data | filter:search_str)) | orderBy:field:sort_order | pagination:page:limit" 
+						style="display:none" data-ng-style="{display:'table-row'}">
 						<td>
-							<?=$attendee['firm']; ?>
+							<button type="button" class="btn btn-default btn-xs" title="Speaker" ng-show="item.speakerID">
+								<i class="glyphicon glyphicon-volume-up"></i>
+							</button>
+							<button type="button" class="btn btn-default btn-xs" title="Sponsor Rep" ng-show="item.repID">
+								<i class="glyphicon glyphicon-usd"></i>
+							</button>
+							{{item.name}}
+							<button class="btn btn-default btn-xs pull-right" data-ng-click="show_user(item.userID, $event)"><i class="glyphicon glyphicon-comment"></i></button>
+						</td>
+						<td data-ng-bind="item.title"></td>
+						<td>{{item.city}} {{item.state}}</td>
+						<td>
+							<span data-ng-bind="item.firm"></span>
 							<div class="pull-right">
-								<a href="tel:<?=$attendee['phone']; ?>"><i class="glyphicon glyphicon-phone-alt"></i></a>
-								<a href="mailto:<?=$attendee['email']; ?>"><i class="glyphicon glyphicon-envelope"></i></a>
+								<a href="tel:{{item.phone}}"><i class="glyphicon glyphicon-phone-alt"></i></a>
+								<a href="mailto:{{item.email}}"><i class="glyphicon glyphicon-envelope"></i></a>
 							</div>
 						</td>
 					</tr>
-				<?php endforeach; ?>
-			</tbody>
+					<?php foreach ($event['attendees'] as $attendee): ?>
+						<tr class="data" data-ng-style="{display:'none'}">
+							<td data-user-id="<?=$attendee['userID']; ?>"><?=$attendee['name']; ?></td>
+							<td><?=$attendee['title']; ?></td>
+							<td><?=$attendee['city']; ?> <?=$attendee['state']; ?></td>
+							<td>
+								<?=$attendee['firm']; ?>
+								<div class="pull-right">
+									<a href="tel:<?=$attendee['phone']; ?>"><i class="glyphicon glyphicon-phone-alt"></i></a>
+									<a href="mailto:<?=$attendee['email']; ?>"><i class="glyphicon glyphicon-envelope"></i></a>
+								</div>
+							</td>
+						</tr>
+					<?php endforeach; ?>
+				</tbody>
+			<?php else: ?>
+				<thead>
+					<tr>
+						<th>Contact</th>
+						<th>
+							<small class="pull-right text-right" style="font0weight:normal" data-ng-bind="total_rows();">
+								Total: <?=count($event['attendees']); ?>
+							</small>
+							Bio
+						</th>
+					</tr>
+				</thead>
+				<tbody>
+					<tr data-ng-repeat="item in (filtered_data = (data | filter:search_str)) | orderBy:field:sort_order | pagination:page:limit" 
+						style="display:none" data-ng-style="{display:'table-row'}">
+						<td>
+							<div class="center-cropped pull-left img-rounded">
+								<img ng-src="http://upstreamacademy.com/apps/{{item.img}}" class="img-rounded" height="100" ng-attr-title="{{item.name}}" alt="{{item.name}}" />
+							</div>
+							<div class="pull-right">
+								<a href="#" ng-click="show_user(item.userID, $event)"><i class="glyphicon glyphicon-comment"></i></a>
+								<a data-ng-href="tel:{{item.phone}}" data-ng-show="item.phone"><i class="glyphicon glyphicon-phone-alt"></i></a>
+								<a data-ng-href="mailto:{{item.email}}" data-ng-show="item.email"><i class="glyphicon glyphicon-envelope"></i></a>
+							</div>
+							<strong>
+								<span data-ng-bind="item.name">John Doe</span>
+							</strong><br/>
+							<small data-ng-bind="item.title">Intern</small><br/>
+							<span class="text-muted">
+								<span data-ng-bind="item.firm">Temporary INC.</span><br/>
+								<span data-ng-bind="item.city">Two Dot</span>,&nbsp;<span data-ng-bind="item.state">MT</span>
+							</span>
+						</td>
+						<td data-ng-bind="item.bio" class="hidden-xs">was an amazing ...</td>
+					</tr>
+					<?php foreach ($event['attendees'] as $attendee): ?>
+						<tr class="data" data-ng-style="{display:'none'}">
+							<td>
+								<div class="center-cropped pull-left img-rounded">
+									<img src="http://upstreamacademy.com/apps/<?=$attendee['photo']; ?>" class="img-rounded" height="100" title="<?=$attendee['name']; ?>" alt="<?=$attendee['name']; ?>" />
+								</div>
+								<div class="pull-right">
+									<a href="tel:<?=$attendee['phone']; ?>"><i class="glyphicon glyphicon-phone-alt"></i></a>
+									<a href="mailto:<?=$attendee['email']; ?>"><i class="glyphicon glyphicon-envelope"></i></a>
+								</div>
+								<strong>
+									<?=$attendee['name']; ?>
+								</strong><br/>
+								<small><?=$attendee['title']; ?></small><br/>
+								<span class="text-muted">
+									<?=$attendee['firm']; ?><br/>
+									<?=$attendee['city']; ?> <?=$attendee['state']; ?>
+								</span>
+							</td>
+							<td><?=$attendee['name']; ?> <?=$attendee['bio']; ?></td>
+						</tr>
+					<?php endforeach; ?>
+				</tbody>
+			<?php endif; ?>
 		</table>
 	</div>
 

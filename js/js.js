@@ -169,9 +169,16 @@ angular.module('event-agenda', []).controller('event-agenda', ['$scope','$contro
 angular.module('event-attendee', []).controller('event-attendee', ['$scope','$sce','API','$controller',function ($scope, $sce, API, $controller) {
 	angular.extend(this, $controller('event-speaker', {$scope: $scope}));
 	
+	// Properly dispay bios
+	$scope.data = []; // $scope.data = Atten.list;
 	var conferenceID = document.getElementById('conferenceID').value ;
-	var Atten = new API('atten/' + conferenceID);
-	$scope.data = Atten.list;
+	var Atten = new API('atten/' + conferenceID, undefined, function (res) {
+		$scope.data = res;
+
+		angular.forEach($scope.data, function (value) {
+			value.bio = (value.bio) ? value.name + ' ' + value.bio : '';
+		});
+	});
 
 	// Searching
 	$scope.total_rows = function () {
