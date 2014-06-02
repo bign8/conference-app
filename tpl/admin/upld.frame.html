@@ -7,21 +7,68 @@
 	Lorem ipsum dolor sit amet, consectetur adipiscing elit. Ut ac eleifend nisl. Mauris vitae tincidunt turpis, quis facilisis orci. Maecenas elementum sapien vitae libero semper commodo. Quisque tincidunt, dui vitae laoreet sollicitudin, sem tellus interdum odio, eu ornare tellus tellus ac tortor. Nulla laoreet urna ligula, ut ultrices dui ultricies et. Proin in viverra tellus. Duis vel sem quis neque molestie vehicula id eu mauris. Mauris eleifend ut est at luctus. Sed nec ligula a lectus ultricies bibendum viverra vitae ante. Suspendisse fringilla turpis nisi. Lorem ipsum dolor sit amet, consectetur adipiscing elit. Donec fermentum nisl urna, non dictum dolor facilisis eu.
 </p>
 
-<div ng-controller="upld" class="col-md-6 col-md-offset-3">
-	<form action="upld.php" method="post" class="well">
-		<div class="input-group form-group">
-			<label for="up_evt" class="input-group-addon">Select an Event</label>
-			<select class="form-control" ng-model="up_evt" id="up_evt" ng-options="c.conferenceID as c.title for c in confs | orderBy:'title'" required>
-				<option value="" disabled>&mdash; Select an Event &mdash;</option>
-			</select>
-		</div>
+<div class="row">
+	<div ng-controller="upld" class="col-md-6 col-md-offset-3">
+		<form action="upld.php" method="post" class="well">
+			<div class="input-group form-group">
+				<label for="up_evt" class="input-group-addon">Select an Event</label>
+				<select class="form-control" ng-model="up_evt" id="up_evt" ng-options="c.conferenceID as c.title for c in confs | orderBy:'title'" required>
+					<option value="" disabled>&mdash; Select an Event &mdash;</option>
+				</select>
+			</div>
 
-		<div class="input-group form-group">
-			<label for="up_file" class="input-group-addon">Select a File</label>
-			<input type="file" name="up_file" id="up_file" class="form-control">
-		</div>
+			<div class="input-group form-group">
+				<label for="up_file" class="input-group-addon">Select a File</label>
+				<input type="file" name="up_file" id="up_file" class="form-control">
+			</div>
 
-		<input type="hidden" name="up_evt" ng-value="up_evt">
-		<input type="submit" value="Upload" class="btn btn-primary center-block" style="width:50%">
-	</form>
+			<input type="hidden" name="up_evt" ng-value="up_evt">
+			<input type="submit" value="Upload" class="btn btn-primary center-block" style="width:50%">
+		</form>
+	</div>
+</div>
+
+<div class="well">
+	<p>
+		Below is a full list of columns that <strong>NEED</strong> to be in the CSV
+		<ul>
+			<li>
+				<code>accountno</code> A unique identifier for each user (should stay the same year to year)
+			</li>
+			<li>
+				<code>name</code> Full name of the participant
+			</li>
+			<li>
+				<code>firm</code> The company of the participant
+			</li>
+			<li>
+				<code>title</code> The job title of the participant
+			</li>
+			<li>
+				<code>city</code> The address city of the participant
+			</li>
+			<li>
+				<code>state</code> The address state of the participant
+			</li>
+			<li>
+				<code>bio</code> The biography of the participant
+			</li>
+			<li>
+				<code>phone1</code> The phone number of the participant
+			</li>
+			<li>
+				<code>contsupref</code> The email number of the participant
+			</li>
+			<li>
+				<code>password</code> The password of the participant (unencrypted)
+			</li>
+			<li>
+				<code>photo link</code> The name of the photo of the user.  Located in <code>http://upstreamacademy.com/apps/...</code>
+			</li>
+			<li>
+				<code>memberships</code> Comma separated field with associations or memberships (UAN,AGN,CPAmerica,etc.)
+			</li>
+		</ul>
+		<i>* Note: the case of the titles does not matter (ie: <u>FIRST</u>, <u>FiRsT</u>, and <u>first</u> are the same)</i>
+	</p>
 </div>
