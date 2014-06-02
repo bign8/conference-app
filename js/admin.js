@@ -55,4 +55,9 @@ controller('quiz', ['$scope', 'API', '$q', function ($scope, API, $q) {
 			if (Conference.list[i].conferenceID == $scope.myEvent) 
 				document.location = './' + Conference.list[i].slug;
 	};
+}]).
+
+controller('upld', ['$scope', 'API', function ($scope, API) {
+	var Conference = new API('conference');
+	$scope.confs = Conference.list;
 }]);

@@ -60,7 +60,7 @@
 			<div class="row">
 				<span class="col-md-3" data-ng-repeat="user in (filtered_users = (users | filter:{photo:'!!',conferenceID:myEvent} | filter:search_str)) | orderBy:'random' | pagination:page:limit">
 					<div class="thumbnail" data-ng-click="show_me(user)">
-						<img data-ng-src="http://upstreamacademy.com/images/ELAApp/{{user.photo}}" class="img-rounded" height="100" 
+						<img data-ng-src="http://upstreamacademy.com/apps/{{user.photo}}" class="img-rounded" height="100" 
 							data-ng-attr-title="{{user.name}}"
 							data-ng-attr-alt="{{user.name}}" alt="John Doe"/>
 					</div>
@@ -98,7 +98,7 @@
 						data-ng-click="view(user)" >
 						<td>
 							<div class="center-cropped pull-left img-rounded" ng-show="user.photo">
-								<img data-ng-src="http://upstreamacademy.com/images/ELAApp/{{user.photo}}" class="img-rounded" height="100" 
+								<img data-ng-src="http://upstreamacademy.com/apps/{{user.photo}}" class="img-rounded" height="100" 
 								data-ng-attr-title="{{user.name}}"
 								data-ng-attr-alt="{{user.name}}" alt="John Doe" />
 							</div>
