@@ -1,0 +1,3 @@
+[submodule "lib/add-to-homescreen"]
+	path = lib/add-to-homescreen
+	url = https://github.com/cubiq/add-to-homescreen

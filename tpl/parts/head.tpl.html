@@ -10,6 +10,15 @@
 	<meta http-equiv="X-UA-Compatible" content="IE=edge" />
 	<title><?php echo isset($title) ? $title : 'Upstream Events'; ?></title>
 
+	<!-- mobile add-to-home stuff (see footer for instantiation) -->
+	<meta name="apple-mobile-web-app-capable" content="yes">
+	<meta name="mobile-web-app-capable" content="yes">
+	<meta name="apple-mobile-web-app-title" content="<?php echo isset($title) ? $title : 'Upstream Events'; ?>">
+	<link rel="shortcut icon" sizes="16x16" href="./lib/add-to-homescreen/imgs/icon-16x16.png">
+	<link rel="shortcut icon" sizes="196x196" href="./lib/add-to-homescreen/imgs/icon-196x196.png">
+	<link rel="apple-touch-icon-precomposed" href="./lib/add-to-homescreen/imgs/icon-152x152.png">
+	<link rel="stylesheet" type="text/css" href="./lib/add-to-homescreen/style/addtohomescreen.css">
+
 	<!-- Libraries: twitter-bootstrap, font-awesome, jquery, angular.js, angular-ui-bootstrap -->
 	<link href="//cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/3.1.1/css/bootstrap.css" rel="stylesheet">
 	<link href="//cdnjs.cloudflare.com/ajax/libs/font-awesome/4.0.3/css/font-awesome.min.css" rel="stylesheet">
