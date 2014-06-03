@@ -62,9 +62,9 @@
 	<?php $panel_include('tpl/' . $path . '/about.frame.html',     'about',     $event); ?>
 	<?php $panel_include('tpl/' . $path . '/location.frame.html',  'location',  $event); ?>
 	<?php if (count($event['speakers']) > 0 || $is_edit) $panel_include('tpl/' . $path . '/speakers.frame.html',  'speakers',  $event); ?>
-	<?php if (count($event['agenda']) > 0 || $is_edit)   $panel_include('tpl/' . $path . '/agenda.frame.html',    'agenda',    $event); ?>
+	<?php if (count($event['agenda']) > 0   || $is_edit) $panel_include('tpl/' . $path . '/agenda.frame.html',    'agenda',    $event); ?>
 	<?php $panel_include('tpl/' . $path . '/attendees.frame.html', 'attendees', $event); ?>
-	<?php $panel_include('tpl/' . $path . '/sponsors.frame.html',  'sponsors',  $event); ?>
+	<?php if (count($event['sponsors']) > 0 || $is_edit) $panel_include('tpl/' . $path . '/sponsors.frame.html',  'sponsors',  $event); ?>
 </<?=$wrap; ?>><!-- ./wrap -->
 
 

@@ -7,8 +7,8 @@
 <?php echo $event['location']['desc']; ?>
 
 <?php 
-$hmap = isset($event['location']['hotel_map']) ? "<a href=\"./data/doc/{$event['location']['hotel_map']}\">(PDF)</a>" : '<em>unavailable</em>';
-$lmap = isset($event['location']['local_map']) ? "<a href=\"./data/doc/{$event['location']['local_map']}\">(PDF)</a>" : '<em>unavailable</em>';
+$hmap = isset($event['location']['hotel_map']) ? "<a href=\"http://upstreamacademy.com/apps/{$event['location']['hotel_map']}\">(PDF)</a>" : '<em>unavailable</em>';
+$lmap = isset($event['location']['local_map']) ? "<a href=\"http://upstreamacademy.com/apps/{$event['location']['local_map']}\">(PDF)</a>" : '<em>unavailable</em>';
 
 $html = <<<HTML
 <div style="width: 400px; height: 145px; overflow: hidden">
