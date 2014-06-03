@@ -138,7 +138,7 @@ Zoom map and move pointer to desired location.
 <input type="text" id="pac-input">
 <div id="map-canvas" class="full-map"></div>
 
-<input type="hidden" id="loc_opt" name="loc_opt" value="<?=$event['location']['map_options']; ?>" />
+<input type="hidden" id="loc_opt" name="loc_opt" value="<?=isset($event['location']['map_options'])?$event['location']['map_options']:'{}'; ?>" />
 
 <script type="text/javascript">
 	var my_map = new ELA_MAP_EDIT( document.getElementById('map-canvas'), document.getElementById('loc_opt'), document.getElementById('pac-input') );

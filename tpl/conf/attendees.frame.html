@@ -105,7 +105,7 @@
 			<?php else: ?>
 				<thead>
 					<tr>
-						<th>Contact</th>
+						<th class="col-xs-3">Contact</th>
 						<th>
 							<small class="pull-right text-right" style="font0weight:normal" data-ng-bind="total_rows();">
 								Total: <?=count($event['attendees']); ?>
@@ -119,7 +119,7 @@
 						style="display:none" data-ng-style="{display:'table-row'}">
 						<td>
 							<div class="center-cropped pull-left img-rounded">
-								<img ng-src="http://upstreamacademy.com/apps/{{item.img}}" class="img-rounded" height="100" ng-attr-title="{{item.name}}" alt="{{item.name}}" />
+								<img ng-src="http://upstreamacademy.com/apps/{{item.photo || '000-blank.jpg'}}" class="img-rounded" height="100" ng-attr-title="{{item.name}}" alt="{{item.name}}" />
 							</div>
 							<div class="pull-right">
 								<a href="#" ng-click="show_user(item.userID, $event)"><i class="glyphicon glyphicon-comment"></i></a>

@@ -72,7 +72,7 @@ class PROCESSOR {
 			$data = array_map('trim', $data);
 
 			// Insert user
-			if ($data == array('')) continue;
+			if ($data == array('') || $data[ $this->titles['accountno'] ] == '') continue;
 			echo '<pre>';
 			print_r($data);
 			echo '</pre><br/><br/>';

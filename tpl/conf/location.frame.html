@@ -45,7 +45,7 @@ $html = str_replace("\r", '', $html);
 	//*
 	var my_map = new ELA_MAP(
 		document.getElementById('map-canvas'), 
-		<?php echo $event['location']['map_options']; ?>,
+		<?=isset($event['location']['map_options'])?$event['location']['map_options']:'{}'; ?>,
 		"<?php echo $event['location']['name']; ?>",
 		"<?php echo $html; ?>"
 	);

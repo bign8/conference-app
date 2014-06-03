@@ -188,7 +188,7 @@ angular.module('event-attendee', []).controller('event-attendee', ['$scope','$sc
 	};
 
 	// Pagination
-	$scope.limits = [15,25,50,100];
+	$scope.limits = [5,15,25,50,100];
 	$scope.limit = $scope.limits[0];
 	$scope.page = 1;
 
