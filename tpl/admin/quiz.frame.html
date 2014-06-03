@@ -95,8 +95,8 @@
 					<tr data-ng-repeat="user in (filtered_users = (users | filter:{conferenceID:myEvent} | filter:search_str)) | orderBy:['last', 'first'] | pagination:page:limit"
 						data-ng-click="view(user)" >
 						<td>
-							<div class="center-cropped pull-left img-rounded" ng-show="user.photo">
-								<img data-ng-src="http://upstreamacademy.com/apps/{{user.photo}}" class="img-rounded" height="100" 
+							<div class="center-cropped pull-left img-rounded">
+								<img data-ng-src="http://upstreamacademy.com/apps/{{user.photo || '000-blank.jpg'}}" class="img-rounded" height="100" 
 								data-ng-attr-title="{{user.name}}"
 								data-ng-attr-alt="{{user.name}}" alt="John Doe" />
 							</div>
