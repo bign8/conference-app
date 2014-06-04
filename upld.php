@@ -77,19 +77,24 @@ class PROCESSOR {
 			print_r($data);
 			echo '</pre><br/><br/>';
 
+			// Detect and replace crazy character encodings!!!
+			$bio = $data[ $this->titles['bio'] ];
+			$bio = iconv(mb_detect_encoding($bio, mb_detect_order(), true), "UTF-8", $bio);
+
 			$user_data = array(
 				$data[ $this->titles['name'] ],
 				$data[ $this->titles['firm'] ],
 				$data[ $this->titles['title'] ],
 				$data[ $this->titles['city'] ],
 				$data[ $this->titles['state'] ],
-				@iconv("SHIFT_JIS", "UTF-8", $data[ $this->titles['bio'] ]), // microsoft :( http://i-tools.org/charset
+				$bio,
 				$data[ $this->titles['phone'] ],
 				$data[ $this->titles['email'] ],
 				$data[ $this->titles['photo link'] ],
 				$data[ $this->titles['memberships'] ],
 				$data[ $this->titles['accountno'] ],
 			);
+
 			if (
 				!$uGetSTH->execute(array( $data[ $this->titles['accountno'] ] )) ||
 				($userID = $uGetSTH->fetchColumn()) === FALSE
