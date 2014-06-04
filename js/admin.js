@@ -21,12 +21,10 @@ controller('conf', ['$scope', 'API', function ($scope, API) {
 	};
 }]).
 
-controller('quiz', ['$scope', 'API', '$q', function ($scope, API, $q) {
-	var load_attendee = $q.defer(), load_user = $q.defer();
-
+controller('quiz', ['$scope', 'API', 'UserModal', function ($scope, API, UserModal) {
 	var Conference = new API('conference');
-	var Attendee = new API('attendee', undefined, load_attendee.resolve);
-	var User = new API('user', undefined, load_user.resolve);
+	var Attendee = new API('attendee');
+	var User = new API('user');
 	$scope.confs = Conference.list;
 	$scope.users = User.list;
 
@@ -54,6 +52,13 @@ controller('quiz', ['$scope', 'API', '$q', function ($scope, API, $q) {
 		for (var i = 0; i < Conference.list.length; i++) 
 			if (Conference.list[i].conferenceID == $scope.myEvent) 
 				document.location = './' + Conference.list[i].slug;
+	};
+
+	$scope.edit_user = function (user) {
+		UserModal.open( user.userID, User, true );
+	};
+	$scope.add_user = function () {
+		UserModal.add( User, true );
 	};
 }]).
 

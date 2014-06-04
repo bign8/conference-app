@@ -224,7 +224,7 @@ class ArrestDB {
 			'fields'  => array('userID', 'name', 'title', 'firm', 'phone', 'photo', 'bio', 'email', 'seen', 'city', 'state', 'member'),
 		),
 		'user-ADMIN'  => array(
-			'actions' => array('GET', 'PUT', 'POST'),
+			'actions' => array('GET', 'PUT', 'POST', 'DELETE'),
 			'fields'  => array('userID', 'name', 'title', 'firm', 'phone', 'photo', 'bio', 'email', 'seen', 'admin', 'city', 'state', 'member'),
 		),
 		'file-ADMIN'  => array(

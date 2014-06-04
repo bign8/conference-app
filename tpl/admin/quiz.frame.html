@@ -100,8 +100,7 @@
 					</tr>
 				</thead>
 				<tbody>
-					<tr data-ng-repeat="user in (filtered_users = (users | filter:{conferenceID:myEvent} | filter:search_str)) | orderBy:['last', 'first'] | pagination:page:limit"
-						data-ng-click="view(user)" >
+					<tr data-ng-repeat="user in (filtered_users = (users | filter:{conferenceID:myEvent} | filter:search_str)) | orderBy:['last', 'first'] | pagination:page:limit" ng-dblclick="edit_user(user)" >
 						<td>
 							<div class="center-cropped pull-left img-rounded">
 								<img data-ng-src="http://upstreamacademy.com/apps/{{user.photo || '000-blank.jpg'}}" class="img-rounded" height="100" 
@@ -141,6 +140,7 @@
 					data-num-pages="num_pages">
 				</span>
 			</div>
+			<button type="button" class="btn btn-success" ng-click="add_user()">Add User</button>
 		</div>
 	</div>
 </div>

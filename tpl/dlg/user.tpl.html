@@ -71,12 +71,19 @@
 
 	<div class="form-group">
 		<label for="user_bio">Bio</label>
-		<textarea id="user_bio" ng-model="user.bio" class="form-control" data-ng-tinymce></textarea>
+		<textarea id="user_bio" ng-model="user.bio" class="form-control text-auto-scale" ></textarea>
 	</div>
 
 	<!-- <pre>{{ user | json }}</pre> -->
 </div>
 <div class="modal-footer">
+	<div class="pull-left" ng-if="is_admin">
+		<button class="btn btn-danger" ng-click="rem(user)">Delete User</button>&nbsp;&nbsp;
+		<label>
+			<input type="checkbox" ng-model="user.admin" ng-true-value="true" ng-false-value="false">
+			Is an Administrator
+		</label>
+	</div>
 	<button class="btn btn-primary" ng-click="ok()">OK</button>
 	<button class="btn btn-warning" ng-click="cancel()">Cancel</button>
 </div>

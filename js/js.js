@@ -367,4 +367,46 @@ directive('editFocus', ['$timeout', function ($timeout) {
 			}, 0, false);
 		});
 	};
+}]).
+
+controller('event-user-modal', ['$scope', '$modalInstance', 'user', 'is_admin', 'User', function ($scope, $modalInstance, user, is_admin, User) {
+	$scope.is_admin = is_admin;
+	$scope.user = user;
+	$scope.ok = function () { $modalInstance.close( $scope.user ); };
+	$scope.cancel = $modalInstance.dismiss.bind(undefined, 'cancel');
+	$scope.rem = function (user) {
+		User.rem( user ).then( $modalInstance.dismiss );
+	};
+}]).
+
+factory('UserModal', ['API', '$modal', '$sce', '$q', function (API, $modal, $sce, $q) {
+	var service = {
+		open: function (userID, their_user, is_admin) {
+			var User = their_user || new API('user');
+			var modalInstance = $modal.open({
+				templateUrl: 'tpl/dlg/user.tpl.html',
+				controller: 'event-user-modal',
+				size: 'lg',
+				resolve: {
+					user: User.get.bind( User, userID ),
+					is_admin: function () { return is_admin || false; },
+					User: function () { return User; }
+				}
+			});
+			return modalInstance.result.then( User.set.bind( User ) ); // Chained promises
+		},
+
+		add: function (their_user, is_admin) {
+			var User = their_user || new API('user'), result = $q.defer();
+			User.add({
+				name: 'New User ' + (Math.random() * 1e4 >> 0), 
+			}).then(function (blank_user) {
+				service.open( blank_user.userID, User, is_admin ).then( result.resolve, function () {
+					User.rem( blank_user ).then( result.reject );
+				});
+			});
+			return result.promise;
+		}
+	};
+	return service;
 }]);

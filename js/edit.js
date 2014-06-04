@@ -171,29 +171,6 @@ controller('event-edit-attendee', ['$scope', 'UserModal', 'API', '$q', function 
 	/* --- end editing --- */
 }]).
 
-factory('UserModal', ['API', '$modal', '$sce', function (API, $modal, $sce) {
-	return {
-		open: function (userID, their_user) {
-			var User = their_user || new API('user');
-			var modalInstance = $modal.open({
-				templateUrl: 'tpl/dlg/user.tpl.html',
-				controller: 'event-user-modal',
-				size: 'lg',
-				resolve: {
-					user: User.get.bind( User, userID )
-				}
-			});
-			return modalInstance.result.then( User.set.bind( User ) ); // Chained promises
-		}
-	};
-}]).
-
-controller('event-user-modal', ['$scope', '$modalInstance', 'user', function ($scope, $modalInstance, user) {
-	$scope.user = user;
-	$scope.ok = function () { $modalInstance.close( $scope.user ); };
-	$scope.cancel = $modalInstance.dismiss.bind(undefined, 'cancel');
-}]).
-
 //  data-ng-non-bindable
 controller('event-edit-agenda', ['$scope', 'API', '$sce', '$modal', function ($scope, API, $sce, $modal) {
 	var conferenceID = document.getElementById('conferenceID').value ;
