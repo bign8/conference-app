@@ -81,6 +81,10 @@ class PROCESSOR {
 			$bio = $data[ $this->titles['bio'] ];
 			$bio = iconv(mb_detect_encoding($bio, mb_detect_order(), true), "UTF-8", $bio);
 
+			// Replace photo appropriately
+			$photo = $data[ $this->titles['photo link'] ];
+			$photo = $photo == '' ? null : $photo;
+
 			$user_data = array(
 				$data[ $this->titles['name'] ],
 				$data[ $this->titles['firm'] ],
@@ -90,7 +94,7 @@ class PROCESSOR {
 				$bio,
 				$data[ $this->titles['phone'] ],
 				$data[ $this->titles['email'] ],
-				$data[ $this->titles['photo link'] ],
+				$photo,
 				$data[ $this->titles['memberships'] ],
 				$data[ $this->titles['accountno'] ],
 			);
