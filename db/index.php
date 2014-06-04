@@ -261,7 +261,7 @@ class ArrestDB {
 		),
 		'conference-ADMIN' => array(
 			'actions' => array('GET', 'PUT', 'POST', 'DELETE'),
-			'fields'  => array('conferenceID', 'title', 'theme', 'slug', 'display_pictures'),
+			'fields'  => array('conferenceID', 'title', 'theme', 'slug', 'display_pictures', 'start_stamp'),
 		)
 	);
 	public static function whitelist( $table, $area ) {

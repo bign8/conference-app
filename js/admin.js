@@ -26,10 +26,20 @@ controller('quiz', ['$scope', 'API', 'UserModal', function ($scope, API, UserMod
 	var Attendee = new API('attendee');
 	var User = new API('user');
 
+	// Add usernames to bios!
 	User.add_cb(function (res) {
 		angular.forEach(res, function (user) {
 			if (user.bio && user.bio.indexOf(user.name) !== 0)
 				user.bio = user.name + ' ' + user.bio ;
+		});
+		$scope.shuffle();
+		return res;
+	});
+
+	// Format start_stamp for grouping
+	Conference.add_cb(function (res) {
+		angular.forEach(res, function (evt) {
+			evt.start_year = evt.start_stamp.substr(0, evt.start_stamp.indexOf('-')) || 'Unknown';
 		});
 		return res;
 	});
@@ -37,7 +47,7 @@ controller('quiz', ['$scope', 'API', 'UserModal', function ($scope, API, UserMod
 	$scope.confs = Conference.list;
 	$scope.users = User.list;
 
-	API.left_join( User, Attendee );
+	API.left_join( User, Attendee ); // TODO: attending 2 conferences?
 
 	// Controls
 	$scope.view = 'tile';
