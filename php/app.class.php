@@ -96,7 +96,7 @@ class App {
 
 
 	public function save_conf( $req ) {
-		$map = function () use ($req) {
+		$map = function () use (&$req) {
 			$arr = func_get_args();
 			$cb = function ($value) use ($req) { return $req[$value]; };
 			return array_map($cb, $arr);
@@ -107,7 +107,6 @@ class App {
 			$sth = $this->db->prepare("UPDATE location SET name=?,address=?,city=?,state=?,map_options=?,hotel_map=?,location_map=?,\"desc\"=? WHERE locationID=?;");
 			$sth->execute($map('loc_name','loc_address','loc_city','loc_state','loc_opt','loc_hotel','loc_loc_map','loc_desc','locationID'));
 		} else {
-			// Un-tested
 			$sth = $this->db->prepare("INSERT INTO location (name,address,city,state,map_options,hotel_map,location_map,\"desc\") VALUES (?,?,?,?,?,?,?,?);");
 			$sth->execute($map('loc_name','loc_address','loc_city','loc_state','loc_opt','loc_hotel','loc_loc_map','loc_desc'));
 			$req['locationID'] = $this->db->lastInsertId();
