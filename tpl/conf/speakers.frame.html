@@ -17,7 +17,7 @@
 			?>
 			<div class="col-sm-6 col-md-4">
 				<div class="thumbnail" style="text-align: center;cursor: pointer" data-ng-click="show_user(<?=$speaker['userID']; ?>)">
-					<img src="http://upstreamacademy.com/apps/<?=$speaker['photo']; ?>" alt="..." style="max-height:300px">
+					<img src="http://upstreamacademy.com/apps/<?=$speaker['photo']=='' ? '000-blank.jpg' : $speaker['photo']; ?>" alt="<?=$speaker['name']; ?>" style="max-height:300px">
 					<div class="caption">
 						<h3><?=$speaker['name']; ?></h3>
 						<p><?=$speaker['title']; ?><br/><?=$speaker['firm']; ?></p>

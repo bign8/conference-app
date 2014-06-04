@@ -31,6 +31,11 @@
 				>
 					<option value="">&mdash; all events &mdash;</option>
 				</select>
+				<span class="input-group-btn" ng-if="myEvent">
+					<button type="button" class="btn btn-warning" title="View this event" ng-click="open_this($event)">
+						<i class="glyphicon glyphicon-eye-open"></i>
+					</button>
+				</span>
 			</div>
 		</div>
 
@@ -51,8 +56,6 @@
 		</div>
 	</div>
 
-	<a href="#" ng-click="open_this($event)" ng-show="myEvent">View this event</a>
-
 	<div data-ng-switch="view">
 		<div data-ng-switch-when="tile">
 			<div class="row">
@@ -64,7 +67,7 @@
 					</div>
 				</span>
 			</div>
-			<div class="text-center clearfix" data-ng-show="num_pages !== 1"><!-- pager -->
+			<div class="text-center clearfix" data-ng-hide="num_pages === 1"><!-- pager -->
 				<span 
 					data-pagination
 					data-total-items="filtered_users.length"
@@ -78,6 +81,11 @@
 					data-last-text="&raquo;"
 					data-num-pages="num_pages">
 				</span>
+			</div>
+			<div class="col-md-6 col-md-offset-3" ng-show="filtered_users.length == 0">
+				<div class="well">
+					<p>It appears there are no attendees to this event that have a profile photo. Please change to list view (<small class="glyphicon glyphicon-list"></small>) to see the event attendees.</p>
+				</div>
 			</div>
 		</div>
 		<div data-ng-switch-when="list">

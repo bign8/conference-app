@@ -35,7 +35,7 @@ controller('quiz', ['$scope', 'API', '$q', function ($scope, API, $q) {
 	// Controls
 	$scope.view = 'tile';
 	$scope.show_me = function (user) {
-		alert(user.name);
+		alert(user.name + '\n' + user.title + '\n' + user.firm);
 	};
 	$scope.shuffle = function () {
 		for (var i = 0, l = $scope.users.length; i < l; i++) $scope.users[i].random = Math.random();
