@@ -25,6 +25,15 @@ controller('quiz', ['$scope', 'API', 'UserModal', function ($scope, API, UserMod
 	var Conference = new API('conference');
 	var Attendee = new API('attendee');
 	var User = new API('user');
+
+	User.add_cb(function (res) {
+		angular.forEach(res, function (user) {
+			if (user.bio && user.bio.indexOf(user.name) !== 0)
+				user.bio = user.name + ' ' + user.bio ;
+		});
+		return res;
+	});
+
 	$scope.confs = Conference.list;
 	$scope.users = User.list;
 
