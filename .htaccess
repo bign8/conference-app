@@ -2,14 +2,8 @@
 
 <IfModule mod_rewrite.c>
 	RewriteEngine On
-
-	RewriteBase /event/db/
-	RewriteCond %{REQUEST_FILENAME} !-d
-	RewriteCond %{REQUEST_FILENAME} !-f
-	RewriteRule ^(.*)$ index.php [L,QSA]
-	
-	RewriteBase /event/
+	RewriteBase /
 	RewriteCond %{REQUEST_FILENAME} !-f
 	RewriteCond %{REQUEST_FILENAME} !-d
-	RewriteRule (.*) conference.php?slug=$1 [L,QSA]
+	RewriteRule ^(.*)$ conference.php?slug=$1 [L,QSA]
 </IfModule>
