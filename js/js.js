@@ -247,7 +247,7 @@ factory('API', ['$http', function ($http) { // TODO: improve with browser data c
 	service.left_join = function (left, right) {
 		var list = [];
 		var manual_join = function (data) {
-			if (!left.list.length || !right.list.length) return; // don't waste time
+			if (!left.list.length) return angular.copy([], list); // don't waste time
 			angular.copy(left.list, list);
 			var map = {}; // O(n + m) join ( because of hash lookup O(n*ln(m)) )
 			for (var i = 0, l = right.list.length; i < l; i++) map[ right.list[i][left.id] ] = right.list[i];

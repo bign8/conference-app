@@ -321,33 +321,19 @@ controller('event-edit-sponsor', ['$scope', '$modal', 'API', '$q', function ($sc
 	};
 }]).
 
-controller('event-edit-sponsor-modal', ['$scope', '$modalInstance', 'company', 'API', '$q', 'UserModal', function ($scope, $modalInstance, company, API, $q, UserModal) {
-	$scope.company = company;
-
-	var load_rep = $q.defer(), load_usr = $q.defer();
-	var Rep  = new API('rep' , undefined, load_rep.resolve, '/sponsorID/' + company.sponsorID);
-	var User = new API('user', undefined, load_usr.resolve);
-
+controller('event-edit-sponsor-modal', ['$scope','$modalInstance','company','API','UserModal',function ($scope,$modalInstance,company,API,UserModal) {
+	
 	// init data
-	$scope.users = User.list;
-	var manual_join_reps = function () {
-		var reps = {};
-		for (var i = 0; i < Rep.list.length; i++) reps[ Rep.list[i].userID ] = Rep.list[i];
-		for (var i = 0; i < User.list.length; i++) angular.extend( User.list[i], reps[ User.list[i].userID ] || null );
-	};
-	$q.all([ load_rep.promise, load_usr.promise ]).then( manual_join_reps );
+	$scope.company = company;
+	var Rep  = new API('rep' , null, null, '/sponsorID/' + company.sponsorID);
+	var User = new API('user');
+	$scope.users = API.left_join(User, Rep);
 
 	// Reps editing
 	$scope.edit = function (user) {
-		UserModal.open( user.userID ).then( angular.extend.bind(undefined, user) );
+		UserModal.open( user.userID, User );
 	};
-	$scope.rem = function (user) {
-		Rep.rem( user ).then(function () {
-			var obj = User.list[ User.list.indexOf(user) ];
-			delete obj.repID;
-			delete obj.sponsorID;
-		}).then( manual_join_reps );
-	};
+	$scope.rem = Rep.rem.bind( Rep );
 	$scope.new_rep = null;
 	$scope.add = function () {
 		if (!$scope.new_rep) return alert('new users not yet allowed');
@@ -356,13 +342,12 @@ controller('event-edit-sponsor-modal', ['$scope', '$modalInstance', 'company', '
 			userID: $scope.new_rep.userID,
 		}).then(function () {
 			$scope.new_rep = null;
-			manual_join_reps();
 		});
 	};
 
 	// Closing functions
 	$scope.ok = function () { $modalInstance.close($scope.company); };
-	$scope.cancel = function () { $modalInstance.dismiss('cancel'); };
+	$scope.cancel = $modalInstance.dismiss.bind(null, 'cancel');
 }]).
 
 // http://justinklemm.com/angularjs-filter-ordering-objects-ngrepeat/
