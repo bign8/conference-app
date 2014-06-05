@@ -107,12 +107,9 @@ controller('event-edit-attendee', ['$scope', 'UserModal', 'API', '$q', function 
 
 	/* --- start initialization --- */
 	var conferenceID = document.getElementById('conferenceID').value ;
-	var load_user = $q.defer(), load_attendee = $q.defer();
-	var User = new API('user', undefined, load_user.resolve);
-	var Attendee = new API('attendee', undefined, load_attendee.resolve, '/conferenceID/' + conferenceID);
-
-	$scope.users = User.list; // manual join
-	API.left_join(User, Attendee);
+	var User = new API('user');
+	var Attendee = new API('attendee', null, null, '/conferenceID/' + conferenceID);
+	$scope.users = API.left_join(User, Attendee);
 	/* --- end initialization --- */
 
 	/* --- start navigation --- */
@@ -138,11 +135,7 @@ controller('event-edit-attendee', ['$scope', 'UserModal', 'API', '$q', function 
 	$scope.add = function () {
 
 		// Create new user or use old one
-		var new_attendee = $scope.new_attendee ? $q.when( $scope.new_attendee ) : User.add({
-			name: 'New User ' + (Math.random() * 10000 >> 0)
-		}).then(function (user) {
-			return UserModal.open( user.userID, User ); // chain promises
-		});
+		var new_attendee = $scope.new_attendee ? $q.when( $scope.new_attendee ) : UserModal.add( User );
 
 		// Add attendee
 		new_attendee.then(function (user) {
@@ -156,11 +149,11 @@ controller('event-edit-attendee', ['$scope', 'UserModal', 'API', '$q', function 
 	};
 	$scope.edit = function (user, $event) {
 		$event.preventDefault();
-		UserModal.open( user.userID ).then( angular.extend.bind(undefined, user) );
+		UserModal.open( user.userID, User );
 	};
 	$scope.rem = function (user, $event) {
 		$event.preventDefault();
-		Attendee.rem( user ).then( User.all.bind( User, undefined ) );
+		Attendee.rem( user );
 	};
 	/* --- end editing --- */
 }]).
