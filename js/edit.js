@@ -255,21 +255,9 @@ controller('event-edit-agenda-modal', ['$scope', '$modalInstance', 'session', 'u
 
 controller('event-edit-sponsor', ['$scope', '$modal', 'API', '$q', function ($scope, $modal, API, $q) {
 	var conferenceID = document.getElementById('conferenceID').value ;
-	var load_company = $q.defer(), load_sponsor = $q.defer();
-	var Company = new API('company', undefined, load_company.resolve);
-	var Sponsor = new API('sponsor', undefined, load_sponsor.resolve, '/conferenceID/' + conferenceID);
-
-	// Init + Process Companies and Sponsors
-	$scope.companies = Company.list;
-	var manual_join_sponsor = function () {
-		var spon = {}; // O(n + m) join ( because of hash lookup O(n*ln(m)) )
-		for (var i = 0; i < Sponsor.list.length; i++) {
-			Sponsor.list[i].priority = parseInt(Sponsor.list[i].priority);
-			spon[ Sponsor.list[i].companyID ] = Sponsor.list[i];
-		}
-		for (var i = 0; i < Company.list.length; i++) angular.extend( Company.list[i], spon[ Company.list[i].companyID ] || null );
-	};
-	$q.all([ load_company.promise, load_sponsor.promise ]).then( manual_join_sponsor );
+	var Company = new API('company');
+	var Sponsor = new API('sponsor', null, null, '/conferenceID/' + conferenceID);
+	$scope.companies = API.left_join( Company, Sponsor );
 
 	// Sponsor Editing
 	$scope.new_sponsor = null;
@@ -288,19 +276,10 @@ controller('event-edit-sponsor', ['$scope', '$modal', 'API', '$q', function ($sc
 				companyID: company.companyID,
 			}).then(function () {
 				$scope.new_sponsor = null;
-				manual_join_sponsor();
 			});	
 		});
 	};
-	$scope.rem = function (sponsor) {
-		Sponsor.rem( sponsor ).then(function() {
-			var obj = Company.list[ Company.list.indexOf(sponsor) ];
-			delete obj.sponsorID;
-			delete obj.conferenceID;
-			delete obj.priority;
-			delete obj.advert;
-		}).then( manual_join_sponsor );
-	};
+	$scope.rem = Sponsor.rem.bind( Sponsor );
 	$scope.set = Sponsor.set.bind( Sponsor );
 	$scope.move = function (obj, diff) {
 		obj.priority = parseInt(obj.priority) + diff;
