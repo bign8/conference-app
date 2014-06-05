@@ -77,27 +77,17 @@ class PROCESSOR {
 			print_r($data);
 			echo '</pre><br/><br/>';
 
-			// Detect and replace crazy character encodings!!!
-			$bio = $data[ $this->titles['bio'] ];
-			$bio = iconv(mb_detect_encoding($bio, mb_detect_order(), true), "UTF-8", $bio);
-
-			// Replace photo appropriately
-			$photo = $data[ $this->titles['photo link'] ];
-			$photo = $photo == '' ? null : $photo;
-
-			$user_data = array(
-				$data[ $this->titles['name'] ],
-				$data[ $this->titles['firm'] ],
-				$data[ $this->titles['title'] ],
-				$data[ $this->titles['city'] ],
-				$data[ $this->titles['state'] ],
-				$bio,
-				$data[ $this->titles['phone'] ],
-				$data[ $this->titles['email'] ],
-				$photo,
-				$data[ $this->titles['memberships'] ],
-				$data[ $this->titles['accountno'] ],
-			);
+			// Clean data for importing
+			$map = function () use ($data) {
+				$arr = func_get_args();
+				$cb = function ($value) use ($data) {
+					$ele = $data[ $this->titles[$value] ];
+					return iconv(mb_detect_encoding($ele, mb_detect_order(), true), "UTF-8", $ele);
+				};
+				return array_map($cb, $arr);
+			};
+			$user_data = $map('name', 'firm', 'title', 'city', 'state', 'bio', 'phone', 'email', 'photo link', 'memberships', 'accountno');
+			$user_data[8] = $user_data[8] == '' ? null : $user_data[8]; // Photo
 
 			if (
 				!$uGetSTH->execute(array( $data[ $this->titles['accountno'] ] )) ||
