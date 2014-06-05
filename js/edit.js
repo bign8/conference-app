@@ -112,12 +112,7 @@ controller('event-edit-attendee', ['$scope', 'UserModal', 'API', '$q', function 
 	var Attendee = new API('attendee', undefined, load_attendee.resolve, '/conferenceID/' + conferenceID);
 
 	$scope.users = User.list; // manual join
-	var manual_join = function () {
-		var atten = {}; // O(n + m) join ( because of hash lookup O(n*ln(m)) )
-		for (var i = 0; i < Attendee.list.length; i++) atten[ Attendee.list[i].userID ] = Attendee.list[i].attendeeID;
-		for (var i = 0; i < User.list.length; i++) User.list[i].attendeeID = atten[ User.list[i].userID ] || null ;
-	};
-	$q.all([ load_user.promise, load_attendee.promise ]).then( manual_join );
+	API.left_join(User, Attendee);
 	/* --- end initialization --- */
 
 	/* --- start navigation --- */
@@ -156,7 +151,6 @@ controller('event-edit-attendee', ['$scope', 'UserModal', 'API', '$q', function 
 				conferenceID: conferenceID
 			}).then(function () {
 				$scope.new_attendee = null;
-				manual_join();
 			});
 		});
 	};
@@ -166,7 +160,7 @@ controller('event-edit-attendee', ['$scope', 'UserModal', 'API', '$q', function 
 	};
 	$scope.rem = function (user, $event) {
 		$event.preventDefault();
-		Attendee.rem( user ).then( manual_join );
+		Attendee.rem( user ).then( User.all.bind( User, undefined ) );
 	};
 	/* --- end editing --- */
 }]).

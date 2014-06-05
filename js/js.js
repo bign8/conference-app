@@ -214,7 +214,13 @@ filter('pagination', function () {
 factory('API', ['$http', function ($http) { // TODO: improve with browser data cashe
 	var base = './db/';
 	var cleanup = function (result) { return result.data.hasOwnProperty('error') ? [] : result.data; };
-	var rem_obj = function (item) { this.list.splice(this.list.indexOf(item), 1); };
+	var rem_obj = function (item) {
+		for (var i = 0, l = this.list.length; i < l; i++) if ( item[this.id] == this.list[i][this.id] ) {
+			this.list.splice(i, 1);
+			break;
+		};
+		return item; // this.list.splice(this.list.indexOf(item), 1);
+	};
 	var add_obj = function (item, data) {
 		item[ this.id ] = data.success.data;
 		this.list.push(item);
@@ -268,7 +274,7 @@ factory('API', ['$http', function ($http) { // TODO: improve with browser data c
 	};
 	service.prototype = {
 		all: function (suffix) {
-			return $http.get(base + this.table + (suffix ? suffix : '')).then( cleanup.bind(this) ).then( callback.bind(this) );
+			return $http.get(base + this.table + (suffix ? suffix : '')).then( cleanup.bind(this) ).then( angular.extend.bind(undefined, this.list) ).then( callback.bind(this) );
 		},
 		get: function (itemID, suffix) {
 			return $http.get(base + this.table + '/' + itemID + (suffix ? suffix : '')).then( cleanup.bind(this) ).then( callback.bind(this) );
