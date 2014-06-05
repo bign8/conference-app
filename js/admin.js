@@ -28,6 +28,7 @@ controller('quiz', ['$scope', 'API', 'UserModal', function ($scope, API, UserMod
 
 	// Add usernames to bios!
 	User.add_cb(function (res) {
+		if (!res.hasOwnProperty('length')) return res; // DO NOT OPERATE ON SINGLE ELEMENT
 		angular.forEach(res, function (user) {
 			if (user.bio && user.bio.indexOf(user.name) !== 0)
 				user.bio = user.name + ' ' + user.bio ;
@@ -47,7 +48,7 @@ controller('quiz', ['$scope', 'API', 'UserModal', function ($scope, API, UserMod
 	$scope.confs = Conference.list;
 	$scope.users = User.list;
 
-	API.left_join( User, Attendee ); // TODO: attending 2 conferences?
+	API.left_join_many( User, Attendee, 'conferenceID' ); // attending 2 conferences
 
 	// Controls
 	$scope.view = 'tile';
@@ -80,6 +81,15 @@ controller('quiz', ['$scope', 'API', 'UserModal', function ($scope, API, UserMod
 		UserModal.add( User, true );
 	};
 }]).
+
+filter('isAttending', function () {
+	return function (arr, conferenceID) {
+		if (!conferenceID) return arr;
+		var out = [];
+		for (var i = 0, l = arr.length; i < l; i++) if (arr[i].conferenceID.indexOf(conferenceID) >= 0) out.push(arr[i]);
+		return out;
+	};
+}).
 
 controller('upld', ['$scope', 'API', function ($scope, API) {
 	var Conference = new API('conference');

@@ -242,8 +242,25 @@ factory('API', ['$http', function ($http) { // TODO: improve with browser data c
 		var manual_join = function (data) {
 			if (!left.list.length || !right.list.length) return; // don't waste time
 			var map = {}; // O(n + m) join ( because of hash lookup O(n*ln(m)) )
-			for (var i = 0, l = right.list.length; i < l; i++) map[ right.list[i][right.id] ] = right.list[i];
+			for (var i = 0, l = right.list.length; i < l; i++) map[ right.list[i][left.id] ] = right.list[i];
 			for (var i = 0, l = left.list.length; i < l; i++) angular.extend( left.list[i], map[ left.list[i][left.id] ] || null );
+			return data;
+		};
+		left.add_cb( manual_join );
+		right.add_cb( manual_join );
+		manual_join();
+	};
+	service.left_join_many = function (left, right, id) {
+		var manual_join = function (data) {
+			if (!left.list.length || !right.list.length) return; // wasteing time
+			var map = {}, O = undefined;
+			for (var i = 0, l = right.list.length; i < l; i++) {
+				O = right.list[ i ];
+				if ( map.hasOwnProperty( O[left.id] ) ) map[ O[left.id] ].push( O[ id ] );
+				else map[ O[left.id] ] = [ O[ id ] ];
+			}
+			for (var i = 0, l = left.list.length; i < l; i++) left.list[i][ id ] = map[ left.list[i][left.id] ] || [];
+			return data;
 		};
 		left.add_cb( manual_join );
 		right.add_cb( manual_join );

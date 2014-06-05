@@ -59,7 +59,7 @@
 	<div data-ng-switch="view">
 		<div data-ng-switch-when="tile">
 			<div class="row">
-				<span class="col-md-3" data-ng-repeat="user in (filtered_users = (users | filter:{photo:'!!',conferenceID:myEvent} | filter:search_str)) | orderBy:'random' | pagination:page:limit">
+				<span class="col-md-3" data-ng-repeat="user in (filtered_users = (users | isAttending:myEvent | filter:{photo:'!!'} | filter:search_str)) | orderBy:'random' | pagination:page:limit">
 					<div class="thumbnail" data-ng-click="show_me(user)">
 						<img data-ng-src="http://upstreamacademy.com/apps/{{user.photo || '000-blank.jpg'}}" class="img-rounded" height="100" 
 							data-ng-attr-title="{{user.name}}"
@@ -100,7 +100,7 @@
 					</tr>
 				</thead>
 				<tbody>
-					<tr data-ng-repeat="user in (filtered_users = (users | filter:{conferenceID:myEvent} | filter:search_str)) | orderBy:['last', 'first'] | pagination:page:limit" ng-dblclick="edit_user(user)" >
+					<tr data-ng-repeat="user in (filtered_users = (users | isAttending:myEvent | filter:search_str)) | orderBy:['last', 'first'] | pagination:page:limit" ng-dblclick="edit_user(user)" >
 						<td>
 							<div class="center-cropped pull-left img-rounded">
 								<img data-ng-src="http://upstreamacademy.com/apps/{{user.photo || '000-blank.jpg'}}" class="img-rounded" height="100" 
