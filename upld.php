@@ -86,7 +86,7 @@ class PROCESSOR {
 				};
 				return array_map($cb, $arr);
 			};
-			$user_data = $map('name', 'firm', 'title', 'city', 'state', 'bio', 'phone', 'email', 'photo link', 'memberships', 'accountno');
+			$user_data = $map('name', 'firm', 'title', 'city', 'state', 'bio', 'phone1', 'contsupref', 'photo link', 'memberships', 'accountno');
 			$user_data[8] = $user_data[8] == '' ? null : $user_data[8]; // Photo
 
 			if (
@@ -135,8 +135,8 @@ class PROCESSOR {
 		if ( !in_array('city', $titles) ) die("No city title.");
 		if ( !in_array('state', $titles) ) die("No state title.");
 		if ( !in_array('bio', $titles) ) die("No bio title.");
-		if ( !in_array('phone', $titles) ) die("No phone title.");
-		if ( !in_array('email', $titles) ) die("No email title.");
+		if ( !in_array('phone1', $titles) ) die("No phone title.");
+		if ( !in_array('contsupref', $titles) ) die("No email title.");
 		if ( !in_array('password', $titles) ) die("No password title.");
 		if ( !in_array('photo link', $titles) ) die("No guide title.");
 		if ( !in_array('memberships', $titles) ) die("No username title.");
