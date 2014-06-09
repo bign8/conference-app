@@ -40,7 +40,11 @@ controller('quiz', ['$scope', 'API', 'UserModal', function ($scope, API, UserMod
 	// Format start_stamp for grouping
 	Conference.add_cb(function (res) {
 		angular.forEach(res, function (evt) {
-			evt.start_year = evt.start_stamp.substr(0, evt.start_stamp.indexOf('-')) || 'Unknown';
+			try {
+				evt.start_year = evt.start_stamp.substr(0, evt.start_stamp.indexOf('-')) || 'Unknown';
+			} catch (e) {
+				evt.start_year = 'Unknown';
+			}
 		});
 		return res;
 	});
