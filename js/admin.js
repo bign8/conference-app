@@ -90,6 +90,14 @@ filter('isAttending', function () {
 	};
 }).
 
+filter('hasImg', function () {
+	return function (arr) {
+		var out = [];
+		for (var i = 0, l = arr.length; i < l; i++) if (arr[i].photo) out.push(arr[i]);
+		return out;
+	};
+}).
+
 controller('upld', ['$scope', 'API', function ($scope, API) {
 	var Conference = new API('conference');
 	$scope.confs = Conference.list;
