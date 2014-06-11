@@ -131,8 +131,8 @@
 							</strong><br/>
 							<small data-ng-bind="item.title">Intern</small><br/>
 							<span class="text-muted">
-								<span data-ng-bind="item.firm">Temporary INC.</span><br/>
-								<span data-ng-bind="item.city">Two Dot</span>,&nbsp;<span data-ng-bind="item.state">MT</span>
+								<small data-ng-bind="item.firm">Temporary INC.</small><br/>
+								<small data-ng-bind="item.city">Two Dot</small>,&nbsp;<small data-ng-bind="item.state">MT</small>
 							</span>
 						</td>
 						<td data-ng-bind="item.bio" class="hidden-xs">was an amazing ...</td>
@@ -152,10 +152,10 @@
 									<?=$attendee['name']; ?>
 								</strong><br/>
 								<small><?=$attendee['title']; ?></small><br/>
-								<span class="text-muted">
+								<small class="text-muted">
 									<?=$attendee['firm']; ?><br/>
 									<?=$attendee['city']; ?> <?=$attendee['state']; ?>
-								</span>
+								</small>
 							</td>
 							<td><?=$attendee['name']; ?> <?=$attendee['bio']; ?></td>
 						</tr>
