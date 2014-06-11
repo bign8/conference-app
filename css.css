@@ -89,6 +89,9 @@ img.pull-right { padding: 0; margin: 0 0 1em 1em; }
 	font-size: 24px;
 	margin-top: 0;
 }
+.well h2 small {
+	color: #151F60;
+}
 /* end colors */
 
 

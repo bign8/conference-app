@@ -3,7 +3,7 @@
 		<h1>About Upstream...</h1>
 	</div>
 </div>
-<img class="pull-right img-responsive col-sm-3 hidden-xs img-rounded" src="./data/ua-logo.png" alt="Upstream Academy">
+<!-- <img class="pull-right hidden-xs img-rounded" src="./data/ua-logo.png" alt="Upstream Academy" style="width:150px">
 <p class="lead">
 	Lorem ipsum dolor sit amet, consectetur adipiscing elit. Ut ac eleifend nisl. Mauris vitae tincidunt turpis, quis facilisis orci. Maecenas elementum sapien vitae libero semper commodo. Quisque tincidunt, dui vitae laoreet sollicitudin, sem tellus interdum odio, eu ornare tellus tellus ac tortor. Nulla laoreet urna ligula, ut ultrices dui ultricies et. Proin in viverra tellus. Duis vel sem quis neque molestie vehicula id eu mauris. Mauris eleifend ut est at luctus. Sed nec ligula a lectus ultricies bibendum viverra vitae ante. Suspendisse fringilla turpis nisi. Lorem ipsum dolor sit amet, consectetur adipiscing elit. Donec fermentum nisl urna, non dictum dolor facilisis eu.
 </p>
@@ -18,63 +18,55 @@
 </p>
 <p>
 	Quisque semper varius nisl vel facilisis. Maecenas ornare molestie diam vitae ultrices. Donec vel erat quis magna tempor pharetra. Quisque congue lorem sit amet ultrices cursus. Suspendisse turpis sapien, mattis ac augue eget, varius sollicitudin dui. Mauris vel justo in nulla convallis aliquam ut vel elit. Sed pretium rhoncus imperdiet. Ut lacus erat, suscipit quis enim et, iaculis dictum ipsum. Vestibulum dignissim, lacus vel aliquet molestie, urna purus cursus libero, in lacinia velit leo a enim. Ut et interdum magna, sit amet placerat erat. Praesent nec tempor neque. Cras ultricies odio a dui fringilla consequat. Donec dictum consequat eros quis lobortis. Proin venenatis lacus et sem congue, at placerat velit consectetur. Nunc lobortis est a dolor varius, non vestibulum elit feugiat.
-</p>
+</p> -->
 
-<!-- style -->
-<style type="text/css">
-/* last attribute on both is to crop border from images...temporay fix */
-.upstream_team { position:relative; margin:0 auto; display:block; width:599px; height:937px; overflow: hidden; }
-.upstream_team img { border:0; position:absolute; visibility:hidden; width:599px; height:937px; left: -2px; }
-</style>
 
-<!-- JS -->
-<script type="text/JavaScript">
-	var UA = UA || {};
-	UA.team = function () {
-		var ids = ['Team','Dev','Jenny','Randl','Kelsey','Tim','Georgia','Sam'];
-		var hide = function(e, that) {
-			if ( !that.contains( e.toElement ) ) show(0);
-		};
-		var show = function (id) {
-			for (var i = 0; i < ids.length; i++) document.getElementById( ids[i] ).style.visibility = (i == id) ? 'visible' : 'hidden' ;
-		};
-		return { hide:hide, show:show };
-	}();
-</script>
 
-<!-- html -->
-<div class="upstream_team" onmouseout="UA.team.hide(event, this)">
-	<img usemap="#team_map" src="http://upstreamacademy.com/images/UATeamAll.jpg"      id="Team"    alt="UA Team" style="visibility: visible;">
-	<img usemap="#team_map" src="http://upstreamacademy.com/images/UATeamDev2.jpg"     id="Dev"     alt="Dev Warren">
-	<img usemap="#team_map" src="http://upstreamacademy.com/images/UATeamJenny2.jpg"   id="Jenny"   alt="Jenny Fuller">
-	<img usemap="#team_map" src="http://upstreamacademy.com/images/UATeamRandl2.jpg"   id="Randl"   alt="Randl Ockey">
-	<img usemap="#team_map" src="http://upstreamacademy.com/images/UATeamKelsey2.jpg"  id="Kelsey"  alt="Kelsey Ferro">
-	<img usemap="#team_map" src="http://upstreamacademy.com/images/UATeamTim2.jpg"     id="Tim"     alt="Tim Bartz">
-	<img usemap="#team_map" src="http://upstreamacademy.com/images/UATeamGeorgia2.jpg" id="Georgia" alt="Georgia Cummings">
-	<img usemap="#team_map" src="http://upstreamacademy.com/images/UATeamSam2.jpg"     id="Sam"     alt="Sam Allred">
 
-	<map name="team_map">
-		<area shape="poly" href="mailto:devw@upstreamacademy.com"     alt="Email Dev"     coords="244,626,242,606,67,604,69,618,69,622,69,628">
-		<area shape="poly" href="mailto:jennyf@upstreamacademy.com"   alt="Email Jenny"   coords="258,670,256,650,81,648,83,662,83,666,83,672">
-		<area shape="poly" href="mailto:randlo@upstreamacademy.com"   alt="Email Randl"   coords="252,723,247,700,77,697,79,711,79,715,79,721">
-		<area shape="poly" href="mailto:kelseym@upstreamacademy.com"  alt="Email Kelsey"  coords="257,764,259,740,85,740,87,754,87,758,87,764">
-		<area shape="poly" href="mailto:timb@upstreamacademy.com"     alt="Email Tim"     coords="248,811,249,793,79,794,78,801,78,805,78,811">
-		<area shape="poly" href="mailto:georgiac@upstreamacademy.com" alt="Email Georgia" coords="254,856,256,832,82,832,84,846,84,850,84,856">
-		<area shape="poly" href="mailto:sama@upstreamacademy.com"     alt="Email Sam"     coords="253,908,255,884,81,884,83,898,83,902,83,908">
+
+<div class="container" id="overview"><!-- style -->
+	<style type="text/css">
+	.upstream_overview { position:relative; margin:0 auto; display:block; width:550px; height:550px; overflow: hidden; }
+	.upstream_overview img { border:0; position:absolute; visibility:hidden; width:550px; height:550px; }
+	</style>
+
+	<!-- JS -->
+	<script type="text/JavaScript">
+		var UA = UA || {};
+		UA.overview = function () {
+			var ids = ['Team','ELA','HPF','LS','Facilitation','MP','BP','HW','UAN'];
+			var hide = function(e, that) {
+				if ( !that.contains( e.toElement ) ) show(0);
+			};
+			var show = function (id) {
+				for (var i = 0; i < ids.length; i++) document.getElementById( ids[i] ).style.visibility = (i == id) ? 'visible' : 'hidden' ;
+			};
+			return { hide:hide, show:show };
+		}();
+	</script>
+
+	<!-- html -->
+	<div class="upstream_overview" onmouseout="UA.overview.hide(event, this)">
+		<img usemap="#overview_map" src="http://www.upstreamacademy.com/images/Marketingblank.png"        id="Team"          alt="UA Team"        style="visibility: visible;">
+		<img usemap="#overview_map" src="http://www.upstreamacademy.com/images/MarketingELA.png"          id="ELA"           alt="Emerging Leaders Academy">
+		<img usemap="#overview_map" src="http://www.upstreamacademy.com/images/MarketingHPF.png"          id="HPF"           alt="High Performance Firms">
+		<img usemap="#overview_map" src="http://www.upstreamacademy.com/images/MarketingLS.png"           id="LS"            alt="LeaderSkills Lessons">
+		<img usemap="#overview_map" src="http://www.upstreamacademy.com/images/MarketingFacilitation.png" id="Facilitation"  alt="Facilitation, Speaking and Coaching">
+		<img usemap="#overview_map" src="http://www.upstreamacademy.com/images/MarketingMP.png"           id="MP"            alt="Management Presentations"  >
+		<img usemap="#overview_map" src="http://www.upstreamacademy.com/images/MarketingBP.png"           id="BP"            alt="BestPractices Conference">
+		<img usemap="#overview_map" src="http://www.upstreamacademy.com/images/MarketingHW.png"           id="HW"            alt="HeadWaters Conference"  >
+		<img usemap="#overview_map" src="http://www.upstreamacademy.com/images/MarketingUAN.png"          id="UAN"           alt="Upstream Academy Network">
+
 		<!-- bodies -->
-		<area shape="poly" onmouseover="UA.team.show(1)" alt="Dev Warren"       coords="57,123,93,120,94,179,131,206,113,493,163,594,54,594,22,235">
-		<area shape="poly" onmouseover="UA.team.show(2)" alt="Jenny Fuller"     coords="93,176,138,91,170,95,177,115,192,152,201,169,206,192,204,241,226,281,229,337,213,381,200,405,194,438,198,463,197,484,220,525,206,556,160,528,184,569,158,574,121,490,127,360,133,272,131,200">
-		<area shape="poly" onmouseover="UA.team.show(3)" alt="Randl Ockey"      coords="259,100,259,138,268,179,251,188,252,198,237,212,225,229,224,270,242,330,253,374,257,410,263,455,260,480,267,495,251,521,229,524,209,508,199,438,238,331,220,254,206,216,210,151,217,109">
-		<area shape="poly" onmouseover="UA.team.show(4)" alt="Kelsey Ferro"     coords="272,181,276,133,306,129,320,140,323,182,333,201,343,228,340,264,334,320,325,379,324,427,321,483,335,520,296,526,261,535,277,490,264,388,252,329,236,267,235,245,236,233,237,224,244,214">
-		<area shape="poly" onmouseover="UA.team.show(5)" alt="Tim Bartz"        coords="332,113,324,65,350,38,384,54,395,74,394,94,403,113,411,122,393,186,372,230,372,262,395,277,390,319,399,393,409,421,402,454,398,480,393,499,363,500,341,493,329,449,343,299,345,267,352,182">
-		<area shape="poly" onmouseover="UA.team.show(6)" alt="Georgia Cummings" coords="403,555,451,565,472,551,476,530,477,472,475,296,471,196,458,144,448,109,414,105,407,165,381,220,378,255,402,273,404,327,419,399,419,473,395,536">
-		<area shape="poly" onmouseover="UA.team.show(7)" alt="Sam Allred"       coords="521,90,535,133,569,176,577,238,581,276,566,319,563,359,557,397,552,515,522,528,504,540,487,528,486,402,483,297,486,211,475,178,465,167,474,109,485,75">
-		<!-- names -->
-		<area shape="rect" onmouseover="UA.team.show(2)" coords="79,633,248,648">
-		<area shape="rect" onmouseover="UA.team.show(3)" coords="71,677,167,695">
-		<area shape="rect" onmouseover="UA.team.show(4)" coords="78,724,173,738">
-		<area shape="rect" onmouseover="UA.team.show(5)" coords="75,769,157,786">
-		<area shape="rect" onmouseover="UA.team.show(6)" coords="80,813,218,834">
-		<area shape="rect" onmouseover="UA.team.show(7)" coords="81,862,161,879">
-	</map>
+		<map name="overview_map">
+			<area onmouseover="UA.overview.show(1)" target="_blank" shape="poly" coords=" -2,392, 63,393, 64,540, -2,542" href="http://www.upstreamacademy.com/leaderskills.asp"             alt="Emerging Leaders Academy">
+			<area onmouseover="UA.overview.show(2)" target="_blank" shape="poly" coords=" 70,542,134,541,133,395, 68,394" href="http://www.upstreamacademy.com/hpf.asp"                      alt="High Performance Firms">
+			<area onmouseover="UA.overview.show(3)" target="_blank" shape="poly" coords="215,543,137,543,137,394,214,394" href="http://www.upstreamacademy.com/leaderskills.asp"             alt="LeaderSkills">
+			<area onmouseover="UA.overview.show(4)" target="_blank" shape="poly" coords="219,545,219,396,272,398,269,542" href="http://www.upstreamacademy.com/retreat_facilitation.asp"     alt="Facilitation and Coaching">
+			<area onmouseover="UA.overview.show(5)" target="_blank" shape="poly" coords="275,544,274,397,334,397,335,543" href="http://www.upstreamacademy.com/management_presentations.asp" alt="Management Presentations">
+			<area onmouseover="UA.overview.show(6)" target="_blank" shape="poly" coords="342,401,343,545,406,541,401,401" href="http://www.upstreamacademy.com/bestpractices.asp"            alt="BestPractices Conference">
+			<area onmouseover="UA.overview.show(7)" target="_blank" shape="poly" coords="414,547,414,400,478,401,479,543" href="http://www.upstreamacademy.com/headwaters.asp"               alt="Upstream Academy Network">
+			<area onmouseover="UA.overview.show(8)" target="_blank" shape="poly" coords="485,402,490,537,537,537,535,402" href="http://www.upstreamacademy.com/upstream_network.asp"         alt="HeadWaters">
+		</map>
+  </div>
 </div>
