@@ -121,7 +121,9 @@
 								<span data-ng-bind="user.city">Two Dot</span>,&nbsp;<span data-ng-bind="user.state">MT</span>
 							</span>
 						</td>
-						<td data-ng-bind="user.bio" class="hidden-xs">was an amazing ...</td>
+						<td class="hidden-xs">
+							<span ng-show="user.bio">{{user.name}} {{user.bio}}</span>
+						</td>
 					</tr>
 				</tbody>
 			</table>

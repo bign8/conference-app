@@ -28,11 +28,6 @@ controller('quiz', ['$scope', 'API', 'UserModal', function ($scope, API, UserMod
 
 	// Add usernames to bios!
 	User.add_cb(function (res) {
-		if (!res.hasOwnProperty('length')) return res; // DO NOT OPERATE ON SINGLE ELEMENT
-		angular.forEach(res, function (user) {
-			if (user.bio && user.bio.indexOf(user.name) !== 0)
-				user.bio = user.name + ' ' + user.bio ;
-		});
 		$scope.shuffle();
 		return res;
 	});
