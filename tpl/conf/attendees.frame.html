@@ -115,7 +115,7 @@
 					</tr>
 				</thead>
 				<tbody>
-					<tr data-ng-repeat="item in (filtered_data = (data | filter:search_str)) | orderBy:field:sort_order | pagination:page:limit" 
+					<tr data-ng-repeat="item in (filtered_data = (data | filter:{userID:'!!'} | filter:search_str)) | orderBy:field:sort_order | pagination:page:limit" 
 						style="display:none" data-ng-style="{display:'table-row'}">
 						<td>
 							<div class="center-cropped pull-left img-rounded">
@@ -136,6 +136,7 @@
 							</span>
 						</td>
 						<td data-ng-bind="item.bio" class="hidden-xs">was an amazing ...</td>
+						<!-- <td>{{item|json}}</td> -->
 					</tr>
 					<?php foreach ($event['attendees'] as $attendee): ?>
 						<tr class="data" data-ng-style="{display:'none'}">
