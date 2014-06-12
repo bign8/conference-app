@@ -19,7 +19,9 @@ function render_row($item, $has_date = true) {
 
 	if ($has_date) $html .= date("g:i a", strtotime($item['start'])) . ' - ' . date("g:i a", strtotime($item['end'])) . "</td>\n";
 	$html .= '<td>' . ( count( $item['speakers'] ) > 0 ? '<b>' . $item['title'] . '</b>' : $item['title'] );
-	$html .= "<button ng-click=\"show_note({$item['sessionID']}, '" . str_replace("'", "\'", $item['title']) . "')\" class=\"btn btn-default btn-xs pull-right\"><i class=\"glyphicon glyphicon-comment\"></i></button></td>\n";
+	$html .= "<button ng-click=\"show_note({$item['sessionID']}, '" . str_replace("'", "\'", $item['title']) . "')\" class=\"btn btn-default btn-xs pull-right\"><i class=\"glyphicon glyphicon-comment\"></i></button>\n<ul>\n";
+	foreach ($item['files'] as $file) $html .= "<li><a href=\"http://upstreamacademy.com/apps/{$file['file']}\">{$file['name']}</a></li>";
+	$html .= "</ul></td>\n";
 	$html .= '<td>' . ( ($item['desc']=='') ? '-' : $item['desc'] ) . "</td>\n";
 	$html .= '<td>';
 

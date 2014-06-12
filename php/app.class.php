@@ -72,11 +72,14 @@ class App {
 		// Agenda
 		$sth1 = $this->db->prepare("SELECT * FROM session s WHERE conferenceID=? ORDER BY \"date\", start, s.title;");
 		$sth2 = $this->db->prepare("SELECT u.* FROM speaker s LEFT JOIN user u ON s.userID=u.userID WHERE sessionID=? ORDER BY name;");
+		$sth3 = $this->db->prepare("SELECT * FROM file WHERE sessionID=? ORDER BY name;");
 		$sth1->execute( $conf['conferenceID'] );
 		$conf['agenda'] = array();
 		while (false !== ($row = $sth1->fetch())) {
 			$sth2->execute( $row['sessionID'] );
 			$row['speakers'] = $sth2->fetchAll();
+			$sth3->execute( $row['sessionID'] );
+			$row['files'] = $sth3->fetchAll();
 			array_push($conf['agenda'], $row);
 		}
 
