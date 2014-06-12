@@ -1,10 +1,10 @@
 <div class="jumbotron" style="margin-top:-140px">
 	<img class="pull-right hidden-xs img-rounded" src="./data/ua-logo.png" alt="Upstream Academy" style="width:150px">
-	<h1>Upstream Academy Events</h1>
+	<h3>Upstream Academy Events</h3>
 	<?php if (isset($_SESSION['user'])): ?>
-		<p>Welcome! Check out your <a href="#conf">Conferences</a>.</p>
+		<p><small>Welcome! Check out your <a href="#conf">Conferences</a>.</small></p>
 	<?php else: ?>
-		<p>Please <a href="#login">login or create an account</a>.</p>
+		<p><small>Please <a href="#login">login or create an account</a>.</small></p>
 	<?php endif; ?>
 	<p><a class="btn btn-primary" href="#about">Learn more</a></p>
 </div>
