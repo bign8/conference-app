@@ -68,7 +68,7 @@ class PROCESSOR {
 
 
 		// process rows
-		while (($data = fgetcsv($this->handle, 1000, ",")) !== FALSE) {
+		while (($data = fgetcsv($this->handle, 10000, ",")) !== FALSE) {
 			$data = array_map('trim', $data);
 
 			// Insert user
@@ -78,11 +78,14 @@ class PROCESSOR {
 			echo '</pre><br/><br/>';
 
 			// Clean data for importing
-			$map = function () use ($data) {
+			$titles = $this->titles;
+			$map = function () use ($data, $titles) {
 				$arr = func_get_args();
-				$cb = function ($value) use ($data) {
-					$ele = $data[ $this->titles[$value] ];
-					return iconv(mb_detect_encoding($ele, mb_detect_order(), true), "UTF-8", $ele);
+				$cb = function ($value) use ($data, $titles) {
+					$ele = $data[ $titles[$value] ];
+					$encoding = mb_detect_encoding($ele, mb_detect_order(), true);
+					if (!isset($encoding) || $encoding == '') $encoding = 'cp1252';
+					return iconv($encoding, "UTF-8", $ele);
 				};
 				return array_map($cb, $arr);
 			};
