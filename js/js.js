@@ -72,41 +72,42 @@ ELA_MAP.prototype = {
  * ------------------------------------------------------------------- */
 
 // jQuery soft scroll
-jQuery.fn.scroll_top = function (cb) {
-	if ( this.offset() ) jQuery('html, body').animate({
-		scrollTop: Math.max(parseInt( this.offset().top, 10 ), 0)
-	}, 500, cb);
-};
-jQuery(document).ready(function() {
+if (window.hasOwnProperty('jQuery')) {
+	jQuery.fn.scroll_top = function (cb) {
+		if ( this.offset() ) jQuery('html, body').animate({
+			scrollTop: Math.max(parseInt( this.offset().top, 10 ), 0)
+		}, 500, cb);
+	};
+	jQuery(document).ready(function() {
 
-	// soft scroll links
-	jQuery('a').on('click', function (e){
-		e.target = $(e.target).closest('a')[0];
-		if ( e.target.hash ) {
-			jQuery( e.target.hash ).scroll_top(function() {
-				if (e.target.hash == '#login') jQuery('#inputUser').focus();
-				document.location.hash = e.target.hash;
-			});
-			e.preventDefault();
-		}
-	});
+		// soft scroll links
+		jQuery('a').on('click', function (e){
+			e.target = $(e.target).closest('a')[0];
+			if ( e.target.hash ) {
+				jQuery( e.target.hash ).scroll_top(function() {
+					if (e.target.hash == '#login') jQuery('#inputUser').focus();
+					document.location.hash = e.target.hash;
+				});
+				e.preventDefault();
+			}
+		});
 
-	// Profile image
-	jQuery('#user_image').change(function() {
-		if (this.files && this.files[0]) {
-			var reader = new FileReader();
-			reader.onload = function (e) {
-				jQuery('#actual_user_image').attr('src', e.target.result);
-			};
-			reader.readAsDataURL(this.files[0]);
-		}
+		// Profile image
+		jQuery('#user_image').change(function() {
+			if (this.files && this.files[0]) {
+				var reader = new FileReader();
+				reader.onload = function (e) {
+					jQuery('#actual_user_image').attr('src', e.target.result);
+				};
+				reader.readAsDataURL(this.files[0]);
+			}
+		});
+		jQuery('#profile_reset').click(function () {
+			document.profile.reset();
+			$('#actual_user_image').attr('src', 'data/usr/' + $('#orig_image').val());
+		});
 	});
-	jQuery('#profile_reset').click(function () {
-		document.profile.reset();
-		$('#actual_user_image').attr('src', 'data/usr/' + $('#orig_image').val());
-	});
-});
-
+}
 
 /* ------------------------------------------------------------------- *|
  * angular page accents
