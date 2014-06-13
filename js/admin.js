@@ -1,7 +1,7 @@
 angular.module('event-admin', ['helpers', 'ui.bootstrap']).
 
-controller('conf', ['$scope', 'API', function ($scope, API) {
-	var Conference = new API('conference');
+controller('conf', ['$scope', 'ArrestDB', function ($scope, ArrestDB) {
+	var Conference = new ArrestDB('conference');
 	$scope.confs = Conference.list;
 	$scope.set_conf = Conference.set.bind( Conference );
 	$scope.rem_conf = function (conf) {
@@ -21,10 +21,10 @@ controller('conf', ['$scope', 'API', function ($scope, API) {
 	};
 }]).
 
-controller('quiz', ['$scope', 'API', 'UserModal', function ($scope, API, UserModal) {
-	var Conference = new API('conference');
-	var Attendee = new API('attendee');
-	var User = new API('user');
+controller('quiz', ['$scope', 'ArrestDB', 'UserModal', function ($scope, ArrestDB, UserModal) {
+	var Conference = new ArrestDB('conference');
+	var Attendee = new ArrestDB('attendee');
+	var User = new ArrestDB('user');
 
 	// Add usernames to bios!
 	User.add_cb(function (res) {
@@ -47,7 +47,7 @@ controller('quiz', ['$scope', 'API', 'UserModal', function ($scope, API, UserMod
 	$scope.confs = Conference.list;
 	$scope.users = User.list;
 
-	API.left_join_many( User, Attendee, 'conferenceID' ); // attending 2 conferences
+	ArrestDB.left_join_many( User, Attendee, 'conferenceID' ); // attending 2 conferences
 
 	// Controls
 	$scope.view = 'tile';
@@ -98,7 +98,7 @@ filter('hasImg', function () {
 	};
 }).
 
-controller('upld', ['$scope', 'API', function ($scope, API) {
-	var Conference = new API('conference');
+controller('upld', ['$scope', 'ArrestDB', function ($scope, ArrestDB) {
+	var Conference = new ArrestDB('conference');
 	$scope.confs = Conference.list;
 }]);

@@ -2,10 +2,10 @@ angular.module('print', [
 	'helpers',
 ]).
 
-controller('print', ['$scope', 'API', '$location', function ($scope, API, $location) {
-	var Conference = new API('conference');
-	var Attendee = new API('attendee');
-	var User = new API('user');
+controller('print', ['$scope', 'ArrestDB', '$location', function ($scope, ArrestDB, $location) {
+	var Conference = new ArrestDB('conference');
+	var Attendee = new ArrestDB('attendee');
+	var User = new ArrestDB('user');
 
 	// Format start_stamp for grouping
 	Conference.add_cb(function (res) {
@@ -22,7 +22,7 @@ controller('print', ['$scope', 'API', '$location', function ($scope, API, $locat
 	$scope.confs = Conference.list;
 	$scope.users = User.list;
 
-	API.left_join_many( User, Attendee, 'conferenceID' ); // attending 2 conferences
+	ArrestDB.left_join_many( User, Attendee, 'conferenceID' ); // attending 2 conferences
 
 	// Controls
 	$scope.view = 'list';

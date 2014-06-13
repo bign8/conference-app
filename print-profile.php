@@ -114,6 +114,7 @@
 		
 		<script src="//cdnjs.cloudflare.com/ajax/libs/angular.js/1.2.14/angular.min.js"></script>
 		<script src="js/js.js"></script>
+		<script src="/db2/ArrestDB.ng.js"></script>
 		<script src="js/print.js"></script>
 	</body>
 </html>

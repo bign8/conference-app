@@ -103,13 +103,13 @@ angular.module('event-edit', ['event']).
 
 controller('event-edit-head', angular.noop).
 
-controller('event-edit-attendee', ['$scope', 'UserModal', 'API', '$q', function ($scope, UserModal, API, $q) {
+controller('event-edit-attendee', ['$scope', 'UserModal', 'ArrestDB', '$q', function ($scope, UserModal, ArrestDB, $q) {
 
 	/* --- start initialization --- */
 	var conferenceID = document.getElementById('conferenceID').value ;
-	var User = new API('user');
-	var Attendee = new API('attendee', null, null, '/conferenceID/' + conferenceID);
-	$scope.users = API.left_join(User, Attendee);
+	var User = new ArrestDB('user');
+	var Attendee = new ArrestDB('attendee', null, null, '/conferenceID/' + conferenceID);
+	$scope.users = ArrestDB.left_join(User, Attendee);
 	/* --- end initialization --- */
 
 	/* --- start navigation --- */
@@ -159,11 +159,11 @@ controller('event-edit-attendee', ['$scope', 'UserModal', 'API', '$q', function 
 }]).
 
 //  data-ng-non-bindable
-controller('event-edit-agenda', ['$scope', 'API', '$sce', '$modal', function ($scope, API, $sce, $modal) {
+controller('event-edit-agenda', ['$scope', 'ArrestDB', '$sce', '$modal', function ($scope, ArrestDB, $sce, $modal) {
 	var conferenceID = document.getElementById('conferenceID').value ;
 
-	var Session = new API('session', undefined, undefined, '/conferenceID/' + conferenceID);
-	var UserMap = {}, User = new API('user', undefined, function() {
+	var Session = new ArrestDB('session', undefined, undefined, '/conferenceID/' + conferenceID);
+	var UserMap = {}, User = new ArrestDB('user', undefined, function() {
 		for (var i = 0; i < User.list.length; i++) UserMap[User.list[i].userID] = User.list[i];
 	});
 
@@ -208,13 +208,13 @@ controller('event-edit-agenda', ['$scope', 'API', '$sce', '$modal', function ($s
 	$scope.rem = Session.rem.bind( Session );
 }]).
 
-controller('event-edit-agenda-modal', ['$scope', '$modalInstance', 'session', 'user', 'API', 'UserModal', function ($scope, $modalInstance, session, user, API, UserModal) {
+controller('event-edit-agenda-modal', ['$scope', '$modalInstance', 'session', 'user', 'ArrestDB', 'UserModal', function ($scope, $modalInstance, session, user, ArrestDB, UserModal) {
 	$scope.users = user;
 	$scope.session = session;
 
 	// Init speaker and file stuff;
-	var File = new API('file', undefined, undefined, '/sessionID/' + session.sessionID);
-	var Speaker = new API('speaker', undefined, function () {
+	var File = new ArrestDB('file', undefined, undefined, '/sessionID/' + session.sessionID);
+	var Speaker = new ArrestDB('speaker', undefined, function () {
 		for (var i = 0; i < Speaker.list.length; i++) angular.extend(Speaker.list[i], user[Speaker.list[i].userID]);
 	}, '/sessionID/' + session.sessionID);
 	$scope.files = File.list;
@@ -253,11 +253,11 @@ controller('event-edit-agenda-modal', ['$scope', '$modalInstance', 'session', 'u
 	$scope.cancel = function () { $modalInstance.dismiss('cancel'); };
 }]).
 
-controller('event-edit-sponsor', ['$scope', '$modal', 'API', '$q', function ($scope, $modal, API, $q) {
+controller('event-edit-sponsor', ['$scope', '$modal', 'ArrestDB', '$q', function ($scope, $modal, ArrestDB, $q) {
 	var conferenceID = document.getElementById('conferenceID').value ;
-	var Company = new API('company');
-	var Sponsor = new API('sponsor', null, null, '/conferenceID/' + conferenceID);
-	$scope.companies = API.left_join( Company, Sponsor );
+	var Company = new ArrestDB('company');
+	var Sponsor = new ArrestDB('sponsor', null, null, '/conferenceID/' + conferenceID);
+	$scope.companies = ArrestDB.left_join( Company, Sponsor );
 
 	// Sponsor Editing
 	$scope.new_sponsor = null;
@@ -300,13 +300,13 @@ controller('event-edit-sponsor', ['$scope', '$modal', 'API', '$q', function ($sc
 	};
 }]).
 
-controller('event-edit-sponsor-modal', ['$scope','$modalInstance','company','API','UserModal',function ($scope,$modalInstance,company,API,UserModal) {
+controller('event-edit-sponsor-modal', ['$scope','$modalInstance','company','ArrestDB','UserModal',function ($scope,$modalInstance,company,ArrestDB,UserModal) {
 	
 	// init data
 	$scope.company = company;
-	var Rep  = new API('rep' , null, null, '/sponsorID/' + company.sponsorID);
-	var User = new API('user');
-	$scope.users = API.left_join(User, Rep);
+	var Rep  = new ArrestDB('rep' , null, null, '/sponsorID/' + company.sponsorID);
+	var User = new ArrestDB('user');
+	$scope.users = ArrestDB.left_join(User, Rep);
 
 	// Reps editing
 	$scope.edit = function (user) {
