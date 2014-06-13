@@ -32,7 +32,7 @@
 					<div class="input-group">
 						<label class="input-group-addon" for="myEvent">Event: </label>
 						<select class="form-control" ng-model="myEvent" id="myEvent" 
-							ng-options="c.conferenceID as c.title group by c.start_year for c in confs | orderBy:['-start_year', 'title']"
+							ng-options="c as c.title group by c.start_year for c in confs | orderBy:['-start_year', 'title']"
 						>
 							<option value="">&mdash; all events &mdash;</option>
 						</select>
@@ -46,8 +46,13 @@
 
 			<div data-ng-switch="view">
 				<div data-ng-switch-when="tile">
+
+					<div class="page-header">
+						<h1>{{myEvent.title}} <small>{{myEvent.start_year}}</small></h1>
+					</div>
+
 					<div class="row">
-						<span class="col-xs-3" data-ng-repeat="user in (filtered_users = (users | isAttending:myEvent | hasImg | filter:search_str)) | orderBy:['name'] ">
+						<span class="col-xs-3" data-ng-repeat="user in (filtered_users = (users | isAttending:myEvent.conferenceID | hasImg | filter:search_str)) | orderBy:['name'] ">
 							<div class="thumbnail" data-ng-click="show_me(user)">
 								<img data-ng-src="http://upstreamacademy.com/apps/{{user.photo || '000-blank.jpg'}}" class="img-rounded" height="100" 
 									data-ng-attr-title="{{user.name}}"
@@ -67,11 +72,14 @@
 							<tr>
 								<th>Img</th>
 								<th>Contact</th>
-								<th>Bio</th>
+								<th>
+									<span class="pull-right">{{myEvent.title}}</span>
+									Bio
+								</th>
 							</tr>
 						</thead>
 						<tbody>
-							<tr data-ng-repeat="user in (filtered_users = (users | isAttending:myEvent | filter:search_str)) | orderBy:['name'] " ng-dblclick="edit_user(user)" >
+							<tr data-ng-repeat="user in (filtered_users = (users | isAttending:myEvent.conferenceID | filter:search_str)) | orderBy:['name'] " ng-dblclick="edit_user(user)" >
 								<td>
 									<div class="center-cropped pull-left img-rounded">
 										<img data-ng-src="http://upstreamacademy.com/apps/{{user.photo || '000-blank.jpg'}}" class="img-rounded" height="100" 
