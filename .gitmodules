@@ -1,3 +1,6 @@
 [submodule "lib/add-to-homescreen"]
 	path = lib/add-to-homescreen
 	url = https://github.com/cubiq/add-to-homescreen
+[submodule "db2"]
+	path = db2
+	url = https://github.com/bign8/ArrestDB.git
