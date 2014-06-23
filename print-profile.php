@@ -15,7 +15,7 @@
 		</style>
 	</head>
 	<body>
-		<div class="container">
+		<div class="container" style="padding: 0 30px 0 30px">
 			<div class="form-group row hidden-print" style="margin-top:20px">
 				<div class="col-xs-2 hidden-xs">
 					<div class="btn-group">
@@ -80,7 +80,7 @@
 					<table class="table" data-ng-cloak>
 						<thead>
 							<tr>
-								<th>Img</th>
+								<th style="width:145px">Picture</th>
 								<th>Contact</th>
 								<th>
 									<span class="pull-right">{{myEvent.title}}</span>
@@ -91,8 +91,9 @@
 						<tbody>
 							<tr data-ng-repeat="user in (filtered_users = (users | isAttending:myEvent.conferenceID | filter:search_str)) | orderBy:['name'] " ng-dblclick="edit_user(user)" >
 								<td>
-									<div class="center-cropped pull-left img-rounded">
-										<img data-ng-src="http://upstreamacademy.com/apps/{{user.photo || '000-blank.jpg'}}" class="img-rounded" height="100" 
+									<div class="pull-left img-rounded">
+										<img data-ng-src="http://upstreamacademy.com/apps/{{user.photo || '000-blank.jpg'}}" class="img-rounded"
+										height="200" width="145" style="height:200px;width:145px"
 										data-ng-attr-title="{{user.name}}"
 										data-ng-attr-alt="{{user.name}}" alt="John Doe" />
 									</div>
