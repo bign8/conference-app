@@ -25,6 +25,7 @@ controller('print', ['$scope', 'ArrestDB', '$location', function ($scope, Arrest
 	ArrestDB.left_join_many( User, Attendee, 'conferenceID' ); // attending 2 conferences
 
 	// Controls
+	$scope.show_names = true;
 	$scope.view = 'list';
 	$scope.$watch('myEvent', function (val) {
 		if (!val) $scope.myEvent = undefined;

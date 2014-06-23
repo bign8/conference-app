@@ -28,7 +28,16 @@
 					</div>
 				</div>
 
-				<div class="col-xs-5 col-xs-offset-2">
+				<div class="col-xs-2" ng-show="view=='tile'">
+					<div class="input-group">
+						<span class="input-group-addon">
+							<input type="checkbox" ng-model="show_names">
+						</span>
+						<input class="form-control" type="text" placeholder="Include Names" disabled>
+					</div>
+				</div>
+
+				<div class="col-xs-5 col-xs-offset-2" ng-class="{'col-xs-offset-2': view=='list'}">
 					<div class="input-group">
 						<label class="input-group-addon" for="myEvent">Event: </label>
 						<select class="form-control" ng-model="myEvent" id="myEvent" 
@@ -57,6 +66,7 @@
 								<img data-ng-src="http://upstreamacademy.com/apps/{{user.photo || '000-blank.jpg'}}" class="img-rounded" height="100" 
 									data-ng-attr-title="{{user.name}}"
 									data-ng-attr-alt="{{user.name}}" alt="John Doe"/>
+								<div class="caption" ng-show="show_names" style="text-align:center">{{user.name}}</div>
 							</div>
 						</span>
 					</div>
