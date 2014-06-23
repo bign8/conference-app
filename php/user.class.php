@@ -144,6 +144,9 @@ class User {
 		if (!$this->reset_valid($hash)) throw new Exception();
 		return $this->db->prepare("UPDATE user SET pass=?,resetHash=NULL,resetExpire=NULL WHERE resetHash=?;")->execute( $this->create_hash($pass), $hash ); // TODO: auto login
 	}
+	public function reset_pass_direct( $userID, $pass ) {
+		return $this->db->prepare("UPDATE user SET pass=?,resetHash=NULL,resetExpire=NULL WHERE userID=?;")->execute( $this->create_hash($pass), $userID );
+	}
 
 	// https://crackstation.net/hashing-security.htm#phpsourcecode
 	public function create_hash($password) {

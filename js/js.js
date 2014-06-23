@@ -309,13 +309,20 @@ directive('editFocus', ['$timeout', function ($timeout) {
 	};
 }]).
 
-controller('event-user-modal', ['$scope', '$modalInstance', 'user', 'is_admin', 'User', function ($scope, $modalInstance, user, is_admin, User) {
+controller('event-user-modal', ['$scope', '$modalInstance', 'user', 'is_admin', 'User', 'ArrestDB_base', '$http', function ($scope, $modalInstance, user, is_admin, User, ArrestDB_base, $http) {
 	$scope.is_admin = is_admin;
 	$scope.user = user;
 	$scope.ok = function () { $modalInstance.close( $scope.user ); };
 	$scope.cancel = $modalInstance.dismiss.bind(undefined, 'cancel');
 	$scope.rem = function (user) {
 		User.rem( user ).then( $modalInstance.dismiss );
+	};
+	$scope.pass = function () {
+		$http.post(ArrestDB_base + 'reset/' + $scope.user.userID, {
+			pass: $scope.user.new_pass,
+		}).then(function () {
+			$scope.user.new_pass = undefined;
+		});
 	};
 }]).
 

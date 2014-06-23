@@ -73,7 +73,14 @@
 		<label for="user_bio">Bio</label>
 		<textarea id="user_bio" ng-model="user.bio" class="form-control text-auto-scale" ></textarea>
 	</div>
+	
 
+	<div class="input-group">
+		<input type="password" class="form-control" placeholder="New Password" ng-model="user.new_pass">
+		<span class="input-group-btn">
+			<button class="btn btn-warning" ng-click="pass()" ng-disabled="!user.new_pass">Reset Password</button>
+		</span>
+	</div>
 	<!-- <pre>{{ user | json }}</pre> -->
 </div>
 <div class="modal-footer">

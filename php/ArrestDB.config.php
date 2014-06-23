@@ -6,7 +6,7 @@ if (session_id() == '') session_start();
 $dsn = 'sqlite:' . implode(DIRECTORY_SEPARATOR, array(__DIR__, '..', 'php', 'db.db'));
 
 class ArrestDB_Custom {
-	public static function RUN() {
+	public static function GET_DELETE() {
 		ArrestDB::Serve('GET', '/(atten)/(#num)', function ($table, $id) {
 			$querys = array( // take conferenceID as arg; return userID, speakerID, repID
 				'SELECT userID, NULL as speakerID, NULL as repID FROM attendee WHERE conferenceID=?',
@@ -26,6 +26,20 @@ class ArrestDB_Custom {
 				$result = ArrestDB::$NO_CONTENT;
 			}
 			return ArrestDB::Reply($result);
+		});
+	}
+	public static function PUT_POST() {
+		ArrestDB::Serve('POST', '/(reset)/(#num)', function($table, $userID) {
+			include_once('user.class.php');
+			$user = new User();
+			$result = $user->reset_pass_direct( $userID, $_POST['pass'] );
+
+			if ($result === false) {
+				$response = ArrestDB::$CONFLICT;
+			} else {
+				$response = ArrestDB::$OK;
+			}
+			return ArrestDB::Reply( ArrestDB::$OK );
 		});
 	}
 }
@@ -65,6 +79,12 @@ class ArrestDB_Security {
 			'2' => array(
 				'actions' => array('GET', 'PUT', 'POST', 'DELETE'),
 				'fields'  => array('fileID', 'name', 'file', 'sessionID'),
+			),
+		),
+		'reset' => array(
+			'2' => array(
+				'actions' => array('POST'),
+				'fields'  => array('pass'),
 			),
 		),
 		'session' => array(
