@@ -107,8 +107,8 @@
 				<tbody>
 					<tr data-ng-repeat="user in (filtered_users = (users | isAttending:myEvent | filter:search_str)) | orderBy:['last', 'first'] | pagination:page:limit" ng-dblclick="edit_user(user)" >
 						<td>
-							<div class="center-cropped pull-left img-rounded">
-								<img data-ng-src="http://upstreamacademy.com/apps/{{user.photo || '000-blank.jpg'}}" class="img-rounded" height="100" 
+							<div class="pull-left img-rounded" style="margin-right:5px">
+								<img data-ng-src="http://upstreamacademy.com/apps/{{user.photo || '000-blank.jpg'}}" class="img-rounded" height="200" 
 								data-ng-attr-title="{{user.name}}"
 								data-ng-attr-alt="{{user.name}}" alt="John Doe" />
 							</div>

@@ -62,7 +62,7 @@ controller('quiz', ['$scope', 'ArrestDB', 'UserModal', function ($scope, ArrestD
 	});
 
 	// Pagination
-	$scope.limits = [8,16,32,64,128];
+	$scope.limits = [4,8,16,32,64,128];
 	$scope.limit = $scope.limits[0];
 	$scope.page = 1;
 
