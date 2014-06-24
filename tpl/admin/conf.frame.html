@@ -19,7 +19,7 @@
 					<th>Title</th>
 					<th>Theme</th>
 					<th>Slug</th>
-					<th>Edit</th>
+					<th style="width:80px">Edit</th>
 				</tr>
 			</thead>
 			<tbody>
@@ -33,7 +33,15 @@
 							<a ng-href="./{{conf.slug}}?edit" class="btn btn-default btn-xs" title="Edit Full Conference">
 								<i class="glyphicon glyphicon-edit"></i>
 							</a>
-							<button type="button" class="btn btn-default btn-xs" ng-model="conf.display_pictures" btn-checkbox btn-checkbox-true="'true'" btn-checkbox-false="'false'" title="Display profile images on attendee visable list of event participants?" ng-change="set_conf(conf)">
+							<button type="button"
+								class="btn btn-default btn-xs dramatic" 
+								ng-model="conf.display_pictures"
+								btn-checkbox
+								btn-checkbox-true="'true'"
+								btn-checkbox-false="'false'" 
+								title="Display profile images on attendee visable list of event participants?"
+								ng-change="set_conf(conf)"
+							>
 								<i class="glyphicon glyphicon-user"></i>
 							</button>
 						</div>
