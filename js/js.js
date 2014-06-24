@@ -81,7 +81,7 @@ if (window.hasOwnProperty('jQuery')) {
 	jQuery(document).ready(function() {
 
 		// soft scroll links
-		jQuery('a').on('click', function (e){
+		jQuery('a:not(.no-scroll)').on('click', function (e){
 			e.target = $(e.target).closest('a')[0];
 			if ( e.target.hash ) {
 				jQuery( e.target.hash ).scroll_top(function() {
