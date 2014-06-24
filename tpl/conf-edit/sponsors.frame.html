@@ -37,10 +37,10 @@
 					{{company.logo}}
 					<div class="pull-right">
 						<small>#{{company.priority}}</small>
-						<button type="button" class="btn btn-default btn-xs" data-ng-click="move(company, -1)"><i class="glyphicon glyphicon-chevron-up"></i></button>
-						<button type="button" class="btn btn-default btn-xs" data-ng-click="move(company, +1)"><i class="glyphicon glyphicon-chevron-down"></i></button>
-						<button type="button" class="btn btn-default btn-xs" data-ng-click="edit(company)"><i class="glyphicon glyphicon-edit"></i></button>
-						<button type="button" class="btn btn-default btn-xs" data-ng-click="rem(company)"><i class="glyphicon glyphicon-remove"></i></button>
+						<button type="button" class="btn btn-default btn-xs" data-ng-click="move(company, -1)" title="Move Up"><i class="glyphicon glyphicon-chevron-up"></i></button>
+						<button type="button" class="btn btn-default btn-xs" data-ng-click="move(company, +1)" title="Move Down"><i class="glyphicon glyphicon-chevron-down"></i></button>
+						<button type="button" class="btn btn-default btn-xs" data-ng-click="edit(company)" title="Edit Sponsor"><i class="glyphicon glyphicon-pencil"></i></button>
+						<button type="button" class="btn btn-default btn-xs" data-ng-click="rem(company)" title="Remove Sponsor"><i class="glyphicon glyphicon-remove"></i></button>
 					</div>
 				</td>
 			</tr>
