@@ -6,3 +6,108 @@
 <!-- <p class="lead">
 	Lorem ipsum dolor sit amet, consectetur adipiscing elit. Ut ac eleifend nisl. Mauris vitae tincidunt turpis, quis facilisis orci. Maecenas elementum sapien vitae libero semper commodo. Quisque tincidunt, dui vitae laoreet sollicitudin, sem tellus interdum odio, eu ornare tellus tellus ac tortor. Nulla laoreet urna ligula, ut ultrices dui ultricies et. Proin in viverra tellus. Duis vel sem quis neque molestie vehicula id eu mauris. Mauris eleifend ut est at luctus. Sed nec ligula a lectus ultricies bibendum viverra vitae ante. Suspendisse fringilla turpis nisi. Lorem ipsum dolor sit amet, consectetur adipiscing elit. Donec fermentum nisl urna, non dictum dolor facilisis eu.
 </p> -->
+
+<div ng-controller="tags">
+	<div class="col-md-6">
+		
+		<div class="input-group">
+			<label for="tag-search" class="input-group-addon">Search</label>
+			<input type="text" class="form-control" id="tag-search" placeholder="Search" ng-model="search">
+			<span class="input-group-btn">
+				<button class="btn btn-danger">
+					<i class="glyphicon glyphicon-remove"></i>
+				</button>
+			</span>
+		</div>
+
+		<table class="table table-hover">
+			<thead>
+				<tr>
+					<th>Tag</th>
+				</tr>
+			</thead>
+			<tbody>
+				<tr ng-repeat="tag in (filtered = (tags | filter:search)) | orderBy:['order','title'] | pagination:page:limit" ng-click="set_mod(tag)">
+					<td>
+						<div class="btn-group pull-right">
+							<button class="btn btn-default btn-xs" style="min-width:24px" disabled>{{tag.order || '-'}}</button>
+							<button type="button" class="btn btn-default btn-xs" ng-click="move(tag, -1, $event)" title="Move Up">
+								<i class="glyphicon glyphicon-chevron-up"></i>
+							</button>
+							<button type="button" class="btn btn-default btn-xs" ng-click="move(tag, +1, $event)" title="Move Down">
+								<i class="glyphicon glyphicon-chevron-down"></i>
+							</button>
+							<button type="button" class="btn btn-default btn-xs" ng-click="rem(tag, $event)" title="Delete">
+								<i class="glyphicon glyphicon-trash"></i>
+							</button>
+						</div>
+						<img ng-src="http://upstreamacademy.com/apps/{{tag.img}}" title="{{tag.title}}" alt="{{tag.title}}" class="pull-left" style="margin-right:10px">
+						<span>{{tag.title}}</span><br />
+						<small>{{tag.slug}}</small>
+					</td>
+				</tr>
+			</tbody>
+		</table>
+
+		<div class="text-center clearfix" data-ng-hide="num_pages === 1"><!-- pager -->
+			<span 
+				data-pagination
+				data-total-items="filtered.length"
+				data-items-per-page="limit"
+				data-ng-model="page"
+				data-max-size="5"
+				data-boundary-links="true"
+				data-previous-text="&lsaquo;"
+				data-next-text="&rsaquo;"
+				data-first-text="&laquo;"
+				data-last-text="&raquo;"
+				data-num-pages="num_pages">
+			</span>
+		</div>
+	</div>
+	<div class="col-md-6">
+		<form class="form-horizontal" role="form" ng-submit="save()" name="modify">
+			<legend class="text-center">Modify or Create tag</legend>
+			<div class="form-group">
+				<label for="conf_title" class="col-sm-2 control-label">Title</label>
+				<div class="col-sm-10">
+					<input type="text" class="form-control" id="conf_title" placeholder="Title" ng-model="mod.title" required>
+					<p class="help-block">Shows when mouse hovers over image</p>
+				</div>
+			</div>
+			<div class="form-group">
+				<label for="conf_theme" class="col-sm-2 control-label">Image</label>
+				<div class="col-sm-10">
+					<input type="text" class="form-control" id="conf_theme" placeholder="Image" ng-model="mod.img" required>
+					<p class="help-block">
+						Size: 40 x 40 px<br/>
+						Located in <code>http://upstreamacademy.com/apps/...</code>
+					</p>
+				</div>
+			</div>
+			<div class="form-group">
+				<label for="conf_slug" class="col-sm-2 control-label">Slug</label>
+				<div class="col-sm-10">
+					<input type="text" class="form-control" id="conf_slug" placeholder="Slug" ng-model="mod.slug" required>
+					<p class="help-block">Should be <b>UNIQUE!</b> and contain no commas</p>
+				</div>
+			</div>
+			<div class="form-group">
+				<label for="conf_theme" class="col-sm-2 control-label">Order</label>
+				<div class="col-sm-10">
+					<input type="text" class="form-control" id="conf_theme" placeholder="Order" ng-model="mod.order" required>
+					<p class="help-block">The lower the number the more likely it will be shown</p>
+				</div>
+			</div>
+			<div class="form-group">
+				<div class="col-sm-offset-2 col-sm-10">
+					<button type="button" class="btn btn-success pull-left" ng-click="save(mod)" ng-disabled="same(mod, old) || modify.$invalid">Save</button>
+					<button type="button" class="btn btn-danger pull-right" ng-click="reset()" ng-disabled="same(mod, old)">Reset</button>
+					<div class="text-center">
+						<button type="button" class="btn btn-warning" ng-click="clear()">Clear</button>
+					</div>
+				</div>
+			</div>
+		</form>
+	</div>
+</div>

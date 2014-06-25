@@ -81,6 +81,41 @@ controller('quiz', ['$scope', 'ArrestDB', 'UserModal', function ($scope, ArrestD
 	};
 }]).
 
+controller('tags',  ['$scope', 'ArrestDB', function ($scope, ArrestDB) {
+	var Tag = new ArrestDB('tag');
+	$scope.tags = Tag.list;
+	$scope.page = 1;
+	$scope.limit = 5;
+
+	$scope.mod = undefined;
+	$scope.old = undefined;
+	$scope.set_mod = function (tag){
+		$scope.old = tag;
+		$scope.mod = angular.copy(tag);
+	};
+	$scope.same = angular.equals;
+	$scope.clear = function () {
+		$scope.old = undefined;
+		$scope.mod = undefined;
+	};
+	$scope.reset = function () {
+		$scope.mod = angular.copy( $scope.old );
+	};
+	$scope.save = function (target) {
+		var promise = target.tagID ? Tag.set(target) : Tag.add(target);
+		promise.then( $scope.clear );
+	};
+	$scope.move = function (target, offset, $event) {
+		$event.stopPropagation();
+		target.order = ( (parseInt(target.order) || 0) + offset ).toString();
+		$scope.save( target );
+	};
+	$scope.rem = function (target, $event) {
+		$event.stopPropagation();
+		Tag.rem(target);
+	};
+}]).
+
 filter('isAttending', function () {
 	return function (arr, conferenceID) {
 		if (!conferenceID) return arr;

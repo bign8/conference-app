@@ -78,7 +78,11 @@ class ArrestDB_Security {
 		'tag' => array(
 			'1' => array(
 				'actions' => array('GET'),
-				'fields'  => array('tagID', 'title', 'img', 'slug', '"Order"'),
+				'fields'  => array('tagID', 'title', 'img', 'slug', 'order'),
+			),
+			'2' => array(
+				'actions' => array('GET', 'PUT', 'POST', 'DELETE'),
+				'fields'  => array('tagID', 'title', 'img', 'slug', 'order'),
 			),
 		),
 		'file' => array(
