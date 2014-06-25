@@ -5,7 +5,7 @@
 </div>
 <?php echo $event['html_sponsors']; ?>
 
-<div class="row">
+<div class="row" data-ng-controller="event-speaker">
 	<?php 
 		$count = count($event['sponsors']);
 		for ($i=0; $i < $count; $i++): 
@@ -17,7 +17,7 @@
 		?>
 		<div class="col-sm-6 col-md-4">
 			<div class="thumbnail" style="text-align:center;">
-				<?php if (!is_null($sponsor['logo'])): ?>
+				<?php if (!is_null($sponsor['logo']) && $sponsor['logo'] != ''): ?>
 					<img src="http://upstreamacademy.com/apps/<?=$sponsor['logo']; ?>" alt="..." style="max-height:300px">
 				<?php endif; ?>
 				<div class="caption">
@@ -46,7 +46,9 @@
 								<?php foreach ($sponsor['reps'] as $rep): ?>
 									<tr>
 										<td>
-											<?=$rep['name']; ?>
+											<a href="#" data-ng-click="show_user(<?=$rep['userID']; ?>, $event)">
+												<?=$rep['name']; ?>
+											</a>
 											<div class="pull-right">
 												<a href="tel:<?=$rep['phone']; ?>"><i class="glyphicon glyphicon-phone-alt"></i></a>
 												<a href="mailto:<?=$rep['email']; ?>"><i class="glyphicon glyphicon-envelope"></i></a>
