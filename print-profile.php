@@ -66,7 +66,9 @@
 								<img data-ng-src="http://upstreamacademy.com/apps/{{user.photo || '000-blank.jpg'}}" class="img-rounded" height="100" 
 									data-ng-attr-title="{{user.name}}"
 									data-ng-attr-alt="{{user.name}}" alt="John Doe"/>
-								<div class="caption" ng-show="show_names" style="text-align:center">{{user.name}}</div>
+								<div class="caption" style="text-align:center">
+									{{show_names ? user.name : '&nbsp;'}}
+								</div>
 							</div>
 						</span>
 					</div>
