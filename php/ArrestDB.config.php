@@ -75,6 +75,12 @@ class ArrestDB_Security {
 				'fields'  => array('userID', 'name', 'title', 'firm', 'phone', 'photo', 'bio', 'email', 'seen', 'admin', 'city', 'state', 'member'),
 			),
 		),
+		'tag' => array(
+			'1' => array(
+				'actions' => array('GET'),
+				'fields'  => array('tagID', 'title', 'img', 'slug', '"Order"'),
+			),
+		),
 		'file' => array(
 			'2' => array(
 				'actions' => array('GET', 'PUT', 'POST', 'DELETE'),

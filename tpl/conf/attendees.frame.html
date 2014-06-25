@@ -53,6 +53,7 @@
 			<?php if ($event['display_pictures'] !== 'true'): ?>
 				<thead>
 					<tr>
+						<th style="width:200px">Memberships</th>
 						<th>Name</th>
 						<th>Title</th>
 						<th>Location</th>
@@ -67,6 +68,7 @@
 				<tbody>
 					<tr data-ng-repeat="item in (filtered_data = (data | filter:search_str)) | orderBy:field:sort_order | pagination:page:limit" 
 						style="display:none" data-ng-style="{display:'table-row'}">
+						<td data-memberships="item.member">None</td>
 						<td>
 							<button type="button" class="btn btn-default btn-xs" title="Speaker" ng-show="item.speakerID">
 								<i class="glyphicon glyphicon-volume-up"></i>
@@ -105,6 +107,7 @@
 			<?php else: ?>
 				<thead>
 					<tr>
+						<th style="width:140px">Memberships</th>
 						<th class="col-xs-3">Contact</th>
 						<th>
 							<small class="pull-right text-right" style="font0weight:normal" data-ng-bind="total_rows();">
@@ -117,6 +120,7 @@
 				<tbody>
 					<tr data-ng-repeat="item in (filtered_data = (data | filter:{userID:'!!'} | filter:search_str)) | orderBy:field:sort_order | pagination:page:limit" 
 						style="display:none" data-ng-style="{display:'table-row'}">
+						<td data-memberships="item.member">None</td>
 						<td>
 							<div class="center-cropped pull-left img-rounded">
 								<img ng-src="http://upstreamacademy.com/apps/{{item.photo || '000-blank.jpg'}}" class="img-rounded" height="100" ng-attr-title="{{item.name}}" alt="{{item.name}}" />

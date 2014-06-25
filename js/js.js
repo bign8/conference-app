@@ -201,7 +201,26 @@ angular.module('event-attendee', []).controller('event-attendee', ['$scope','$sc
 	];
 	$scope.field = $scope.fields[0].field;
 	$scope.sort_order = false;
-}]);
+}]).
+
+directive('memberships', ['ArrestDB', function (ArrestDB) {
+	var Tag = new ArrestDB('tag');
+	return {
+		scope: { memberships: '=' },
+		template: '<div ng-repeat="item in list | myMember:memberships | orderBy:\'order\' | limitTo:3" class="pull-right" style="margin-left:10px"><img ng-src="http://upstreamacademy.com/apps/{{item.img}}" title="{{item.title}}"></div>',
+		link: function(scope, element, attrs) { scope.list = Tag.list; }
+	};
+}]).
+
+filter('myMember', function () {
+	return function (input, mem_str) {
+		var response = [], slug_arr = mem_str.toLowerCase().split(',');
+		for (var i = 0, len = input.length; i < len; i++)
+			if ( slug_arr.indexOf(input[i].slug.toLowerCase()) > -1)
+				response.push(input[i]);
+		return response;
+	};
+});
 
 angular.module('helpers', [
 	'ArrestDB'
