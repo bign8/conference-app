@@ -148,9 +148,9 @@ class User {
 		return $this->db->prepare("UPDATE user SET pass=?,resetHash=NULL,resetExpire=NULL WHERE userID=?;")->execute( $this->create_hash($pass), $userID );
 	}
 
-	public function send_comment( $comment ) {
+	public function send_comment( $data ) {
 		$mail = new myMail();
-		return $mail->notify('Event App Comment', $comment);
+		return $mail->notify('Event App Comment (' . $data['name'] . ')', $data['comments']);
 	}
 
 	// https://crackstation.net/hashing-security.htm#phpsourcecode

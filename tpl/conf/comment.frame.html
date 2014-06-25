@@ -11,6 +11,7 @@
 
 <form action="<?=$_SERVER['REQUEST_URI']; ?>#comment" method="post">
 	<input type="hidden" name="action" value="comment">
+	<input type="hidden" name="name" value="<?=$_SESSION['user']['name']; ?>">
 	<div class="form-group">
 		<textarea name="comments" rows="20" class="form-control" required></textarea>
 	</div>

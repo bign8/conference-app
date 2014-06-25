@@ -88,7 +88,7 @@ if (isset($_REQUEST['action'])) {
 			break;
 		case 'comment':
 			try {
-				$res = $user->send_comment( $_POST['comments'] );
+				$res = $user->send_comment( $_POST );
 				if ($res) throw new GUIException('Comments Sent', '', 'success');
 				else throw new GUIException('Comment error', 'There was a problem sending your comments, please try again');
 			} catch (GUIException $e) {

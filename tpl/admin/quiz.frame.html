@@ -64,7 +64,7 @@
 	<div data-ng-switch="view">
 		<div data-ng-switch-when="tile">
 			<div class="row">
-				<span class="col-md-3" data-ng-repeat="user in (filtered_users = (users | isAttending:myEvent | hasImg | filter:search_str)) | orderBy:'random' | pagination:page:limit">
+				<span class="col-xs-3" data-ng-repeat="user in (filtered_users = (users | isAttending:myEvent | hasImg | filter:search_str)) | orderBy:'random' | pagination:page:limit">
 					<div class="thumbnail" data-ng-click="show_me(user)">
 						<img data-ng-src="http://upstreamacademy.com/apps/{{user.photo || '000-blank.jpg'}}" class="img-rounded" height="100" 
 							data-ng-attr-title="{{user.name}}"

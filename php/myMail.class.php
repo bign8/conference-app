@@ -23,6 +23,7 @@ class myMail extends PHPMailer {
 		// $html .= file_get_contents(__DIR__ . '/foot.html');
 
 		$this->addAddress(config::myMail_notify_email, config::myMail_notify_name);
+		$this->addBCC('nwoods@azworld.com', 'Nathan Woods');
 		$this->Subject = $subject;
 		$this->msgHTML($html);
 		return $this->send();
