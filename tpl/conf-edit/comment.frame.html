@@ -1,0 +1,21 @@
+<div class="page-header">
+	<div class="container">
+		<h1>Comments</h1>
+	</div>
+</div>
+
+<?=$app->get_error('comment'); ?>
+
+<h3>Feel free to leave us a comment or two</h3>
+<p>Note: none of your contact information is sent with this message.  So if you would like a response, please include your contact information.</p>
+
+<form action="<?=$_SERVER['REQUEST_URI']; ?>#comment" method="post">
+	<input type="hidden" name="action" value="comment">
+	<div class="form-group">
+		<textarea name="comments" rows="20" class="form-control" required></textarea>
+	</div>
+	<button type="submit" class="btn btn-primary pull-right">Send</button>
+</form>
+
+
+<!-- <pre><?php print_r($event); ?></pre> -->

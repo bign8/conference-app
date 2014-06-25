@@ -86,6 +86,14 @@ if (isset($_REQUEST['action'])) {
 				$app->set_gui_error('profile', $e);
 			}
 			break;
+		case 'comment':
+			try {
+				$res = $user->send_comment( $_POST['comments'] );
+				if ($res) throw new GUIException('Comments Sent', '', 'success');
+				else throw new GUIException('Comment error', 'There was a problem sending your comments, please try again');
+			} catch (GUIException $e) {
+				$app->set_gui_error('comment', $e);
+			}
 	}
 }
 

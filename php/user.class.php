@@ -148,6 +148,11 @@ class User {
 		return $this->db->prepare("UPDATE user SET pass=?,resetHash=NULL,resetExpire=NULL WHERE userID=?;")->execute( $this->create_hash($pass), $userID );
 	}
 
+	public function send_comment( $comment ) {
+		$mail = new myMail();
+		return $mail->notify('Event App Comment', $comment);
+	}
+
 	// https://crackstation.net/hashing-security.htm#phpsourcecode
 	public function create_hash($password) {
 		$salt = base64_encode(mcrypt_create_iv(PBKDF2_SALT_BYTE_SIZE, MCRYPT_DEV_URANDOM));

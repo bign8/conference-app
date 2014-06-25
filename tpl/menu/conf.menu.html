@@ -6,6 +6,7 @@
 	<?php if (count($event['agenda']) > 0   || $is_edit): ?><li><a href="#agenda">Agenda</a></li><?php endif; ?>
 	<li><a href="#attendees">Attendees</a></li>
 	<?php if (count($event['sponsors']) > 0 || $is_edit): ?><li><a href="#sponsors">Sponsors</a></li><?php endif; ?>
+	<li><a href="#comment">Comments</a></li>
 	<li><a href="/index.php#Team" class="no-scroll">Contact Us</a></li>
 	<?php if (@$_SESSION['user']['admin'] == 'true'): ?>
 		<?php if (isset($_REQUEST['edit'])): ?>

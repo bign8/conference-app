@@ -65,6 +65,7 @@
 	<?php if (count($event['agenda']) > 0   || $is_edit) $panel_include('tpl/' . $path . '/agenda.frame.html',    'agenda',    $event); ?>
 	<?php $panel_include('tpl/' . $path . '/attendees.frame.html', 'attendees', $event); ?>
 	<?php if (count($event['sponsors']) > 0 || $is_edit) $panel_include('tpl/' . $path . '/sponsors.frame.html',  'sponsors',  $event); ?>
+	<?php $panel_include('tpl/' . $path . '/comment.frame.html',   'comment',   $event); ?>
 </<?=$wrap; ?>><!-- ./wrap -->
 
 
