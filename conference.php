@@ -40,7 +40,7 @@
 			menubar: false,
 			toolbar_items_size: 'small',
 			plugins: 'link image code',
-			toolbar: "undo redo | styleselect | bold italic underline | alignleft aligncenter alignright alignjustify | bullist numlist outdent indent | link image code",
+			toolbar: "undo redo | styleselect fontsizeselect formatselect fontselect | bold italic underline | alignleft aligncenter alignright alignjustify | bullist numlist outdent indent | link image code",
 			setup: function () { // cleanup for angular
 				delete MCE_OBJ.selector;
 				delete MCE_OBJ.setup;

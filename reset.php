@@ -1,7 +1,8 @@
 <?php
 	require_once('php' . DIRECTORY_SEPARATOR . 'index.php');
 	set_exception_handler(function () { header('Location: .'); });
-	if (!isset($_REQUEST['hash']) || !(new User())->reset_valid($_REQUEST['hash'])) throw new Exception();
+	$user = new User();
+	if (!isset($_REQUEST['hash']) || !$user->reset_valid($_REQUEST['hash'])) throw new Exception('invalid');
 	$title = 'Reset Password';
 	include('tpl/parts/head.tpl.html');
 ?>

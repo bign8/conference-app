@@ -2,7 +2,7 @@
 	if (isset($_SESSION['user'])) $user = $_SESSION['user'];
 	else die(header('Location: .'));
 
-	$user['photo'] = is_null($user['photo']) ? 'default.jpg' : $user['photo']; // Default image
+	$user['photo'] = is_null($user['photo']) ? '000-blank.jpg' : $user['photo']; // Default image
 ?>
 
 <div class="page-header">
@@ -24,7 +24,7 @@
 		<div class="row">
 			<div class="col-sm-2">
 				<div class="img-loader">
-					<img id="actual_user_image" class="img-responsive img-rounded" style="margin-bottom: 10px" src="data/usr/<?=$user['photo']; ?>">
+					<img id="actual_user_image" class="img-responsive img-rounded" style="margin-bottom: 10px" src="http://upstreamacademy.com/apps/<?=$user['photo']; ?>">
 				</div>
 				<input id="user_image" type="file" class="hide" accept="image/*" name="image" />
 				<input type="button" class="form-control btn btn-default" onclick="user_image.click()" value="Choose File" />

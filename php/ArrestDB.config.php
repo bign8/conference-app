@@ -136,7 +136,7 @@ class ArrestDB_Security {
 		'conference' => array(
 			'2' => array(
 				'actions' => array('GET', 'PUT', 'POST', 'DELETE'),
-				'fields'  => array('conferenceID', 'title', 'theme', 'slug', 'display_pictures', 'start_stamp'),
+				'fields'  => array('conferenceID', 'title', 'theme', 'slug', 'display_pictures', 'start_stamp', 'visible'),
 			),
 		),
 	);

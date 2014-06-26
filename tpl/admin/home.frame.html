@@ -43,7 +43,7 @@
 						</div>
 						<img ng-src="http://upstreamacademy.com/apps/{{tag.img}}" title="{{tag.title}}" alt="{{tag.title}}" class="pull-left" style="margin-right:10px">
 						<span>{{tag.title}}</span><br />
-						<small>{{tag.slug}}</small>
+						<small class="text-muted">{{tag.slug}}</small>
 					</td>
 				</tr>
 			</tbody>
@@ -79,10 +79,7 @@
 				<label for="conf_theme" class="col-sm-2 control-label">Image</label>
 				<div class="col-sm-10">
 					<input type="text" class="form-control" id="conf_theme" placeholder="Image" ng-model="mod.img" required>
-					<p class="help-block">
-						Size: 40 x 40 px<br/>
-						Located in <code>http://upstreamacademy.com/apps/...</code>
-					</p>
+					<p class="help-block">Located in <code>http://upstreamacademy.com/apps/...</code></p>
 				</div>
 			</div>
 			<div class="form-group">
@@ -109,5 +106,12 @@
 				</div>
 			</div>
 		</form>
+		<div class="well">
+			The following tags are programatically appended to a user's membership.
+			<ul>
+				<li><code>:Speaker:</code> Assigned as a speaker for one of the sessions</li>
+				<li><code>:Sponsor:</code> Assigned as a sponsor for the conference</li>
+			</ul>
+		</div>
 	</div>
 </div>

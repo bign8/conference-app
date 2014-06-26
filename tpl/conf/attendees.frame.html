@@ -68,14 +68,8 @@
 				<tbody>
 					<tr data-ng-repeat="item in (filtered_data = (data | filter:search_str)) | orderBy:field:sort_order | pagination:page:limit" 
 						style="display:none" data-ng-style="{display:'table-row'}">
-						<td data-memberships="item.member">None</td>
+						<td data-memberships="item.member" data-speaker="item.speakerID" data-rep="item.repID">None</td>
 						<td>
-							<button type="button" class="btn btn-default btn-xs" title="Speaker" ng-show="item.speakerID">
-								<i class="glyphicon glyphicon-volume-up"></i>
-							</button>
-							<button type="button" class="btn btn-default btn-xs" title="Sponsor Rep" ng-show="item.repID">
-								<i class="glyphicon glyphicon-usd"></i>
-							</button>
 							{{item.name}}
 							<button class="btn btn-default btn-xs pull-right" data-ng-click="show_user(item.userID, $event)"><i class="glyphicon glyphicon-comment"></i></button>
 						</td>
@@ -120,7 +114,7 @@
 				<tbody>
 					<tr data-ng-repeat="item in (filtered_data = (data | filter:{userID:'!!'} | filter:search_str)) | orderBy:field:sort_order | pagination:page:limit" 
 						style="display:none" data-ng-style="{display:'table-row'}">
-						<td data-memberships="item.member">None</td>
+						<td data-memberships="item.member" data-speaker="!!item.speakerID" data-rep="!!item.repID">None</td>
 						<td>
 							<div class="center-cropped pull-left img-rounded">
 								<img ng-src="http://upstreamacademy.com/apps/{{item.photo || '000-blank.jpg'}}" class="img-rounded" height="100" ng-attr-title="{{item.name}}" alt="{{item.name}}" />

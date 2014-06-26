@@ -104,7 +104,7 @@ if (window.hasOwnProperty('jQuery')) {
 		});
 		jQuery('#profile_reset').click(function () {
 			document.profile.reset();
-			$('#actual_user_image').attr('src', 'data/usr/' + $('#orig_image').val());
+			$('#actual_user_image').attr('src', 'http://upstreamacademy.com/apps/' + $('#orig_image').val());
 		});
 	});
 }
@@ -206,15 +206,25 @@ angular.module('event-attendee', []).controller('event-attendee', ['$scope','$sc
 directive('memberships', ['ArrestDB', function (ArrestDB) {
 	var Tag = new ArrestDB('tag');
 	return {
-		scope: { memberships: '=' },
-		template: '<div ng-repeat="item in list | myMember:memberships | orderBy:\'order\' | limitTo:3" class="pull-right" style="margin-left:10px"><img ng-src="http://upstreamacademy.com/apps/{{item.img}}" title="{{item.title}}"></div>',
+		scope: {
+			memberships: '=',
+			speaker: '=',
+			rep: '=',
+		},
+		template: '<div ng-repeat="item in list | myMember:memberships:speaker:rep | orderBy:\'order\' | limitTo:3" class="pull-right" style="margin-left:10px"><img ng-src="http://upstreamacademy.com/apps/{{item.img}}" title="{{item.title}}"></div>',
 		link: function(scope, element, attrs) { scope.list = Tag.list; }
 	};
 }]).
 
 filter('myMember', function () {
-	return function (input, mem_str) {
-		var response = [], slug_arr = mem_str.toLowerCase().split(',');
+	return function (input, mem_str, is_speaker, is_rep) {
+		var response = [], slug_arr = (mem_str || '').toLowerCase().split(',');
+
+		// Push custom add-ons
+		if (is_speaker) slug_arr.push(':speaker:');
+		if (is_rep) slug_arr.push(':sponsor:');
+
+		// Find associated tags
 		for (var i = 0, len = input.length; i < len; i++)
 			if ( slug_arr.indexOf(input[i].slug.toLowerCase()) > -1)
 				response.push(input[i]);

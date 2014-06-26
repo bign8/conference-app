@@ -14,23 +14,30 @@ foreach ($event['agenda'] as $item) {
 	array_push($days[ $item['date'] ], $item);
 }
 
+// This is necessary in case two events occur at the same time, shows up "pretty" like they are supposed to...
 function render_row($item, $has_date = true) {
 	$html = '';
-
+	// Time
 	if ($has_date) $html .= date("g:i a", strtotime($item['start'])) . ' - ' . date("g:i a", strtotime($item['end'])) . "</td>\n";
+
+	// Title + files
 	$html .= '<td>' . ( count( $item['speakers'] ) > 0 ? '<b>' . $item['title'] . '</b>' : $item['title'] );
 	$html .= "<button ng-click=\"show_note({$item['sessionID']}, '" . str_replace("'", "\'", $item['title']) . "')\" class=\"btn btn-default btn-xs pull-right\"><i class=\"glyphicon glyphicon-comment\"></i></button>\n<ul>\n";
 	foreach ($item['files'] as $file) $html .= "<li><a href=\"http://upstreamacademy.com/apps/{$file['file']}\">{$file['name']}</a></li>";
 	$html .= "</ul></td>\n";
-	$html .= '<td>' . ( ($item['desc']=='') ? '-' : $item['desc'] ) . "</td>\n";
-	$html .= '<td>';
 
+	// Speakers
+	$html .= '<td>';
 	if (count($item['speakers']) == 0) $html .= '-';
 	foreach ($item['speakers'] as $speaker) {
 		$html .= '<a href="#" title="' . $speaker['title'] . ' - ' . $speaker['firm'] . '" data-ng-click="show_user(' . $speaker['userID'] . ', $event)" >' . $speaker['name'] . '</a><br/>';
 	}
+	$html .= '</td>'."\r\n";
 
-	return $html . "</td>\n</tr>\n";
+	// Description
+	$html .= '<td class="hidden-xs">' . ( ($item['desc']=='') ? '-' : $item['desc'] ) . "</td>\n";
+
+	return $html . "</tr>\n";
 }
 
 foreach ($days as $date => $day):
@@ -44,8 +51,8 @@ foreach ($days as $date => $day):
 			<tr>
 				<th class="col-md-2">Time</th>
 				<th class="col-md-3">Title</th>
-				<th class="col-md-5">Descripiton</th>
 				<th class="col-md-2">Speaker(s)</th>
+				<th class="col-md-5 hidden-xs">Descripiton</th>
 			</tr>
 		</thead>
 		<tbody>

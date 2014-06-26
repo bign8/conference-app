@@ -34,7 +34,7 @@ class App {
 	}
 
 	public function get_my_confs($userID) {
-		$sth = $this->db->prepare("SELECT * FROM attendee a LEFT JOIN conference c ON a.conferenceID=c.conferenceID WHERE userID=? ORDER BY start_stamp, title;");
+		$sth = $this->db->prepare("SELECT * FROM attendee a LEFT JOIN conference c ON a.conferenceID=c.conferenceID WHERE userID=? AND visible='true' ORDER BY start_stamp, title;");
 		$sth->execute( $userID );
 		return $sth->fetchAll();
 	}
