@@ -32,7 +32,7 @@ class User {
 	}
 
 	public function login( $email, $pass ) {
-		$sth = $this->db->prepare("SELECT * FROM user WHERE email=?;");
+		$sth = $this->db->prepare("SELECT * FROM user WHERE email=? COLLATE NOCASE;");
 		$test = (
 			$sth->execute( $email ) &&
 			($user = $sth->fetch()) !== false && 
