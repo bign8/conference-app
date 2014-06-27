@@ -3,43 +3,24 @@
 		<h1>About Upstream</h1>
 	</div>
 </div>
-<!-- <img class="pull-right hidden-xs img-rounded" src="./data/ua-logo.png" alt="Upstream Academy" style="width:150px">
-<p class="lead">
-	Lorem ipsum dolor sit amet, consectetur adipiscing elit. Ut ac eleifend nisl. Mauris vitae tincidunt turpis, quis facilisis orci. Maecenas elementum sapien vitae libero semper commodo. Quisque tincidunt, dui vitae laoreet sollicitudin, sem tellus interdum odio, eu ornare tellus tellus ac tortor. Nulla laoreet urna ligula, ut ultrices dui ultricies et. Proin in viverra tellus. Duis vel sem quis neque molestie vehicula id eu mauris. Mauris eleifend ut est at luctus. Sed nec ligula a lectus ultricies bibendum viverra vitae ante. Suspendisse fringilla turpis nisi. Lorem ipsum dolor sit amet, consectetur adipiscing elit. Donec fermentum nisl urna, non dictum dolor facilisis eu.
-</p>
-<p>
-	In feugiat tincidunt tortor. Quisque cursus purus a justo egestas, id consectetur tellus vulputate. Quisque sed blandit nulla. Nunc fringilla quis lacus eget hendrerit. Etiam tincidunt metus at nisl scelerisque dapibus. Interdum et malesuada fames ac ante ipsum primis in faucibus. Vivamus vestibulum mauris lacus, nec accumsan lectus adipiscing nec. Vestibulum convallis suscipit lectus vitae eleifend. Proin luctus pulvinar mi et elementum. Pellentesque luctus, metus quis elementum dictum, leo lorem posuere odio, vel accumsan tellus odio at risus. Proin tempus imperdiet quam nec vestibulum.
-</p>
-<p>
-	Morbi placerat felis neque, at placerat lorem tempus quis. Duis tincidunt tempor nisl sed tempus. Etiam a pharetra enim. Ut semper in quam quis sodales. In ac velit viverra, tristique lectus ut, imperdiet nulla. Morbi egestas dapibus turpis at sodales. Ut imperdiet turpis justo, ac placerat risus gravida sed. Suspendisse potenti.
-</p>
-<p>
-	Pellentesque habitant morbi tristique senectus et netus et malesuada fames ac turpis egestas. Mauris nisl sem, fringilla nec neque molestie, porttitor accumsan tellus. Nam felis odio, sollicitudin a mi vitae, vehicula dictum diam. Cras condimentum sit amet lacus at luctus. Curabitur aliquet ante consequat, aliquet ligula eu, congue nisl. Proin nibh ligula, ornare vel elit ac, sagittis lacinia tellus. Duis non orci egestas, pharetra purus id, mattis nisi. Maecenas sagittis, erat id placerat placerat, ante est rhoncus ligula, eget aliquet tellus odio vitae augue. Cras non mauris neque. Cras varius vestibulum dui sed rutrum. Maecenas nisl est, pharetra sit amet risus eget, ornare scelerisque lorem. Nunc at dolor non odio ullamcorper vulputate vitae a purus.
-</p>
-<p>
-	Quisque semper varius nisl vel facilisis. Maecenas ornare molestie diam vitae ultrices. Donec vel erat quis magna tempor pharetra. Quisque congue lorem sit amet ultrices cursus. Suspendisse turpis sapien, mattis ac augue eget, varius sollicitudin dui. Mauris vel justo in nulla convallis aliquam ut vel elit. Sed pretium rhoncus imperdiet. Ut lacus erat, suscipit quis enim et, iaculis dictum ipsum. Vestibulum dignissim, lacus vel aliquet molestie, urna purus cursus libero, in lacinia velit leo a enim. Ut et interdum magna, sit amet placerat erat. Praesent nec tempor neque. Cras ultricies odio a dui fringilla consequat. Donec dictum consequat eros quis lobortis. Proin venenatis lacus et sem congue, at placerat velit consectetur. Nunc lobortis est a dolor varius, non vestibulum elit feugiat.
-</p> -->
-
-
-
-
 
 <div class="container" id="overview"><!-- style -->
 	<style type="text/css">
-	.upstream_overview { position:relative; margin:0 auto; display:block; width:550px; height:550px; overflow: hidden; }
-	.upstream_overview img { border:0; position:absolute; visibility:hidden; width:550px; height:550px; }
+	.upstream_overview { margin:0 auto; display:block; width:100%; max-width:550px; overflow: hidden; }
+	.upstream_overview img { border:0; display:none; width:100%; max-width:550px; left: -2px; }
+	.upstream_overview img:first-child { display:block; }
 	</style>
 
 	<!-- JS -->
 	<script type="text/JavaScript">
 		var UA = UA || {};
 		UA.overview = function () {
-			var ids = ['Team','ELA','HPF','LS','Facilitation','MP','BP','HW','UAN'];
+			var ids = ['Blank','ELA','HPF','LS','Facilitation','MP','BP','HW','UAN'];
 			var hide = function(e, that) {
 				if ( !that.contains( e.toElement ) ) show(0);
 			};
 			var show = function (id) {
-				for (var i = 0; i < ids.length; i++) document.getElementById( ids[i] ).style.visibility = (i == id) ? 'visible' : 'hidden' ;
+				for (var i = 0; i < ids.length; i++) document.getElementById( ids[i] ).style.display = (i == id) ? 'block' : 'none' ;
 			};
 			return { hide:hide, show:show };
 		}();
@@ -47,7 +28,7 @@
 
 	<!-- html -->
 	<div class="upstream_overview" onmouseout="UA.overview.hide(event, this)">
-		<img usemap="#overview_map" src="http://www.upstreamacademy.com/images/Marketingblank.png"        id="Team"          alt="UA Team"        style="visibility: visible;">
+		<img usemap="#overview_map" src="http://www.upstreamacademy.com/images/Marketingblank.png"        id="Blank"         alt="Blank">
 		<img usemap="#overview_map" src="http://www.upstreamacademy.com/images/MarketingELA.png"          id="ELA"           alt="Emerging Leaders Academy">
 		<img usemap="#overview_map" src="http://www.upstreamacademy.com/images/MarketingHPF.png"          id="HPF"           alt="High Performance Firms">
 		<img usemap="#overview_map" src="http://www.upstreamacademy.com/images/MarketingLS.png"           id="LS"            alt="LeaderSkills Lessons">

@@ -14,9 +14,9 @@
 
 <!-- style -->
 <style type="text/css">
-/* last attribute on both is to crop border from images...temporay fix */
-.upstream_team { position:relative; margin:0 auto; display:block; width:599px; height:937px; overflow: hidden; }
-.upstream_team img { border:0; position:absolute; visibility:hidden; width:599px; height:937px; left: -2px; }
+.upstream_team { margin:0 auto; display:block; width:100%; max-width:599px; overflow: hidden; }
+.upstream_team img { border:0; display:none; width:100%; max-width:599px; }
+.upstream_team img:first-child { display:block; }
 </style>
 
 <!-- JS -->
@@ -28,7 +28,7 @@
 			if ( !that.contains( e.toElement ) ) show(0);
 		};
 		var show = function (id) {
-			for (var i = 0; i < ids.length; i++) document.getElementById( ids[i] ).style.visibility = (i == id) ? 'visible' : 'hidden' ;
+			for (var i = 0; i < ids.length; i++) document.getElementById( ids[i] ).style.display = (i == id) ? 'block' : 'none' ;
 		};
 		return { hide:hide, show:show };
 	}();
@@ -36,7 +36,7 @@
 
 <!-- html -->
 <div class="upstream_team" onmouseout="UA.team.hide(event, this)">
-	<img usemap="#team_map" src="http://upstreamacademy.com/images/UATeamAll.jpg"      id="Team"    alt="UA Team" style="visibility: visible;">
+	<img usemap="#team_map" src="http://upstreamacademy.com/images/UATeamAll.jpg"      id="Team"    alt="UA Team">
 	<img usemap="#team_map" src="http://upstreamacademy.com/images/UATeamDev2.jpg"     id="Dev"     alt="Dev Warren">
 	<img usemap="#team_map" src="http://upstreamacademy.com/images/UATeamJenny2.jpg"   id="Jenny"   alt="Jenny Fuller">
 	<img usemap="#team_map" src="http://upstreamacademy.com/images/UATeamRandl2.jpg"   id="Randl"   alt="Randl Ockey">

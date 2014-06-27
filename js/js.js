@@ -82,7 +82,7 @@ if (window.hasOwnProperty('jQuery')) {
 
 		// soft scroll links
 		jQuery('a:not(.no-scroll)').on('click', function (e){
-			e.target = $(e.target).closest('a')[0];
+			e.target = jQuery(e.target).closest('a')[0];
 			if ( e.target.hash ) {
 				jQuery( e.target.hash ).scroll_top(function() {
 					if (e.target.hash == '#login') jQuery('#inputUser').focus();
@@ -104,8 +104,11 @@ if (window.hasOwnProperty('jQuery')) {
 		});
 		jQuery('#profile_reset').click(function () {
 			document.profile.reset();
-			$('#actual_user_image').attr('src', 'http://upstreamacademy.com/apps/' + $('#orig_image').val());
+			jQuery('#actual_user_image').attr('src', 'http://upstreamacademy.com/apps/' + jQuery('#orig_image').val());
 		});
+
+		// Resize image maps
+		jQuery('img[usemap]').rwdImageMaps();
 	});
 }
 
